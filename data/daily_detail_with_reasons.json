@@ -1,0 +1,2853 @@
+{
+  "2026-09-04": {
+    "groups": [
+      {
+        "rank": 1,
+        "theme": "반도체",
+        "avgChange": 4.56,
+        "sumValue": 51786,
+        "note": "필라델피아 반도체지수 급등 및 SK하이닉스 3분기 영업이익 급증 전망",
+        "stocks": [
+          {
+            "name": "SK하이닉스",
+            "change": 3.2,
+            "value": 46609,
+            "reason": "필라델피아 반도체지수 급등 및 Q3 영업이익 급증 전망 속 강세"
+          },
+          {
+            "name": "SK스퀘어",
+            "change": 6.12,
+            "value": 4647,
+            "reason": "반도체주 동반 강세 속 상승"
+          },
+          {
+            "name": "제주반도체",
+            "change": 4.36,
+            "value": 530,
+            "reason": "반도체주 동반 강세 속 상승"
+          }
+        ]
+      },
+      {
+        "rank": 2,
+        "theme": "바이오",
+        "avgChange": 47.18,
+        "sumValue": 18495,
+        "note": "스카이랩스 코스닥 신규상장 첫날 공모가 대비 급등",
+        "stocks": [
+          {
+            "name": "스카이랩스",
+            "change": 135.0,
+            "value": 16913,
+            "reason": "코스닥 신규상장 첫날, 공모가(1만원) 대비 급등"
+          },
+          {
+            "name": "현대약품",
+            "change": 3.52,
+            "value": 895,
+            "reason": "제약·바이오 테마 강세 속 상승"
+          },
+          {
+            "name": "레메디",
+            "change": 3.01,
+            "value": 687,
+            "reason": "제약·바이오 테마 강세 속 상승"
+          }
+        ]
+      },
+      {
+        "rank": 3,
+        "theme": "로봇",
+        "avgChange": 16.08,
+        "sumValue": 9835,
+        "note": "로보티즈 2분기 흑자전환·중국시장 성장성, 美 FCC 중국산 로봇 규제 반사이익 기대감",
+        "stocks": [
+          {
+            "name": "원익홀딩스",
+            "change": 29.91,
+            "value": 1451,
+            "reason": "로봇산업 정책지원 강화 기대감·3500억 투자유치 속 상한가"
+          },
+          {
+            "name": "로보티즈",
+            "change": 22.54,
+            "value": 4282,
+            "reason": "2분기 흑자전환 및 중국시장 성장성 부각, FCC 중국산 로봇 규제 반사이익 모멘텀"
+          },
+          {
+            "name": "원익",
+            "change": 17.13,
+            "value": 1458,
+            "reason": "로봇주 동반 강세"
+          },
+          {
+            "name": "에스피지",
+            "change": 12.41,
+            "value": 1040,
+            "reason": "로봇주 동반 강세"
+          },
+          {
+            "name": "원익IPS",
+            "change": 9.33,
+            "value": 1022,
+            "reason": "로봇주 동반 강세"
+          },
+          {
+            "name": "레인보우로보틱스",
+            "change": 5.15,
+            "value": 582,
+            "reason": "로봇주 동반 강세"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "MLCC",
+        "avgChange": 4.25,
+        "sumValue": 9247,
+        "note": "AI 데이터센터 전력효율 부품 수요 확대 기대감",
+        "stocks": [
+          {
+            "name": "삼성전기",
+            "change": 3.93,
+            "value": 8674,
+            "reason": "AI 데이터센터 전력효율 부품 수요 확대 기대감"
+          },
+          {
+            "name": "삼화콘덴서",
+            "change": 4.57,
+            "value": 573,
+            "reason": "AI 데이터센터 전력효율 부품 수요 확대 기대감"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "반도체소부장",
+        "avgChange": 7.75,
+        "sumValue": 5173,
+        "note": "HBM 장비투자 확대 및 AI서버 수요 구조적 증가 기대감",
+        "stocks": [
+          {
+            "name": "한미반도체",
+            "change": 9.26,
+            "value": 2179,
+            "reason": "HBM 장비투자 확대 및 AI서버 수요 구조적 증가 기대감"
+          },
+          {
+            "name": "주성엔지니어링",
+            "change": 6.13,
+            "value": 1537,
+            "reason": "HBM 장비투자 확대 및 AI서버 수요 구조적 증가 기대감"
+          },
+          {
+            "name": "테스",
+            "change": 9.63,
+            "value": 693,
+            "reason": "HBM 장비투자 확대 및 AI서버 수요 구조적 증가 기대감"
+          },
+          {
+            "name": "이오테크닉스",
+            "change": 5.98,
+            "value": 764,
+            "reason": "HBM 장비투자 확대 및 AI서버 수요 구조적 증가 기대감"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "2차전지",
+        "avgChange": 10.63,
+        "sumValue": 2351,
+        "note": "",
+        "stocks": [
+          {
+            "name": "SK이노베이션",
+            "change": 5.73,
+            "value": 1764,
+            "reason": ""
+          },
+          {
+            "name": "피노",
+            "change": 15.52,
+            "value": 587,
+            "reason": ""
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "스테이블코인",
+        "avgChange": 11.21,
+        "sumValue": 1682,
+        "note": "미 비트코인 급등 및 클래리티법 처리 기대감",
+        "stocks": [
+          {
+            "name": "우리기술투자",
+            "change": 8.93,
+            "value": 955,
+            "reason": "미 비트코인 급등 및 클래리티법 처리 기대감"
+          },
+          {
+            "name": "헥토파이낸셜",
+            "change": 13.48,
+            "value": 727,
+            "reason": "미 비트코인 급등 및 클래리티법 처리 기대감"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "정유",
+        "avgChange": 6.36,
+        "sumValue": 1473,
+        "note": "",
+        "stocks": [
+          {
+            "name": "S-Oil",
+            "change": 6.36,
+            "value": 1473,
+            "reason": ""
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "항공",
+        "avgChange": 3.6,
+        "sumValue": 1455,
+        "note": "",
+        "stocks": [
+          {
+            "name": "대한항공",
+            "change": 3.6,
+            "value": 1455,
+            "reason": ""
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "AI",
+        "avgChange": 4.76,
+        "sumValue": 1140,
+        "note": "",
+        "stocks": [
+          {
+            "name": "삼성에스디에스",
+            "change": 5.31,
+            "value": 505,
+            "reason": ""
+          },
+          {
+            "name": "GS",
+            "change": 4.21,
+            "value": 635,
+            "reason": ""
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "통신",
+        "avgChange": 3.93,
+        "sumValue": 839,
+        "note": "",
+        "stocks": [
+          {
+            "name": "SK텔레콤",
+            "change": 3.93,
+            "value": 839,
+            "reason": ""
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "지주사",
+        "avgChange": 12.65,
+        "sumValue": 642,
+        "note": "",
+        "stocks": [
+          {
+            "name": "HD현대",
+            "change": 12.65,
+            "value": 642,
+            "reason": ""
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "PCB",
+        "avgChange": 10.75,
+        "sumValue": 626,
+        "note": "",
+        "stocks": [
+          {
+            "name": "비에이치",
+            "change": 10.75,
+            "value": 626,
+            "reason": ""
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "SOFC",
+        "avgChange": 12.44,
+        "sumValue": 605,
+        "note": "SOFC 연료전지 공급계약(1087억원) 진행",
+        "stocks": [
+          {
+            "name": "두산퓨얼셀",
+            "change": 12.44,
+            "value": 605,
+            "reason": "SOFC 연료전지 공급계약(1087억원) 진행"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "풍력에너지",
+        "avgChange": 4.63,
+        "sumValue": 540,
+        "note": "",
+        "stocks": [
+          {
+            "name": "SK이터닉스",
+            "change": 4.63,
+            "value": 540,
+            "reason": ""
+          }
+        ]
+      }
+    ]
+  },
+  "2026-09-07": {
+    "groups": [
+      {
+        "rank": 1,
+        "theme": "반도체",
+        "avgChange": 8.53,
+        "sumValue": 116910,
+        "note": "오픈AI 'GPT-6 아스트라' 출시·AGI 기대감 확산, AI CapEx 지속성 기대감에 HBM·서버D램 수요 기대감",
+        "stocks": [
+          {
+            "name": "SK하이닉스",
+            "change": 8.26,
+            "value": 61132,
+            "reason": "외국인·기관 동반 순매수 속 AI 칩 기대감에 급등"
+          },
+          {
+            "name": "삼성전자",
+            "change": 5.68,
+            "value": 49001,
+            "reason": "AI 모멘텀 속 HBM·서버D램 수요 기대감에 강세"
+          },
+          {
+            "name": "SK스퀘어",
+            "change": 8.07,
+            "value": 6034,
+            "reason": "SK하이닉스 급등 속 지주회사 동반 강세"
+          },
+          {
+            "name": "DB하이텍",
+            "change": 12.12,
+            "value": 743,
+            "reason": "반도체 대형주 랠리 속 파운드리 동반 강세"
+          }
+        ]
+      },
+      {
+        "rank": 2,
+        "theme": "바이오",
+        "avgChange": 12.98,
+        "sumValue": 12886,
+        "note": "개별 종목별 상장·임상 이슈",
+        "stocks": [
+          {
+            "name": "스카이랩스",
+            "change": 30.0,
+            "value": 7804,
+            "reason": "상장일 효과 속 상한가"
+          },
+          {
+            "name": "JW신약",
+            "change": 9.65,
+            "value": 2064,
+            "reason": "제약바이오 테마 강세 속 급등"
+          },
+          {
+            "name": "레메디",
+            "change": 15.17,
+            "value": 1309,
+            "reason": "제약바이오 테마 강세 속 급등"
+          },
+          {
+            "name": "현대약품",
+            "change": 5.91,
+            "value": 1028,
+            "reason": "제약바이오 테마 강세 속 강세"
+          },
+          {
+            "name": "인제니아테라퓨틱스(Reg.S)",
+            "change": 4.17,
+            "value": 681,
+            "reason": "제약바이오 테마 강세 속 강세"
+          }
+        ]
+      },
+      {
+        "rank": 3,
+        "theme": "원전",
+        "avgChange": 11.37,
+        "sumValue": 12345,
+        "note": "美 원전 8기(1300억달러 규모) 건설 프로젝트 국내 기업 참여 기대감",
+        "stocks": [
+          {
+            "name": "두산에너빌리티",
+            "change": 10.98,
+            "value": 5319,
+            "reason": "미국 원전 8기 건설 추진 기대감"
+          },
+          {
+            "name": "삼미금속",
+            "change": 22.16,
+            "value": 1740,
+            "reason": "원전 테마 강세 속 급등"
+          },
+          {
+            "name": "대우건설",
+            "change": 9.26,
+            "value": 1666,
+            "reason": "원전 건설 수혜 기대감"
+          },
+          {
+            "name": "한전기술",
+            "change": 13.66,
+            "value": 1096,
+            "reason": "원전 설계 수혜 기대감"
+          },
+          {
+            "name": "현대건설",
+            "change": 6.02,
+            "value": 1011,
+            "reason": "원전 건설 수혜 기대감"
+          },
+          {
+            "name": "비에이치아이",
+            "change": 12.83,
+            "value": 898,
+            "reason": "원전 기기 공급 수혜 기대감"
+          },
+          {
+            "name": "삼성E&A",
+            "change": 4.69,
+            "value": 615,
+            "reason": "원전 플랜트 수혜 기대감"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "MLCC",
+        "avgChange": 5.03,
+        "sumValue": 8698,
+        "note": "AI 서버향 MLCC 수요 확대 기대감",
+        "stocks": [
+          {
+            "name": "삼성전기",
+            "change": 3.78,
+            "value": 7886,
+            "reason": "AI 서버향 MLCC 수요 확대 기대감"
+          },
+          {
+            "name": "삼화콘덴서",
+            "change": 6.28,
+            "value": 812,
+            "reason": "AI 서버향 MLCC 수요 확대 기대감"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "반도체소부장",
+        "avgChange": 6.06,
+        "sumValue": 8458,
+        "note": "반도체 대형주 랠리 속 후공정·장비주 동반 강세",
+        "stocks": [
+          {
+            "name": "주성엔지니어링",
+            "change": 4.99,
+            "value": 2131,
+            "reason": "반도체 대형주 랠리 속 후공정·장비주 동반 강세"
+          },
+          {
+            "name": "한미반도체",
+            "change": 4.57,
+            "value": 1774,
+            "reason": "반도체 대형주 랠리 속 후공정·장비주 동반 강세"
+          },
+          {
+            "name": "HPSP",
+            "change": 4.92,
+            "value": 1368,
+            "reason": "반도체 대형주 랠리 속 후공정·장비주 동반 강세"
+          },
+          {
+            "name": "두산",
+            "change": 11.3,
+            "value": 1257,
+            "reason": "반도체 대형주 랠리 속 후공정·장비주 동반 강세"
+          },
+          {
+            "name": "테스",
+            "change": 4.02,
+            "value": 840,
+            "reason": "반도체 대형주 랠리 속 후공정·장비주 동반 강세"
+          },
+          {
+            "name": "하나마이크론",
+            "change": 4.3,
+            "value": 576,
+            "reason": "반도체 대형주 랠리 속 후공정·장비주 동반 강세"
+          },
+          {
+            "name": "피에스케이홀딩스",
+            "change": 8.33,
+            "value": 512,
+            "reason": "반도체 대형주 랠리 속 후공정·장비주 동반 강세"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "전력설비",
+        "avgChange": 6.66,
+        "sumValue": 5399,
+        "note": "AI 데이터센터 전력 수요 및 한전 전력망 투자 확대 기대감",
+        "stocks": [
+          {
+            "name": "효성중공업",
+            "change": 8.53,
+            "value": 1470,
+            "reason": "AI 데이터센터 전력 수요 및 한전 전력망 투자 확대 기대감"
+          },
+          {
+            "name": "가온전선",
+            "change": 10.61,
+            "value": 1197,
+            "reason": "AI 데이터센터 전력 수요 및 한전 전력망 투자 확대 기대감"
+          },
+          {
+            "name": "LS ELECTRIC",
+            "change": 5.99,
+            "value": 842,
+            "reason": "AI 데이터센터 전력 수요 및 한전 전력망 투자 확대 기대감"
+          },
+          {
+            "name": "HD현대일렉트릭",
+            "change": 6.86,
+            "value": 690,
+            "reason": "AI 데이터센터 전력 수요 및 한전 전력망 투자 확대 기대감"
+          },
+          {
+            "name": "산일전기",
+            "change": 3.76,
+            "value": 611,
+            "reason": "AI 데이터센터 전력 수요 및 한전 전력망 투자 확대 기대감"
+          },
+          {
+            "name": "금호전기",
+            "change": 4.19,
+            "value": 589,
+            "reason": "AI 데이터센터 전력 수요 및 한전 전력망 투자 확대 기대감"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "로봇",
+        "avgChange": 10.19,
+        "sumValue": 4641,
+        "note": "LG전자 로봇 자회사 베어로보틱스 프리IPO·액추에이터 빅테크 수주 기대감",
+        "stocks": [
+          {
+            "name": "LG전자",
+            "change": 6.2,
+            "value": 3663,
+            "reason": "LG전자 로봇 자회사 베어로보틱스 프리IPO·액추에이터 빅테크 수주 기대감"
+          },
+          {
+            "name": "매드업",
+            "change": 14.18,
+            "value": 978,
+            "reason": "LG전자 로봇 자회사 베어로보틱스 프리IPO·액추에이터 빅테크 수주 기대감"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "금융지주",
+        "avgChange": 3.23,
+        "sumValue": 2466,
+        "note": "저평가 매력 부각",
+        "stocks": [
+          {
+            "name": "신한지주",
+            "change": 3.26,
+            "value": 862,
+            "reason": "저평가 매력 부각"
+          },
+          {
+            "name": "우리금융지주",
+            "change": 3.01,
+            "value": 855,
+            "reason": "저평가 매력 부각"
+          },
+          {
+            "name": "하나금융지주",
+            "change": 3.43,
+            "value": 749,
+            "reason": "저평가 매력 부각"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "PCB",
+        "avgChange": 4.2,
+        "sumValue": 1862,
+        "note": "",
+        "stocks": [
+          {
+            "name": "LG이노텍",
+            "change": 4.27,
+            "value": 941,
+            "reason": ""
+          },
+          {
+            "name": "대덕전자",
+            "change": 4.12,
+            "value": 921,
+            "reason": ""
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "SOFC",
+        "avgChange": 13.8,
+        "sumValue": 1694,
+        "note": "",
+        "stocks": [
+          {
+            "name": "두산퓨얼셀",
+            "change": 13.8,
+            "value": 1694,
+            "reason": ""
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "건설",
+        "avgChange": 4.63,
+        "sumValue": 1058,
+        "note": "",
+        "stocks": [
+          {
+            "name": "삼성물산",
+            "change": 4.63,
+            "value": 1058,
+            "reason": ""
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "지주사",
+        "avgChange": 6.63,
+        "sumValue": 872,
+        "note": "",
+        "stocks": [
+          {
+            "name": "SK",
+            "change": 6.63,
+            "value": 872,
+            "reason": ""
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "광통신",
+        "avgChange": 3.54,
+        "sumValue": 823,
+        "note": "",
+        "stocks": [
+          {
+            "name": "대한광통신",
+            "change": 3.54,
+            "value": 823,
+            "reason": ""
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "생명보험",
+        "avgChange": 4.87,
+        "sumValue": 803,
+        "note": "",
+        "stocks": [
+          {
+            "name": "삼성생명",
+            "change": 4.87,
+            "value": 803,
+            "reason": ""
+          }
+        ]
+      }
+    ]
+  },
+  "2026-09-08": {
+    "groups": [
+      {
+        "rank": 1,
+        "theme": "원전",
+        "avgChange": 7.24,
+        "sumValue": 15553,
+        "note": "美 원전 8기(1300억달러 규모) 건설 참여 기대감",
+        "stocks": [
+          {
+            "name": "대우건설",
+            "change": 8.47,
+            "value": 5477,
+            "reason": "美 원전 8기 건설 기대감 등에 원전 테마 상승 속 동반 강세"
+          },
+          {
+            "name": "한전기술",
+            "change": 16.6,
+            "value": 3133,
+            "reason": "美 원전 8기 건설 기대감 등에 원전 테마 상승 속 급등"
+          },
+          {
+            "name": "현대건설",
+            "change": 3.55,
+            "value": 2250,
+            "reason": "원전 테마 상승 속 동반 강세"
+          },
+          {
+            "name": "우리기술",
+            "change": 8.15,
+            "value": 1549,
+            "reason": "원전 테마 상승 속 동반 강세"
+          },
+          {
+            "name": "지투파워",
+            "change": 5.54,
+            "value": 1340,
+            "reason": "원전 테마 상승 속 동반 강세"
+          },
+          {
+            "name": "한국전력",
+            "change": 4.12,
+            "value": 1206,
+            "reason": "원전 테마 상승 속 동반 강세"
+          },
+          {
+            "name": "한전산업",
+            "change": 4.24,
+            "value": 598,
+            "reason": "원전 테마 상승 속 동반 강세"
+          }
+        ]
+      },
+      {
+        "rank": 2,
+        "theme": "바이오",
+        "avgChange": 16.33,
+        "sumValue": 6122,
+        "note": "정부 임신중지약 '미프진' 연내 도입 기대감",
+        "stocks": [
+          {
+            "name": "현대약품",
+            "change": 23.99,
+            "value": 3226,
+            "reason": "정부, 임신중지약 '미프진' 이르면 연내 도입 기대감 등에 낙태/피임 테마 상승 속 급등"
+          },
+          {
+            "name": "JW신약",
+            "change": 8.66,
+            "value": 2896,
+            "reason": "임신중지약 '미프진' 도입 기대감 속 바이오 테마 동반 강세"
+          }
+        ]
+      },
+      {
+        "rank": 3,
+        "theme": "반도체소부장",
+        "avgChange": 7.37,
+        "sumValue": 5792,
+        "note": "AI 반도체(HBM/D램) 투자 확대 기대감",
+        "stocks": [
+          {
+            "name": "주성엔지니어링",
+            "change": 3.95,
+            "value": 5126,
+            "reason": "AI 반도체(HBM/D램) 투자 확대 기대감 속 3거래일 연속 강세"
+          },
+          {
+            "name": "세미파이브",
+            "change": 10.78,
+            "value": 666,
+            "reason": "AI 반도체 투자 확대 기대감 속 반도체소부장 테마 동반 강세"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "광통신",
+        "avgChange": 22.69,
+        "sumValue": 2640,
+        "note": "AI 데이터센터·6G 광통신 부품 국산화 사업 선정",
+        "stocks": [
+          {
+            "name": "빛과전자",
+            "change": 30.0,
+            "value": 1435,
+            "reason": "AI 데이터센터·6G 광통신 부품 국산화 사업 선정"
+          },
+          {
+            "name": "광전자",
+            "change": 15.37,
+            "value": 1205,
+            "reason": "AI 데이터센터·6G 광통신 부품 국산화 사업 선정"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "시멘트",
+        "avgChange": 14.46,
+        "sumValue": 1570,
+        "note": "구체 재료 미확인(잠정)",
+        "stocks": [
+          {
+            "name": "서산",
+            "change": 14.46,
+            "value": 1570,
+            "reason": "구체 재료 미확인(잠정)"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "철강",
+        "avgChange": 10.07,
+        "sumValue": 1222,
+        "note": "알래스카 LNG 사업 대미투자 논의 대상 포함 소식",
+        "stocks": [
+          {
+            "name": "신스틸",
+            "change": 16.24,
+            "value": 666,
+            "reason": "알래스카 LNG 사업 대미투자 논의 대상 포함 소식"
+          },
+          {
+            "name": "금강철강",
+            "change": 3.9,
+            "value": 556,
+            "reason": "알래스카 LNG 사업 대미투자 논의 대상 포함 소식"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "정유",
+        "avgChange": 6.77,
+        "sumValue": 593,
+        "note": "구체 재료 미확인(잠정)",
+        "stocks": [
+          {
+            "name": "흥구석유",
+            "change": 6.77,
+            "value": 593,
+            "reason": "구체 재료 미확인(잠정)"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "유리기판",
+        "avgChange": 10.7,
+        "sumValue": 519,
+        "note": "구체 재료 미확인(잠정)",
+        "stocks": [
+          {
+            "name": "한빛레이저",
+            "change": 10.7,
+            "value": 519,
+            "reason": "구체 재료 미확인(잠정)"
+          }
+        ]
+      }
+    ]
+  },
+  "2026-09-10": {
+    "groups": [
+      {
+        "rank": 1,
+        "theme": "반도체소부장",
+        "avgChange": 7.49,
+        "sumValue": 19104,
+        "note": "글로벌 반도체 고객사 매출 확대 및 제품 포트폴리오 다변화 기대감",
+        "stocks": [
+          {
+            "name": "주성엔지니어링",
+            "change": 7.02,
+            "value": 11337,
+            "reason": "글로벌 반도체 고객사 매출 확대 기대감 속 강세"
+          },
+          {
+            "name": "티에스이",
+            "change": 14.15,
+            "value": 2368,
+            "reason": "일부 반도체 관련주 상승 속 글로벌 고객사 매출 확대 및 제품 포트폴리오 다변화 기대감 지속 속 급등"
+          },
+          {
+            "name": "파두",
+            "change": 6.59,
+            "value": 1512,
+            "reason": "반도체 관련주 강세 속 동반 상승"
+          },
+          {
+            "name": "고영",
+            "change": 5.67,
+            "value": 1233,
+            "reason": "반도체 관련주 강세 속 동반 상승"
+          },
+          {
+            "name": "두산테스나",
+            "change": 6.32,
+            "value": 894,
+            "reason": "반도체 관련주 강세 속 동반 상승"
+          },
+          {
+            "name": "티씨케이",
+            "change": 5.44,
+            "value": 893,
+            "reason": "반도체 관련주 강세 속 동반 상승"
+          },
+          {
+            "name": "SFA반도체",
+            "change": 7.24,
+            "value": 867,
+            "reason": "반도체 관련주 강세 속 동반 상승"
+          }
+        ]
+      },
+      {
+        "rank": 2,
+        "theme": "반도체",
+        "avgChange": 4.2,
+        "sumValue": 5283,
+        "note": "반도체 업황 개선 기대감",
+        "stocks": [
+          {
+            "name": "DB하이텍",
+            "change": 3.32,
+            "value": 2710,
+            "reason": "반도체 업황 개선 기대감 속 강세"
+          },
+          {
+            "name": "제주반도체",
+            "change": 5.07,
+            "value": 2573,
+            "reason": "반도체 업황 개선 기대감 속 강세"
+          }
+        ]
+      },
+      {
+        "rank": 3,
+        "theme": "정유",
+        "avgChange": 15.16,
+        "sumValue": 4283,
+        "note": "중동發 리스크 고조 속 국제유가 급등, LPG/윤활유/주유소 테마 상승",
+        "stocks": [
+          {
+            "name": "흥구석유",
+            "change": 20.02,
+            "value": 3265,
+            "reason": "중동發 리스크 고조 속 국제유가 급등 등에 LPG/윤활유/주유소 테마 상승 속 급등"
+          },
+          {
+            "name": "한국석유",
+            "change": 10.3,
+            "value": 1018,
+            "reason": "정유 테마 동반 강세"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "로봇",
+        "avgChange": 7.08,
+        "sumValue": 3627,
+        "note": "피지컬 AI/휴머노이드 로봇 테마 상승",
+        "stocks": [
+          {
+            "name": "로보티즈",
+            "change": 4.35,
+            "value": 2141,
+            "reason": "피지컬 AI/휴머노이드 로봇 테마 상승"
+          },
+          {
+            "name": "에스피지",
+            "change": 4.39,
+            "value": 802,
+            "reason": "피지컬 AI/휴머노이드 로봇 테마 상승"
+          },
+          {
+            "name": "액스비스",
+            "change": 12.5,
+            "value": 684,
+            "reason": "피지컬 AI/휴머노이드 로봇 테마 상승"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "광통신",
+        "avgChange": 3.22,
+        "sumValue": 2191,
+        "note": "북미 광케이블 사업 확대 기대감",
+        "stocks": [
+          {
+            "name": "빛과전자",
+            "change": 3.02,
+            "value": 1524,
+            "reason": "북미 광케이블 사업 확대 기대감"
+          },
+          {
+            "name": "RFHIC",
+            "change": 3.42,
+            "value": 667,
+            "reason": "북미 광케이블 사업 확대 기대감"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "해운",
+        "avgChange": 8.01,
+        "sumValue": 2000,
+        "note": "",
+        "stocks": [
+          {
+            "name": "흥아해운",
+            "change": 8.01,
+            "value": 2000,
+            "reason": ""
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "AI",
+        "avgChange": 7.4,
+        "sumValue": 1651,
+        "note": "지능형로봇/인공지능(AI) 테마 상승",
+        "stocks": [
+          {
+            "name": "매드업",
+            "change": 10.01,
+            "value": 1026,
+            "reason": "지능형로봇/인공지능(AI) 테마 상승"
+          },
+          {
+            "name": "GS건설",
+            "change": 4.78,
+            "value": 625,
+            "reason": "지능형로봇/인공지능(AI) 테마 상승"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "철강",
+        "avgChange": 7.96,
+        "sumValue": 1235,
+        "note": "",
+        "stocks": [
+          {
+            "name": "넥스틸",
+            "change": 7.96,
+            "value": 1235,
+            "reason": ""
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "바이오",
+        "avgChange": 11.86,
+        "sumValue": 736,
+        "note": "구체 재료 미확인(잠정)",
+        "stocks": [
+          {
+            "name": "페니트리움바이오",
+            "change": 11.86,
+            "value": 736,
+            "reason": "구체 재료 미확인(잠정)"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "유리기판",
+        "avgChange": 4.62,
+        "sumValue": 679,
+        "note": "구체 재료 미확인(잠정)",
+        "stocks": [
+          {
+            "name": "태성",
+            "change": 4.62,
+            "value": 679,
+            "reason": "구체 재료 미확인(잠정)"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "2차전지",
+        "avgChange": 3.31,
+        "sumValue": 603,
+        "note": "구체 재료 미확인(잠정)",
+        "stocks": [
+          {
+            "name": "에코프로비엠",
+            "change": 3.31,
+            "value": 603,
+            "reason": "구체 재료 미확인(잠정)"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "조선기자재",
+        "avgChange": 9.03,
+        "sumValue": 536,
+        "note": "구체 재료 미확인(잠정)",
+        "stocks": [
+          {
+            "name": "HD현대마린솔루션",
+            "change": 9.03,
+            "value": 536,
+            "reason": "구체 재료 미확인(잠정)"
+          }
+        ]
+      }
+    ]
+  },
+  "2026-09-11": {
+    "groups": [
+      {
+        "rank": 1,
+        "theme": "MLCC",
+        "avgChange": 18.76,
+        "sumValue": 5435,
+        "note": "MLCC 공급난 부각 등에 MLCC(적층세라믹콘덴서) 테마 상승",
+        "stocks": [
+          {
+            "name": "삼화콘덴서",
+            "change": 18.76,
+            "value": 5435,
+            "reason": "MLCC 공급난 부각 등에 MLCC(적층세라믹콘덴서) 테마 상승 속 급등"
+          }
+        ]
+      },
+      {
+        "rank": 2,
+        "theme": "보안(정보)",
+        "avgChange": 20.18,
+        "sumValue": 5151,
+        "note": "젠슨 황 엔비디아 CEO '다음 AI 거대 시장은 사이버 보안' 발언",
+        "stocks": [
+          {
+            "name": "엑스게이트",
+            "change": 29.94,
+            "value": 2087,
+            "reason": "젠슨 황 엔비디아 CEO 발언('다음 AI 거대 시장은 사이버 보안') 등에 보안주(정보) 테마 상승 속 상한가"
+          },
+          {
+            "name": "우리로",
+            "change": 7.31,
+            "value": 1766,
+            "reason": "보안주(정보) 테마 상승 속 오픈AI 사이버보안 생태계 합류 소식 부각에 급등"
+          },
+          {
+            "name": "드림시큐리티",
+            "change": 23.29,
+            "value": 1298,
+            "reason": "젠슨 황 엔비디아 CEO 발언 등에 보안주(정보) 테마상승 속 급등"
+          }
+        ]
+      },
+      {
+        "rank": 3,
+        "theme": "조선",
+        "avgChange": 4.8,
+        "sumValue": 4378,
+        "note": "HD현대중공업 1.7조원 규모 발전엔진·SMR 생산설비 증설 발표",
+        "stocks": [
+          {
+            "name": "HD현대중공업",
+            "change": 5.62,
+            "value": 3420,
+            "reason": "HD현대중공업 1.7조원 규모 발전엔진·SMR 생산설비 증설 발표에 조선주 반등 신호탄으로 부각되며 급등"
+          },
+          {
+            "name": "HD한국조선해양",
+            "change": 3.98,
+            "value": 958,
+            "reason": "HD현대중공업발 발전엔진·SMR 증설 기대감 확산에 조선업종 동반 강세"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "화장품",
+        "avgChange": 11.22,
+        "sumValue": 3358,
+        "note": "K-뷰티 중남미 수출 급증 소식",
+        "stocks": [
+          {
+            "name": "한국화장품제조",
+            "change": 19.38,
+            "value": 1839,
+            "reason": "K-뷰티 중남미 수출 급증 소식"
+          },
+          {
+            "name": "에이피알",
+            "change": 3.05,
+            "value": 1519,
+            "reason": "K-뷰티 중남미 수출 급증 소식"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "원전",
+        "avgChange": 4.1,
+        "sumValue": 3087,
+        "note": "美 원전 8기 건설 제안 소식",
+        "stocks": [
+          {
+            "name": "한전기술",
+            "change": 4.83,
+            "value": 1778,
+            "reason": "美 원전 8기 건설 제안 소식"
+          },
+          {
+            "name": "GS건설",
+            "change": 3.36,
+            "value": 1309,
+            "reason": "美 원전 8기 건설 제안 소식"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "조선기자재",
+        "avgChange": 5.83,
+        "sumValue": 1504,
+        "note": "데이터센터용 엔진 유지보수 시장 확대 기대감",
+        "stocks": [
+          {
+            "name": "HD현대마린솔루션",
+            "change": 7.63,
+            "value": 877,
+            "reason": "데이터센터용 엔진 유지보수 시장 확대 기대감"
+          },
+          {
+            "name": "한화엔진",
+            "change": 4.03,
+            "value": 627,
+            "reason": "데이터센터용 엔진 유지보수 시장 확대 기대감"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "로봇",
+        "avgChange": 11.97,
+        "sumValue": 1284,
+        "note": "현대모비스 로봇 액추에이터 레이저 가공장비 공급",
+        "stocks": [
+          {
+            "name": "액스비스",
+            "change": 11.97,
+            "value": 1284,
+            "reason": "현대모비스 로봇 액추에이터 레이저 가공장비 공급"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "은행",
+        "avgChange": 3.24,
+        "sumValue": 968,
+        "note": "",
+        "stocks": [
+          {
+            "name": "우리금융지주",
+            "change": 3.24,
+            "value": 968,
+            "reason": ""
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "손해보험",
+        "avgChange": 6.03,
+        "sumValue": 934,
+        "note": "",
+        "stocks": [
+          {
+            "name": "삼성화재",
+            "change": 6.03,
+            "value": 934,
+            "reason": ""
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "콩/대두",
+        "avgChange": 3.23,
+        "sumValue": 636,
+        "note": "대두/콩 관련 농산물 가격 강세",
+        "stocks": [
+          {
+            "name": "샘표",
+            "change": 3.23,
+            "value": 636,
+            "reason": "대두/콩 관련 농산물 가격 강세"
+          }
+        ]
+      }
+    ]
+  },
+  "2026-09-14": {
+    "groups": [
+      {
+        "rank": 1,
+        "theme": "보안(정보)",
+        "avgChange": 14.53,
+        "sumValue": 7440,
+        "note": "젠슨 황 엔비디아 CEO 'AI 다음 응용처는 사이버보안' 발언 지속",
+        "stocks": [
+          {
+            "name": "샌즈랩",
+            "change": 29.95,
+            "value": 883,
+            "reason": "AI 사이버보안 수요 기대감에 2거래일 연속 상한가"
+          },
+          {
+            "name": "라온시큐어",
+            "change": 23.35,
+            "value": 619,
+            "reason": "사이버보안 테마 급등 속 급등"
+          },
+          {
+            "name": "지니언스",
+            "change": 13.45,
+            "value": 534,
+            "reason": "사이버보안 테마 급등 속 급등"
+          },
+          {
+            "name": "에스투더블유",
+            "change": 7.95,
+            "value": 1372,
+            "reason": "사이버보안 테마 강세 속 급등"
+          },
+          {
+            "name": "엑스게이트",
+            "change": 6.97,
+            "value": 2919,
+            "reason": "사이버보안 테마 강세 속 강세"
+          },
+          {
+            "name": "드림시큐리티",
+            "change": 5.53,
+            "value": 1113,
+            "reason": "사이버보안 테마 강세 속 강세"
+          }
+        ]
+      },
+      {
+        "rank": 2,
+        "theme": "광통신",
+        "avgChange": 21.16,
+        "sumValue": 7061,
+        "note": "6G 광통신 부품 국산화 사업 선정 및 AI 인프라 확대 기대감",
+        "stocks": [
+          {
+            "name": "광전자",
+            "change": 30.0,
+            "value": 2726,
+            "reason": "AI·반도체 관련 광통신주 동반 강세 속 상한가"
+          },
+          {
+            "name": "티엠씨",
+            "change": 20.96,
+            "value": 883,
+            "reason": "AI 인프라 확대에 따른 광통신 케이블 시장 진입 기대감에 VI 발동"
+          },
+          {
+            "name": "빛과전자",
+            "change": 12.53,
+            "value": 3452,
+            "reason": "6G 광통신 부품 상용화 사업 수행기관 선정 및 AI 인프라 확대 기대감"
+          }
+        ]
+      },
+      {
+        "rank": 3,
+        "theme": "방산",
+        "avgChange": 3.74,
+        "sumValue": 5056,
+        "note": "K-방산 업황 호조, 한화에어로 크로아티아 천무 공급계약 등 수주 호재",
+        "stocks": [
+          {
+            "name": "한화에어로스페이스",
+            "change": 4.72,
+            "value": 2844,
+            "reason": "크로아티아 천무 다연장로켓체계 공급계약(6411억원) 등 수주 호재 속 K-방산 강세"
+          },
+          {
+            "name": "LIG디펜스앤에어로스페이스",
+            "change": 3.1,
+            "value": 1123,
+            "reason": "K-방산 업황 호조 속 방산주 동반 강세"
+          },
+          {
+            "name": "한화시스템",
+            "change": 3.39,
+            "value": 1089,
+            "reason": "K-방산 업황 호조 속 방산주 동반 강세"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "화장품",
+        "avgChange": 7.96,
+        "sumValue": 2914,
+        "note": "K-뷰티 수출 호조 및 호실적 속 신고가 랠리",
+        "stocks": [
+          {
+            "name": "한국콜마",
+            "change": 3.18,
+            "value": 1207,
+            "reason": "K-뷰티 수출 호조 및 호실적 속 신고가 랠리"
+          },
+          {
+            "name": "실리콘투",
+            "change": 4.37,
+            "value": 1137,
+            "reason": "K-뷰티 수출 호조 및 호실적 속 신고가 랠리"
+          },
+          {
+            "name": "아로마티카",
+            "change": 16.34,
+            "value": 570,
+            "reason": "K-뷰티 수출 호조 및 호실적 속 신고가 랠리"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "반도체",
+        "avgChange": 5.87,
+        "sumValue": 2239,
+        "note": "8인치 파운드리 공급부족 및 AI·로봇향 수요 급증 기대감",
+        "stocks": [
+          {
+            "name": "DB하이텍",
+            "change": 5.77,
+            "value": 1718,
+            "reason": "8인치 파운드리 공급부족 및 AI·로봇향 수요 급증 기대감"
+          },
+          {
+            "name": "SFA반도체",
+            "change": 5.97,
+            "value": 521,
+            "reason": "8인치 파운드리 공급부족 및 AI·로봇향 수요 급증 기대감"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "은행",
+        "avgChange": 4.84,
+        "sumValue": 2071,
+        "note": "저평가 매력 및 외국인 지분율 50% 이상 매수세",
+        "stocks": [
+          {
+            "name": "우리금융지주",
+            "change": 4.84,
+            "value": 2071,
+            "reason": "저평가 매력 및 외국인 지분율 50% 이상 매수세"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "폴더블폰부품",
+        "avgChange": 6.76,
+        "sumValue": 1965,
+        "note": "애플 폴더블 아이폰 출시 기대감",
+        "stocks": [
+          {
+            "name": "비에이치",
+            "change": 5.68,
+            "value": 1043,
+            "reason": "애플 폴더블 아이폰 출시 기대감"
+          },
+          {
+            "name": "파인엠텍",
+            "change": 7.84,
+            "value": 922,
+            "reason": "애플 폴더블 아이폰 출시 기대감"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "조선",
+        "avgChange": 3.27,
+        "sumValue": 1641,
+        "note": "12.2억달러 규모 LNG운반선·원유운반선 6척 수주",
+        "stocks": [
+          {
+            "name": "삼성중공업",
+            "change": 3.27,
+            "value": 1641,
+            "reason": "12.2억달러 규모 LNG운반선·원유운반선 6척 수주"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "반도체소부장",
+        "avgChange": 6.84,
+        "sumValue": 1077,
+        "note": "반도체 특수가스(WF6) 가격 급등 및 2차전지 전해질 수요 회복 기대감",
+        "stocks": [
+          {
+            "name": "후성",
+            "change": 6.84,
+            "value": 1077,
+            "reason": "반도체 특수가스(WF6) 가격 급등 및 2차전지 전해질 수요 회복 기대감"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "게임",
+        "avgChange": 16.65,
+        "sumValue": 1052,
+        "note": "위메이드맥스 최대주주 변경 이슈",
+        "stocks": [
+          {
+            "name": "위메이드맥스",
+            "change": 29.84,
+            "value": 549,
+            "reason": "위메이드맥스 최대주주 변경 이슈"
+          },
+          {
+            "name": "위메이드",
+            "change": 3.45,
+            "value": 503,
+            "reason": "위메이드맥스 최대주주 변경 이슈"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "AI기판",
+        "avgChange": 29.91,
+        "sumValue": 673,
+        "note": "계열사 영풍전자 북미 빅테크 AI기판 공급 소식",
+        "stocks": [
+          {
+            "name": "영풍",
+            "change": 29.91,
+            "value": 673,
+            "reason": "계열사 영풍전자 북미 빅테크 AI기판 공급 소식"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "MLCC",
+        "avgChange": 4.43,
+        "sumValue": 644,
+        "note": "AI 서버·데이터센터향 MLCC 품귀현상",
+        "stocks": [
+          {
+            "name": "아모텍",
+            "change": 4.43,
+            "value": 644,
+            "reason": "AI 서버·데이터센터향 MLCC 품귀현상"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "지주사",
+        "avgChange": 8.63,
+        "sumValue": 512,
+        "note": "한화 인적분할 신설 지주사 상장 초기 강세",
+        "stocks": [
+          {
+            "name": "한화머시너리앤서비스홀딩스",
+            "change": 8.63,
+            "value": 512,
+            "reason": "한화 인적분할 신설 지주사 상장 초기 강세"
+          }
+        ]
+      }
+    ]
+  },
+  "2026-09-15": {
+    "groups": [
+      {
+        "rank": 1,
+        "theme": "2차전지",
+        "avgChange": 6.15,
+        "sumValue": 9366,
+        "note": "美 중국산 배터리 견제 반사이익 기대감 속 반등",
+        "stocks": [
+          {
+            "name": "삼성SDI",
+            "change": 3.57,
+            "value": 3837,
+            "reason": "美 중국산 배터리 견제 반사이익 기대감 속 2차전지 업종 반등"
+          },
+          {
+            "name": "SK이노베이션",
+            "change": 3.88,
+            "value": 2284,
+            "reason": "美 중국산 배터리 견제 반사이익 기대감"
+          },
+          {
+            "name": "LG에너지솔루션",
+            "change": 3.41,
+            "value": 1570,
+            "reason": "美 중국산 배터리 견제 반사이익 기대감"
+          },
+          {
+            "name": "포스코퓨처엠",
+            "change": 6.04,
+            "value": 1091,
+            "reason": "2차전지 소재주 반등 기대감 속 동반 강세"
+          },
+          {
+            "name": "에스엠벡셀",
+            "change": 13.83,
+            "value": 584,
+            "reason": "美 완성차 기업과 차세대 LMR 배터리 공동개발 협력 소식에 급등"
+          }
+        ]
+      },
+      {
+        "rank": 2,
+        "theme": "로봇",
+        "avgChange": 15.36,
+        "sumValue": 8987,
+        "note": "정부 제조업 AI 전환 정책 및 휴머노이드 생태계 육성 기대감",
+        "stocks": [
+          {
+            "name": "에스피지",
+            "change": 17.42,
+            "value": 3667,
+            "reason": "로봇 테마 강세 속 급등"
+          },
+          {
+            "name": "원익홀딩스",
+            "change": 18.49,
+            "value": 2520,
+            "reason": "정부 제조업 AI 전환 정책 및 휴머노이드 생태계 육성 기대감에 로봇 테마 급등"
+          },
+          {
+            "name": "삼현",
+            "change": 29.8,
+            "value": 1528,
+            "reason": "로봇 테마 상한가"
+          },
+          {
+            "name": "레인보우로보틱스",
+            "change": 4.16,
+            "value": 638,
+            "reason": "로봇 테마 강세 속 동반 상승"
+          },
+          {
+            "name": "PS일렉트로닉스",
+            "change": 6.95,
+            "value": 634,
+            "reason": "로봇 액추에이터 레이저 가공장비 공급 기대감"
+          }
+        ]
+      },
+      {
+        "rank": 3,
+        "theme": "원전",
+        "avgChange": 4.87,
+        "sumValue": 5869,
+        "note": "美 원전 프로젝트 참여 기대와 SMR 산업 육성 정책",
+        "stocks": [
+          {
+            "name": "한전기술",
+            "change": 7.24,
+            "value": 4368,
+            "reason": "美 원전 프로젝트 참여 기대, SMR 육성 정책, 자사주 소각 등에 급등"
+          },
+          {
+            "name": "DL이앤씨",
+            "change": 3.27,
+            "value": 808,
+            "reason": "원전 밸류체인 강세 속 동반 상승"
+          },
+          {
+            "name": "GS건설",
+            "change": 4.09,
+            "value": 693,
+            "reason": "원전 밸류체인 강세 속 동반 상승"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "바이오",
+        "avgChange": 10.36,
+        "sumValue": 5690,
+        "note": "",
+        "stocks": [
+          {
+            "name": "삼익제약",
+            "change": 23.19,
+            "value": 2375,
+            "reason": ""
+          },
+          {
+            "name": "한미약품",
+            "change": 4.75,
+            "value": 1389,
+            "reason": ""
+          },
+          {
+            "name": "지투지바이오",
+            "change": 7.91,
+            "value": 746,
+            "reason": ""
+          },
+          {
+            "name": "올릭스",
+            "change": 8.49,
+            "value": 655,
+            "reason": ""
+          },
+          {
+            "name": "펩트론",
+            "change": 7.48,
+            "value": 525,
+            "reason": ""
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "광통신",
+        "avgChange": 17.19,
+        "sumValue": 5059,
+        "note": "",
+        "stocks": [
+          {
+            "name": "광전자",
+            "change": 4.38,
+            "value": 3717,
+            "reason": ""
+          },
+          {
+            "name": "한국첨단소재",
+            "change": 29.98,
+            "value": 1342,
+            "reason": ""
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "반도체",
+        "avgChange": 11.26,
+        "sumValue": 3410,
+        "note": "",
+        "stocks": [
+          {
+            "name": "DB하이텍",
+            "change": 7.64,
+            "value": 1904,
+            "reason": ""
+          },
+          {
+            "name": "SFA반도체",
+            "change": 14.87,
+            "value": 1506,
+            "reason": ""
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "반도체소부장",
+        "avgChange": 4.92,
+        "sumValue": 2986,
+        "note": "",
+        "stocks": [
+          {
+            "name": "후성",
+            "change": 3.76,
+            "value": 1353,
+            "reason": ""
+          },
+          {
+            "name": "두산",
+            "change": 3.59,
+            "value": 1010,
+            "reason": ""
+          },
+          {
+            "name": "피에스케이홀딩스",
+            "change": 7.4,
+            "value": 623,
+            "reason": ""
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "보안",
+        "avgChange": 19.21,
+        "sumValue": 2219,
+        "note": "",
+        "stocks": [
+          {
+            "name": "아톤",
+            "change": 29.84,
+            "value": 676,
+            "reason": ""
+          },
+          {
+            "name": "라온시큐어",
+            "change": 8.58,
+            "value": 1543,
+            "reason": ""
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "SOFC",
+        "avgChange": 8.58,
+        "sumValue": 1965,
+        "note": "",
+        "stocks": [
+          {
+            "name": "두산퓨얼셀",
+            "change": 8.58,
+            "value": 1965,
+            "reason": ""
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "MLCC",
+        "avgChange": 3.45,
+        "sumValue": 1884,
+        "note": "",
+        "stocks": [
+          {
+            "name": "삼화콘덴서",
+            "change": 3.45,
+            "value": 1884,
+            "reason": ""
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "탈모",
+        "avgChange": 9.12,
+        "sumValue": 1634,
+        "note": "탈모치료제 건보 확대 기대감",
+        "stocks": [
+          {
+            "name": "JW신약",
+            "change": 9.12,
+            "value": 1634,
+            "reason": "탈모치료제 건보 확대 기대감"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "철강",
+        "avgChange": 7.88,
+        "sumValue": 927,
+        "note": "",
+        "stocks": [
+          {
+            "name": "현대제철",
+            "change": 7.88,
+            "value": 927,
+            "reason": ""
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "PCB",
+        "avgChange": 3.28,
+        "sumValue": 542,
+        "note": "",
+        "stocks": [
+          {
+            "name": "티엘비",
+            "change": 3.28,
+            "value": 542,
+            "reason": ""
+          }
+        ]
+      }
+    ]
+  },
+  "2026-09-16": {
+    "groups": [
+      {
+        "rank": 1,
+        "theme": "반도체",
+        "avgChange": 8.05,
+        "sumValue": 75786,
+        "note": "HBM 수요 확대 및 고객사 다변화 기대감, 8인치 파운드리 공급감소·가격인상 기대감",
+        "stocks": [
+          {
+            "name": "SK하이닉스",
+            "change": 3.96,
+            "value": 72498,
+            "reason": "HBM4 12단 양산·16단 인증 진입, 반도체 레버리지 ETP 자산 급증으로 변동성 확대"
+          },
+          {
+            "name": "DB하이텍",
+            "change": 8.14,
+            "value": 2052,
+            "reason": "8인치 파운드리 공급감소 및 중국 AI·로봇용 수요 확대, 중국고객 대상 추가 10% 가격인상(10월 반영)"
+          },
+          {
+            "name": "SFA반도체",
+            "change": 3.72,
+            "value": 733,
+            "reason": "반도체 대형주 강세 속 동반 상승"
+          },
+          {
+            "name": "해성디에스",
+            "change": 16.39,
+            "value": 503,
+            "reason": "반도체 패키지기판 수요 확대 기대감"
+          }
+        ]
+      },
+      {
+        "rank": 2,
+        "theme": "광통신",
+        "avgChange": 15.08,
+        "sumValue": 14290,
+        "note": "광통신 부품 국산화 사업(과기정통부) 수행기관 선정 소식에 AI데이터센터·6G 확산 기대감",
+        "stocks": [
+          {
+            "name": "대한광통신",
+            "change": 14.78,
+            "value": 7147,
+            "reason": "광통신 부품 국산화 사업 수혜 기대감 속 광통신 관련주 동반 강세"
+          },
+          {
+            "name": "빛과전자",
+            "change": 7.4,
+            "value": 3350,
+            "reason": "과기정통부 '지능정보 네트워크용 광통신 부품 상용화 사업' 수행기관 선정, 전일 상한가 이어 강세 지속"
+          },
+          {
+            "name": "빛샘전자",
+            "change": 30.0,
+            "value": 1955,
+            "reason": "광통신 테마 강세 속 상한가"
+          },
+          {
+            "name": "성호전자",
+            "change": 12.31,
+            "value": 992,
+            "reason": "자회사 ADS테크 CPO(공동패키지광학) 정렬먼트 시스템 삼성전자 공동개발 계약, AI데이터센터용 광트랜시버 관련"
+          },
+          {
+            "name": "우리넷",
+            "change": 10.91,
+            "value": 846,
+            "reason": "광통신 테마 강세 속 동반 상승"
+          }
+        ]
+      },
+      {
+        "rank": 3,
+        "theme": "MLCC",
+        "avgChange": 4.18,
+        "sumValue": 8827,
+        "note": "AI서버·데이터센터향 MLCC 품귀현상 지속",
+        "stocks": [
+          {
+            "name": "삼성전기",
+            "change": 4.18,
+            "value": 8827,
+            "reason": "AI서버·데이터센터향 MLCC 품귀현상 지속"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "반도체소부장",
+        "avgChange": 5.85,
+        "sumValue": 5607,
+        "note": "삼성전자 광주·SK하이닉스 호남 후공정 시설 관측, HPSP 테라팩 수주 기대감",
+        "stocks": [
+          {
+            "name": "주성엔지니어링",
+            "change": 3.99,
+            "value": 2200,
+            "reason": "삼성전자 광주·SK하이닉스 호남 후공정 시설 관측, HPSP 테라팩 수주 기대감"
+          },
+          {
+            "name": "두산",
+            "change": 7.37,
+            "value": 1579,
+            "reason": "삼성전자 광주·SK하이닉스 호남 후공정 시설 관측, HPSP 테라팩 수주 기대감"
+          },
+          {
+            "name": "원익IPS",
+            "change": 8.76,
+            "value": 1248,
+            "reason": "삼성전자 광주·SK하이닉스 호남 후공정 시설 관측, HPSP 테라팩 수주 기대감"
+          },
+          {
+            "name": "HPSP",
+            "change": 3.28,
+            "value": 580,
+            "reason": "삼성전자 광주·SK하이닉스 호남 후공정 시설 관측, HPSP 테라팩 수주 기대감"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "전력설비",
+        "avgChange": 6.44,
+        "sumValue": 4405,
+        "note": "미국 태양광 발전단지 공급 및 역대최대 수주 소식",
+        "stocks": [
+          {
+            "name": "효성중공업",
+            "change": 4.02,
+            "value": 1723,
+            "reason": "미국 태양광 발전단지 공급 및 역대최대 수주 소식"
+          },
+          {
+            "name": "LS에코에너지",
+            "change": 10.93,
+            "value": 1673,
+            "reason": "미국 태양광 발전단지 공급 및 역대최대 수주 소식"
+          },
+          {
+            "name": "산일전기",
+            "change": 4.37,
+            "value": 1009,
+            "reason": "미국 태양광 발전단지 공급 및 역대최대 수주 소식"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "통신장비",
+        "avgChange": 9.17,
+        "sumValue": 1842,
+        "note": "2027년 5G·6G 투자 확대에 따른 공급부족 전망 기대감",
+        "stocks": [
+          {
+            "name": "RFHIC",
+            "change": 5.57,
+            "value": 1275,
+            "reason": "2027년 5G·6G 투자 확대에 따른 공급부족 전망 기대감"
+          },
+          {
+            "name": "케이엠더블유",
+            "change": 12.76,
+            "value": 567,
+            "reason": "2027년 5G·6G 투자 확대에 따른 공급부족 전망 기대감"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "SOFC",
+        "avgChange": 21.27,
+        "sumValue": 1732,
+        "note": "수소연료전지 시장 성장 기대감",
+        "stocks": [
+          {
+            "name": "한선엔지니어링",
+            "change": 25.35,
+            "value": 967,
+            "reason": "수소연료전지 시장 성장 기대감"
+          },
+          {
+            "name": "비나텍",
+            "change": 17.18,
+            "value": 765,
+            "reason": "수소연료전지 시장 성장 기대감"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "기타",
+        "avgChange": 4.0,
+        "sumValue": 1356,
+        "note": "구체 재료 미확인(잠정)",
+        "stocks": [
+          {
+            "name": "씨피시스템",
+            "change": 4.0,
+            "value": 1356,
+            "reason": "구체 재료 미확인(잠정)"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "보안",
+        "avgChange": 3.19,
+        "sumValue": 852,
+        "note": "AI 사이버보안 테마 지속",
+        "stocks": [
+          {
+            "name": "샌즈랩",
+            "change": 3.19,
+            "value": 852,
+            "reason": "AI 사이버보안 테마 지속"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "화장품",
+        "avgChange": 3.94,
+        "sumValue": 591,
+        "note": "",
+        "stocks": [
+          {
+            "name": "한국콜마",
+            "change": 3.94,
+            "value": 591,
+            "reason": ""
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "PCB",
+        "avgChange": 4.24,
+        "sumValue": 567,
+        "note": "",
+        "stocks": [
+          {
+            "name": "대덕전자",
+            "change": 4.24,
+            "value": 567,
+            "reason": ""
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "2차전지",
+        "avgChange": 4.34,
+        "sumValue": 547,
+        "note": "",
+        "stocks": [
+          {
+            "name": "LS머트리얼즈",
+            "change": 4.34,
+            "value": 547,
+            "reason": ""
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "철강",
+        "avgChange": 10.24,
+        "sumValue": 533,
+        "note": "",
+        "stocks": [
+          {
+            "name": "동국산업",
+            "change": 10.24,
+            "value": 533,
+            "reason": ""
+          }
+        ]
+      }
+    ]
+  },
+  "2026-09-17": {
+    "groups": [
+      {
+        "rank": 1,
+        "theme": "방산",
+        "avgChange": 9.36,
+        "sumValue": 5175,
+        "note": "미-이란 전쟁 장기화로 중동 방공무기 재고보충 수요 확대 기대, 지정학 리스크 지속에 방산주 전반 강세",
+        "stocks": [
+          {
+            "name": "한화에어로스페이스",
+            "change": 3.98,
+            "value": 1854,
+            "reason": "중동 방공 미사일 재고보충 수요 확대 기대"
+          },
+          {
+            "name": "한화시스템",
+            "change": 12.65,
+            "value": 1045,
+            "reason": "방공·레이더·SAR위성 수출 수주 기대"
+          },
+          {
+            "name": "LIG디펜스앤에어로스페이스",
+            "change": 6.31,
+            "value": 1010,
+            "reason": "K방산 수출 릴레이 수혜"
+          },
+          {
+            "name": "센서뷰",
+            "change": 20.69,
+            "value": 581,
+            "reason": "방산주 강세 확산에 RF·광학 부품주로 동반 급등"
+          },
+          {
+            "name": "우리기술",
+            "change": 3.17,
+            "value": 685,
+            "reason": "원전 테마 부각 + 방산 자회사 성장성 기대"
+          }
+        ]
+      },
+      {
+        "rank": 2,
+        "theme": "반도체",
+        "avgChange": 17.55,
+        "sumValue": 4117,
+        "note": "AI메모리(HBM) 수요 확대와 OLED·반도체 소재 사업 기대감에 반도체 관련주 강세",
+        "stocks": [
+          {
+            "name": "하나마이크론",
+            "change": 7.58,
+            "value": 1257,
+            "reason": "SK하이닉스 HBM 후공정 수혜, AI메모리 수요 확대"
+          },
+          {
+            "name": "한켐",
+            "change": 29.91,
+            "value": 1706,
+            "reason": "OLED·반도체 소재 사업 기대감에 상한가"
+          },
+          {
+            "name": "한양디지텍",
+            "change": 25.49,
+            "value": 515,
+            "reason": "메모리 가격 상승·HBM 출하 확대로 영업이익 전망 상향(KB증권)"
+          },
+          {
+            "name": "코칩",
+            "change": 7.21,
+            "value": 639,
+            "reason": "AI데이터센터(오라클 등)향 MLCC 공급 부각"
+          }
+        ]
+      },
+      {
+        "rank": 3,
+        "theme": "조선",
+        "avgChange": 7.03,
+        "sumValue": 4103,
+        "note": "AI데이터센터향 발전엔진·가스터빈 수요 확대 및 밸류에이션 낙폭과대 인식에 조선주 동반 반등",
+        "stocks": [
+          {
+            "name": "HD현대중공업",
+            "change": 6.58,
+            "value": 1305,
+            "reason": "AI데이터센터향 발전용 엔진 수요, 낙폭과대 반등"
+          },
+          {
+            "name": "삼성중공업",
+            "change": 6.44,
+            "value": 979,
+            "reason": "LNG선·VLCC 고가 수주 모멘텀"
+          },
+          {
+            "name": "한화엔진",
+            "change": 10.3,
+            "value": 1118,
+            "reason": "군함·함정용 엔진 수출 수주 기대"
+          },
+          {
+            "name": "HD한국조선해양",
+            "change": 4.81,
+            "value": 701,
+            "reason": "LNG운반선 고가 수주 사이클 + 함정 발주 증가"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "항공우주",
+        "avgChange": 18.95,
+        "sumValue": 3357,
+        "note": "스페이스X 스타십 시험비행 기대감에 관련 벤더·투자사 동반 급등",
+        "stocks": [
+          {
+            "name": "비츠로테크",
+            "change": 30.0,
+            "value": 957,
+            "reason": "스타십 시험비행 기대 속 우주항공·방산 부품주 상한가"
+          },
+          {
+            "name": "스피어",
+            "change": 16.71,
+            "value": 1355,
+            "reason": "스페이스X 1차 벤더사 부각"
+          },
+          {
+            "name": "아주IB투자",
+            "change": 10.14,
+            "value": 1045,
+            "reason": "스페이스X 지분 보유 벤처캐피탈, 스타십 기대감"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "게임",
+        "avgChange": 20.7,
+        "sumValue": 3385,
+        "note": "",
+        "stocks": [
+          {
+            "name": "미투온",
+            "change": 20.7,
+            "value": 3385,
+            "reason": "카카오게임즈가 지분 39.56%(약 980억원) 인수 소식에 상한가"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "광통신",
+        "avgChange": 16.38,
+        "sumValue": 3185,
+        "note": "",
+        "stocks": [
+          {
+            "name": "성호전자",
+            "change": 16.38,
+            "value": 3185,
+            "reason": "광통신 테마 재부각에 급등"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "바이오",
+        "avgChange": 9.8,
+        "sumValue": 2522,
+        "note": "",
+        "stocks": [
+          {
+            "name": "현대약품",
+            "change": 5.32,
+            "value": 1867,
+            "reason": "정부 임신중지약물(미프지미소) 국내 도입 추진, 독점판권 보유"
+          },
+          {
+            "name": "인제니아테라퓨틱스(Reg.S)",
+            "change": 14.28,
+            "value": 655,
+            "reason": "코스닥 신규상장 혈관질환 항체 신약 개발사, 상장 초기 수급"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "전력설비",
+        "avgChange": 6.38,
+        "sumValue": 1504,
+        "note": "AI데이터센터 전력 인프라(케이블·비상발전기) 수요 확대 기대",
+        "stocks": [
+          {
+            "name": "가온전선",
+            "change": 4.41,
+            "value": 796,
+            "reason": "AI데이터센터향 저마찰 케이블·전력망 수주 확대"
+          },
+          {
+            "name": "지엔씨에너지",
+            "change": 8.34,
+            "value": 708,
+            "reason": "데이터센터 비상발전기 시장점유율 1위 부각"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "에너지",
+        "avgChange": 5.47,
+        "sumValue": 564,
+        "note": "",
+        "stocks": [
+          {
+            "name": "포스코인터내셔널",
+            "change": 5.47,
+            "value": 564,
+            "reason": "美 가스전 인수로 LNG 트레이딩 확대 기대, 기관 5일 연속 순매수"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "AI",
+        "avgChange": 20.77,
+        "sumValue": 507,
+        "note": "",
+        "stocks": [
+          {
+            "name": "지어소프트",
+            "change": 20.77,
+            "value": 507,
+            "reason": "AI 기반 소프트웨어 플랫폼, AI 수익화 기대감 재점화"
+          }
+        ]
+      }
+    ]
+  },
+  "2026-09-18": {
+    "groups": [
+      {
+        "rank": 1,
+        "theme": "반도체",
+        "avgChange": 6.12,
+        "sumValue": 150968,
+        "note": "FOMC 0.25%p 금리인하 확정 후 외국인 집중 매수, 반도체 랠리 동반",
+        "stocks": [
+          {
+            "name": "SK하이닉스",
+            "change": 5.96,
+            "value": 119118,
+            "reason": "FOMC 금리인하 후 외국인 집중 매수, 인텔과 美 메모리 공동생산 논의·HBM 지배력 부각"
+          },
+          {
+            "name": "삼성전기",
+            "change": 4.36,
+            "value": 17870,
+            "reason": "FOMC 금리인하 이후 외국인·기관 동반 매수, 반도체 부품 랠리 동반"
+          },
+          {
+            "name": "SK스퀘어",
+            "change": 6.25,
+            "value": 7804,
+            "reason": "SK하이닉스 지분가치(NAV 95%+) 연동 상승, 펀드 대안 투자처 부각"
+          },
+          {
+            "name": "한미반도체",
+            "change": 4.21,
+            "value": 2588,
+            "reason": "반도체 장비주 강세, 엔비디아 내년 칩 판매량 2배 전망 수혜"
+          },
+          {
+            "name": "브이엠",
+            "change": 4.17,
+            "value": 882,
+            "reason": "SK하이닉스향 반도체 식각장비 공급사, 반도체 랠리 동반"
+          },
+          {
+            "name": "한양디지텍",
+            "change": 10.29,
+            "value": 793,
+            "reason": "반도체 메모리모듈·SSD 제조사, 메모리 랠리 동반 강세"
+          },
+          {
+            "name": "두산테스나",
+            "change": 9.38,
+            "value": 736,
+            "reason": "AI 반도체 테스트 수요 확대, 차량용 반도체 성장 기대"
+          },
+          {
+            "name": "코미코",
+            "change": 5.65,
+            "value": 601,
+            "reason": "반도체 세정·소재 서비스업체로 반도체 랠리 동반 강세"
+          },
+          {
+            "name": "리노공업",
+            "change": 4.82,
+            "value": 576,
+            "reason": "기관 9일 연속 순매수, 반도체 프로브카드·테스트소켓 대장주 부각"
+          }
+        ]
+      },
+      {
+        "rank": 2,
+        "theme": "광통신",
+        "avgChange": 11.02,
+        "sumValue": 25570,
+        "note": "AI데이터센터向 광통신·광반도체 인프라 수요 확대 기대",
+        "stocks": [
+          {
+            "name": "대한광통신",
+            "change": 14.07,
+            "value": 10047,
+            "reason": "AI데이터센터向 광통신 인프라 수요 확대 기대, 거래량 폭증"
+          },
+          {
+            "name": "성호전자",
+            "change": 22.22,
+            "value": 5131,
+            "reason": "광통신 부품 테마 동반 급등"
+          },
+          {
+            "name": "RFHIC",
+            "change": 14.79,
+            "value": 2215,
+            "reason": "AI 인프라 투자 확대 기대감에 통신장비·RF부품 강세"
+          },
+          {
+            "name": "광전자",
+            "change": 3.02,
+            "value": 2231,
+            "reason": "광통신·광반도체 테마주 강한 매수세"
+          },
+          {
+            "name": "빛샘전자",
+            "change": 4.8,
+            "value": 2221,
+            "reason": "광통신·광반도체 테마 동반 강세"
+          },
+          {
+            "name": "우리로",
+            "change": 15.95,
+            "value": 1658,
+            "reason": "광통신·광반도체 테마 강세, 정부 광통신 부품 국산화 국책사업 기대"
+          },
+          {
+            "name": "센서뷰",
+            "change": 8.01,
+            "value": 816,
+            "reason": "밀리미터파(mmWave) RF소재 전문기업, 통신장비 테마 동반 상승"
+          },
+          {
+            "name": "RF머트리얼즈",
+            "change": 7.28,
+            "value": 660,
+            "reason": "AI 인프라 투자 확대에 통신장비 부품 강세"
+          },
+          {
+            "name": "우리넷",
+            "change": 9.07,
+            "value": 591,
+            "reason": "美 훈풍에 국내 광통신주 동반 강세"
+          }
+        ]
+      },
+      {
+        "rank": 3,
+        "theme": "전력설비",
+        "avgChange": 9.06,
+        "sumValue": 24210,
+        "note": "제너락-아마존 AI데이터센터向 비상발전기 공급계약 소식에 전력 인프라주 동반 강세",
+        "stocks": [
+          {
+            "name": "가온전선",
+            "change": 23.8,
+            "value": 8984,
+            "reason": "AI데이터센터向 전력 케이블 수요 급증, 전력 인프라 테마 주도"
+          },
+          {
+            "name": "대한전선",
+            "change": 11.84,
+            "value": 2748,
+            "reason": "전력망 수주 기대 연속 강세, 전력 인프라 테마 확산"
+          },
+          {
+            "name": "LS ELECTRIC",
+            "change": 3.22,
+            "value": 2617,
+            "reason": "전력 케이블·전력기기 섹터 연동 강세"
+          },
+          {
+            "name": "대원전선",
+            "change": 8.4,
+            "value": 1714,
+            "reason": "전력 인프라 테마 확산 동반 상승"
+          },
+          {
+            "name": "지엔씨에너지",
+            "change": 5.26,
+            "value": 1662,
+            "reason": "제너락-아마존 AI데이터센터向 비상발전기 공급계약 소식에 전력설비 테마 동반 강세"
+          },
+          {
+            "name": "산일전기",
+            "change": 4.73,
+            "value": 1459,
+            "reason": "전력설비 테마 동반 강세"
+          },
+          {
+            "name": "일진전기",
+            "change": 8.12,
+            "value": 1174,
+            "reason": "전력설비 테마 동반 강세, 전력 인프라 수주 기대"
+          },
+          {
+            "name": "LS에코에너지",
+            "change": 13.58,
+            "value": 1121,
+            "reason": "전력 인프라 테마 동반 강세"
+          },
+          {
+            "name": "KBI메탈",
+            "change": 9.35,
+            "value": 1004,
+            "reason": "제너락-아마존 AI데이터센터向 비상발전기 공급계약 소식에 전력설비 관련주 동반 급등"
+          },
+          {
+            "name": "LS",
+            "change": 6.74,
+            "value": 945,
+            "reason": "전력 케이블 섹터 연동 강세"
+          },
+          {
+            "name": "SK이터닉스",
+            "change": 4.6,
+            "value": 782,
+            "reason": "전력설비 테마 동반 강세"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "PCB",
+        "avgChange": 3.13,
+        "sumValue": 3208,
+        "note": "",
+        "stocks": [
+          {
+            "name": "두산",
+            "change": 3.13,
+            "value": 3208,
+            "reason": "AI데이터센터向 CCL(동박적층판) 9684억원 설비 증설 발표 및 1213억원 자사주 소각 결정"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "화장품",
+        "avgChange": 5.03,
+        "sumValue": 3085,
+        "note": "",
+        "stocks": [
+          {
+            "name": "에이피알",
+            "change": 4.39,
+            "value": 1603,
+            "reason": "K-뷰티 수출 호조, 화장품 대장주 부각에 관련주 동반 상승"
+          },
+          {
+            "name": "달바글로벌",
+            "change": 5.5,
+            "value": 815,
+            "reason": "K-뷰티 성장세 속 화장품 관련주 동반 상승"
+          },
+          {
+            "name": "한국화장품제조",
+            "change": 5.19,
+            "value": 667,
+            "reason": "화장품 대장주(에이피알) 강세에 관련주 동반 상승"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "로봇",
+        "avgChange": 5.99,
+        "sumValue": 3041,
+        "note": "",
+        "stocks": [
+          {
+            "name": "삼현",
+            "change": 5.48,
+            "value": 1109,
+            "reason": "현대차-엔비디아 모빌리티 협력 기대감에 자동차부품·로봇 관련주 매수세"
+          },
+          {
+            "name": "한라캐스트",
+            "change": 6.71,
+            "value": 1063,
+            "reason": "도요타 휴머노이드 로봇 40만대 투입 계획에 피지컬AI·로봇 테마 동반 강세"
+          },
+          {
+            "name": "현대무벡스",
+            "change": 5.79,
+            "value": 869,
+            "reason": "휴머노이드 로봇 출하 확대 전망에 물류자동화 로봇 관련주 강세"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "방산",
+        "avgChange": 3.67,
+        "sumValue": 2908,
+        "note": "",
+        "stocks": [
+          {
+            "name": "한화시스템",
+            "change": 3.1,
+            "value": 1763,
+            "reason": "방산 업종 전반 강세 속 동반 상승"
+          },
+          {
+            "name": "LIG디펜스앤에어로스페이스",
+            "change": 4.24,
+            "value": 1145,
+            "reason": "방산 업종 전반 강세 속 동반 상승"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "MLCC",
+        "avgChange": 4.58,
+        "sumValue": 2469,
+        "note": "",
+        "stocks": [
+          {
+            "name": "삼화콘덴서",
+            "change": 4.58,
+            "value": 2469,
+            "reason": "MLCC 업황 개선 기대감, 콘덴서 매출 비중 높은 국내 유일 종합 콘덴서 제작사"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "기타",
+        "avgChange": 5.81,
+        "sumValue": 1773,
+        "note": "",
+        "stocks": [
+          {
+            "name": "금호전기",
+            "change": 3.2,
+            "value": 1233,
+            "reason": "코스피 전반 강세 속 동반 상승(개별 재료 미확인)"
+          },
+          {
+            "name": "티엠씨",
+            "change": 8.42,
+            "value": 540,
+            "reason": "코스피 전반 강세 속 동반 상승(개별 재료 미확인)"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "반도체소부장",
+        "avgChange": 4.73,
+        "sumValue": 1647,
+        "note": "",
+        "stocks": [
+          {
+            "name": "LG이노텍",
+            "change": 4.73,
+            "value": 1647,
+            "reason": "반도체·IT부품 랠리 동반 강세"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "바이오",
+        "avgChange": 8.38,
+        "sumValue": 1349,
+        "note": "",
+        "stocks": [
+          {
+            "name": "파미셀",
+            "change": 8.38,
+            "value": 1349,
+            "reason": "코스피 전반 강세 속 줄기세포치료제 개발기업 매수세 유입(개별 재료 미확인)"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "원전",
+        "avgChange": 4.8,
+        "sumValue": 865,
+        "note": "",
+        "stocks": [
+          {
+            "name": "우리기술",
+            "change": 4.8,
+            "value": 865,
+            "reason": "원전 해체시장 확대 기대감 및 방산 자회사 성장성 부각, AI데이터센터向 SMR 전력공급 논의"
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "theme": "항공우주",
+        "avgChange": 11.71,
+        "sumValue": 770,
+        "note": "",
+        "stocks": [
+          {
+            "name": "켄코아에어로스페이스",
+            "change": 11.71,
+            "value": 770,
+            "reason": "방산·우주항공 테마 지속 강세"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,24 @@
+# 비밀값/토큰 — 절대 커밋 금지
+data/kis_token.txt
+data/kis_token_cache.json
+.env
+
+# Python
+__pycache__/
+*.pyc
+
+# 이번 세션 작업 중 남은 스크래치/중간 산출물 (정식 데이터 파일만 추적)
+data/*
+!data/daily_reports.json
+!data/daily_detail_with_reasons.json
+!data/recent_prices.json
+!data/supabase_config.json
+!data/site_password.json
+
+# 원본 참고 엑셀(개인 자료, Pages 서빙에 불필요)
+reference/
+
+# Capacitor 안드로이드 빌드 산출물
+mobile-app/android/app/build/
+mobile-app/android/.gradle/
+mobile-app/node_modules/
