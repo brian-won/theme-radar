@@ -3494,7 +3494,7 @@
   // Supabase anon key는 공개 배포용 키라 노출돼도 안전함(RLS로 접근 범위 제한) — data/supabase_config.json에서 빌드 시 주입
   var SUPABASE_CONFIG = {"url": "https://qhbkjxkxhuqbgepqmiff.supabase.co", "anonKey": "sb_publishable_H7pr48fq13eRMDyeh7aVsw_kw5rLJTK"};
   // 비밀번호는 SHA-256 해시만 저장됨(평문 없음) — scripts/set_dashboard_password.py로 설정
-  var SITE_PASSWORD = {"sha256": "057ba03d6c44104863dc7361fe4578965d1887360f90a0895882e58a6248fc86"};
+  var SITE_PASSWORD = {"sha256": "4a6ab875abee1175898ce32b79cf79bb1d0340ece68fa41d7fa1d57d6ed9674b"};
 
   var TOP_N = 15;
   var fmt = function (n, d) { return Number(n).toLocaleString('ko-KR', {minimumFractionDigits: d || 0, maximumFractionDigits: d || 0}); };
