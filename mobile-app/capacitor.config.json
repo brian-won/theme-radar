@@ -1,0 +1,12 @@
+{
+  "appId": "com.investor.themeradar",
+  "appName": "테마 레이더",
+  "webDir": "www",
+  "server": {
+    "url": "https://brian-won.github.io/theme-radar/",
+    "cleartext": false
+  },
+  "android": {
+    "allowMixedContent": false
+  }
+}
