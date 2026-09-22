@@ -18,8 +18,10 @@
 ```bash
 python scripts/market_screen.py [YYYYMMDD]   # 시황+종목 스크리닝 원본 JSON 출력 (테마/재료는 후속 LLM 단계에서 채움)
 python scripts/fetch_recent_prices.py        # 관심종목 탭용 최근 5거래일 시세(KIS KRX+NXT 통합)·코스피/코스닥 구분 → data/recent_prices.json (리포트 갱신 후 빌드 전에 실행, 약 3분)
-python scripts/build_dashboard.py            # data/daily_reports.json + daily_detail_with_reasons.json + recent_prices.json → dashboard/index.html (공통 정적 웹, 도구 무관)
-# 필요 환경변수: KRX_ID, KRX_PW (data.krx.co.kr 회원) / KIS_APP_KEY, KIS_APP_SECRET (KIS 모의투자, 당일 조회 시 애프터마켓+NXT 통합 보정에 사용)
+python scripts/build_dashboard.py            # data/*.json → dashboard/index.html + docs/index.html (GitHub Pages 배포용, 내용 동일)
+git add -A && git commit -m "..." && git push    # docs/index.html 갱신을 실제 배포(https://brian-won.github.io/theme-radar/)에 반영하려면 푸시까지 해야 함
+python scripts/set_dashboard_password.py "새 비밀번호"   # 대시보드 접근 비밀번호 변경(해시만 저장됨) — 변경 후 build_dashboard.py 재실행 필요
+# 필요 환경변수: KRX_ID, KRX_PW (data.krx.co.kr 회원) / KIS_APP_KEY, KIS_APP_SECRET (KIS 모의투자, 애프터마켓+NXT 통합 보정·관심종목 5일 시세에 사용)
 ```
 lint/typecheck/test/build 파이프라인은 아직 미구성 (스크립트 위주 프로젝트). 구성 시 이 섹션을 갱신할 것.
 
