@@ -257,7 +257,6 @@
   table.mkt-table tbody tr.mkt-row { cursor: pointer; }
   table.mkt-table tbody tr.mkt-row:hover td { filter: brightness(0.96); }
   table.mkt-table tbody tr.mkt-row.active td.mkt-date { background: var(--accent); color: #fff; font-weight: 700; }
-  table.mkt-table tbody tr.mkt-empty td { color: var(--text-muted); }
   table.mkt-table td.mkt-date { font-family: "JetBrains Mono", monospace; font-weight: 600; background: var(--surface-alt); }
   td.mkt-pos { background: #FFC7CE; color: #9C0006; font-weight: 600; }
   td.mkt-neg { background: #DEEBF7; color: #0070C0; font-weight: 600; }
@@ -666,17 +665,6 @@
       .sort(function (a, b) { return a.date < b.date ? 1 : -1; }); // 최신 날짜가 위
   }
   function monthLabel(m) { return m.slice(0, 4) + '년 ' + parseInt(m.slice(5), 10) + '월'; }
-  // 선택한 달의 평일(월~금) 전체를 오름차순으로 반환 — 데이터 없는 미래/휴장일도 빈 행으로 표시하기 위함
-  function weekdaysOfMonth(month) {
-    var y = parseInt(month.slice(0, 4), 10), m = parseInt(month.slice(5, 7), 10);
-    var lastDate = new Date(y, m, 0).getDate();
-    var list = [];
-    for (var d = 1; d <= lastDate; d++) {
-      var wd = new Date(y, m - 1, d).getDay();
-      if (wd >= 1 && wd <= 5) list.push(y + '-' + String(m).padStart(2, '0') + '-' + String(d).padStart(2, '0'));
-    }
-    return list;
-  }
   function niceStep(rough) {
     if (!rough || rough <= 0) return 1;
     var mag = Math.pow(10, Math.floor(Math.log10(rough)));
@@ -720,11 +708,11 @@
     if (!MONTH_SEL.market || months.indexOf(MONTH_SEL.market) === -1) MONTH_SEL.market = months[months.length - 1];
     renderMonthNav('market', months, renderMarketTab);
 
-    var byDate = {};
-    reports.forEach(function (r) { byDate[r.date] = r; });
-    var weekdays = weekdaysOfMonth(MONTH_SEL.market);
-    var rows = weekdays.map(function (date) { return byDate[date] || null; });
-    var withData = rows.filter(Boolean);
+    // 비거래일(주말·공휴일)은 아예 만들지 않고 실제 리포트가 있는 거래일만 오름차순으로 나열
+    // — 그래프 연속성을 위해 빈 칸(gap)을 두지 않는다(2026-10-19 사용자 요청).
+    var rows = reports.filter(function (r) { return r.date.slice(0, 7) === MONTH_SEL.market; });
+    var weekdays = rows.map(function (r) { return r.date; });
+    var withData = rows;
     if (!DAY_SEL.market || !withData.some(function (d) { return d.date === DAY_SEL.market; })) {
       DAY_SEL.market = withData.length ? withData[withData.length - 1].date : null; // 그 달의 가장 최근 데이터
     }
@@ -738,8 +726,7 @@
       return '<td class="mkt-bar-cell"><div class="mkt-bar-wrap"><div class="mkt-bar" style="width:' + pct + '%"></div><span class="mkt-bar-label">' + v + '</span></div></td>';
     }
     var tbody = document.querySelector('#dayTable-market tbody');
-    tbody.innerHTML = rows.map(function (d, i) {
-      if (!d) return '<tr class="mkt-empty"><td class="mkt-date">' + weekdays[i].slice(5) + '</td><td colspan="4"></td></tr>';
+    tbody.innerHTML = rows.map(function (d) {
       var active = d.date === DAY_SEL.market;
       return '<tr class="mkt-row' + (active ? ' active' : '') + '" data-date="' + d.date + '" tabindex="0">' +
         '<td class="mkt-date">' + d.date.slice(5) + '</td>' +
@@ -763,10 +750,10 @@
   function marketComboChart(container, weekdays, rows) {
     var n = weekdays.length;
     if (!n) { container.innerHTML = ''; return; }
-    var kospiChg = rows.map(function (d) { return d ? d.kospiChange : 0; });
-    var kosdaqChg = rows.map(function (d) { return d ? d.kosdaqChange : 0; });
-    var kospiVal = rows.map(function (d) { return d ? d.kospiValue : 0; });
-    var kosdaqVal = rows.map(function (d) { return d ? d.kosdaqValue : 0; });
+    var kospiChg = rows.map(function (d) { return d.kospiChange; });
+    var kosdaqChg = rows.map(function (d) { return d.kosdaqChange; });
+    var kospiVal = rows.map(function (d) { return d.kospiValue; });
+    var kosdaqVal = rows.map(function (d) { return d.kosdaqValue; });
 
     var chgAll = kospiChg.concat(kosdaqChg, [0]);
     var rawMin = Math.min.apply(null, chgAll), rawMax = Math.max.apply(null, chgAll);
@@ -810,7 +797,6 @@
       catLabels += '<text class="cat-label" x="' + cx + '" y="' + (padT + plotH + 14) + '" text-anchor="middle">' + date.slice(5) + '</text>';
       linePtsK.push([cx, y2(kospiVal[i])]);
       linePtsQ.push([cx, y2(kosdaqVal[i])]);
-      if (!rows[i]) return;
       var y0 = y1(0);
       [['kospi', cx - barW - gap / 2, kospiChg[i], 'bar-kospi', 'lbl-kospi-chg'],
        ['kosdaq', cx + gap / 2, kosdaqChg[i], 'bar-kosdaq', 'lbl-kosdaq-chg']].forEach(function (b) {
@@ -824,7 +810,6 @@
     function pathOf(pts) { return pts.map(function (p, i) { return (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1); }).join(' '); }
     var lineDotsSvg = '', lineLabelsSvg = '';
     weekdays.forEach(function (date, i) {
-      if (!rows[i]) return;
       lineDotsSvg += '<circle class="dot-kospi" cx="' + linePtsK[i][0] + '" cy="' + linePtsK[i][1] + '" r="3"/>' +
         '<circle class="dot-kosdaq" cx="' + linePtsQ[i][0] + '" cy="' + linePtsQ[i][1] + '" r="3"/>';
       lineLabelsSvg += '<text class="lbl-kospi-val" x="' + linePtsK[i][0] + '" y="' + (linePtsK[i][1] - 7) + '">' + kospiVal[i] + '</text>' +
