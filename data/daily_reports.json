@@ -372,5 +372,18 @@
     "top1": "로봇(로보틱스)",
     "top2": "AI반도체기판(PCB/FC-BGA)",
     "top3": "탈모치료제"
+  },
+  {
+    "date": "2026-10-21",
+    "kospiChange": 3.29,
+    "kospiValue": 18.44,
+    "kospiMa": "5일선 위 · 20일선 아래 · 60일선 아래",
+    "kosdaqChange": 1.38,
+    "kosdaqValue": 5.28,
+    "kosdaqMa": "5일선 위 · 20일선 아래 · 60일선 아래",
+    "screened": 31,
+    "top1": "반도체(메모리·HBM)",
+    "top2": "SK그룹주(반도체 가치재평가)",
+    "top3": "로봇"
   }
 ]
