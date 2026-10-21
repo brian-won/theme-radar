@@ -192,6 +192,8 @@
   .watch-card .wname { font-size: 16px; font-weight: 900; }
   .wbadge { font-size: 11px; padding: 2px 8px; border-radius: 999px; background: var(--surface-alt); color: var(--text-secondary); font-family: "JetBrains Mono", monospace; }
   .wbadge.hot { background: var(--accent); color: #fff; font-weight: 700; }
+  .wsub { font-size: 11px; color: var(--text-muted); }
+  .wstock .wsubtag { font-size: 9.5px; color: var(--accent-strong); background: var(--accent-soft); padding: 1px 6px; border-radius: 999px; flex-shrink: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 120px; }
   .watch-body { overflow-x: auto; }
   .wrow { display: grid; grid-template-columns: minmax(210px, 1fr) repeat(5, 78px) 30px; gap: 6px; align-items: center; min-width: 690px; padding: 7px 0; border-top: 1px solid var(--border); }
   .wrow.whead { border-top: none; padding: 0 0 6px; font-size: 11px; color: var(--text-muted); font-family: "JetBrains Mono", monospace; }
@@ -265,6 +267,19 @@
   .mkt-bar { position: absolute; left: 0; top: 0; height: 100%; border-radius: 2px; background: linear-gradient(90deg, #8FDBAE, #63C384); }
   .mkt-bar-label { position: relative; z-index: 1; font-family: "JetBrains Mono", monospace; font-size: 11.5px; padding-left: 4px; color: var(--text-primary); }
 
+  /* ---- 시황 표: 5/20/60일선 이격도 화살표 (글자 대신 그래픽, 이격도 클수록 크고 빠르게 움직임) ---- */
+  td.mkt-ma-cell { padding: 4px 3px; }
+  .mkt-ma-group { display: inline-flex; gap: 4px; align-items: flex-end; justify-content: center; }
+  .ma-arrow { display: inline-flex; flex-direction: column; align-items: center; width: 15px; }
+  .ma-arrow-svg { width: calc(8px * var(--mscale, 1)); height: calc(8px * var(--mscale, 1)); display: block; transform-origin: 50% 50%; }
+  .ma-arrow.ma-up .ma-arrow-svg { fill: var(--up); animation: maBobUp var(--mdur, 1.6s) ease-in-out infinite; }
+  .ma-arrow.ma-down .ma-arrow-svg { fill: var(--down); animation: maBobDown var(--mdur, 1.6s) ease-in-out infinite; }
+  .ma-arrow .ma-w { font-size: 7.5px; color: var(--text-muted); font-family: "JetBrains Mono", monospace; line-height: 1.3; }
+  .mkt-ma-na { color: var(--text-muted); }
+  @keyframes maBobUp { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-2.5px); } }
+  @keyframes maBobDown { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(2.5px); } }
+  @media (prefers-reduced-motion: reduce) { .ma-arrow-svg { animation: none !important; } }
+
   /* ---- 시황: 콤보 차트(막대+선, 이중 축) — 원본 엑셀 차트와 동일한 고정 다크 배경 ---- */
   .mkt-chart-card {
     border-radius: 14px; padding: 14px 10px 6px; box-shadow: var(--shadow);
@@ -272,9 +287,10 @@
   }
   .mkt-chart { position: relative; width: 100%; }
   .mkt-chart svg { width: 100%; height: auto; display: block; overflow: visible; }
-  .mkt-chart .grid-line { stroke: #ffffff; stroke-opacity: 0.08; stroke-width: 1; }
+  .mkt-chart .grid-line { stroke: #ffffff; stroke-opacity: 0.14; stroke-width: 1; stroke-dasharray: 2 3; }
   .mkt-chart .zero-line { stroke: #ffffff; stroke-opacity: 0.35; stroke-width: 1; }
   .mkt-chart .axis-label { fill: #d9dde2; font-size: 9.5px; font-family: "JetBrains Mono", monospace; }
+  .mkt-chart .axis-label-r { fill: #FFD966; font-size: 9.5px; font-family: "JetBrains Mono", monospace; font-weight: 600; }
   .mkt-chart .cat-label { fill: #d9dde2; font-size: 9px; }
   .mkt-chart .bar-kospi { fill: #4472C4; }
   .mkt-chart .bar-kosdaq { fill: #A5A5A5; }
@@ -282,10 +298,10 @@
   .mkt-chart .lbl-kosdaq-chg { fill: #E4E6E8; font-size: 9.5px; font-weight: 700; font-family: "JetBrains Mono", monospace; text-anchor: middle; }
   .mkt-chart .lbl-kospi-val { fill: #FF0000; font-size: 9.5px; font-weight: 700; font-family: "JetBrains Mono", monospace; text-anchor: middle; }
   .mkt-chart .lbl-kosdaq-val { fill: #FFD966; font-size: 9.5px; font-weight: 700; font-family: "JetBrains Mono", monospace; text-anchor: middle; }
-  .mkt-chart .line-kospi { fill: none; stroke: #ED7D31; stroke-width: 2.6; }
-  .mkt-chart .line-kosdaq { fill: none; stroke: #FFC000; stroke-width: 2.6; }
-  .mkt-chart .dot-kospi { fill: #ED7D31; }
-  .mkt-chart .dot-kosdaq { fill: #FFC000; }
+  .mkt-chart .line-kospi { fill: none; stroke: #ED7D31; stroke-width: 2.8; filter: drop-shadow(0 0 3px rgba(237, 125, 49, 0.55)); }
+  .mkt-chart .line-kosdaq { fill: none; stroke: #FFC000; stroke-width: 2.8; filter: drop-shadow(0 0 3px rgba(255, 192, 0, 0.5)); }
+  .mkt-chart .dot-kospi { fill: #ED7D31; stroke: #1c1e22; stroke-width: 1.3; }
+  .mkt-chart .dot-kosdaq { fill: #FFC000; stroke: #1c1e22; stroke-width: 1.3; }
   .mkt-legend { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; padding: 10px 4px 2px; font-size: 11.5px; color: #d9dde2; }
   .mkt-legend span { display: inline-flex; align-items: center; gap: 5px; }
   .mkt-legend i { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
@@ -434,10 +450,10 @@
       <div class="table-scroll">
         <table class="mkt-table" id="dayTable-market">
           <thead>
-            <tr><th rowspan="2">일자</th><th colspan="2">코스피</th><th colspan="2">코스닥</th></tr>
-            <tr><th>등락률(%)</th><th>거래대금(조)</th><th>등락률(%)</th><th>거래대금(조)</th></tr>
+            <tr><th rowspan="2">일자</th><th colspan="3">코스피</th><th colspan="3">코스닥</th></tr>
+            <tr><th>등락률(%)</th><th>거래대금(조)</th><th>5·20·60일선</th><th>등락률(%)</th><th>거래대금(조)</th><th>5·20·60일선</th></tr>
           </thead>
-          <tbody><tr><td colspan="5" class="skeleton" style="height:14px;"></td></tr></tbody>
+          <tbody><tr><td colspan="7" class="skeleton" style="height:14px;"></td></tr></tbody>
         </table>
       </div>
       <div class="mkt-chart-card">
@@ -564,7 +580,41 @@
     "top1": "반도체",
     "top2": "바이오",
     "top3": "로봇",
-    "notionUrl": "https://app.notion.com/3ddf9b25fc138133b3d7daabbde258dd"
+    "notionUrl": "https://app.notion.com/3ddf9b25fc138133b3d7daabbde258dd",
+    "kospiMaD": [
+      {
+        "w": 5,
+        "pos": "아래",
+        "dev": -0.15
+      },
+      {
+        "w": 20,
+        "pos": "아래",
+        "dev": -0.05
+      },
+      {
+        "w": 60,
+        "pos": "아래",
+        "dev": -7.44
+      }
+    ],
+    "kosdaqMaD": [
+      {
+        "w": 5,
+        "pos": "위",
+        "dev": 0.11
+      },
+      {
+        "w": 20,
+        "pos": "아래",
+        "dev": -2.01
+      },
+      {
+        "w": 60,
+        "pos": "아래",
+        "dev": -3.16
+      }
+    ]
   },
   {
     "date": "2026-09-07",
@@ -578,7 +628,41 @@
     "top1": "반도체",
     "top2": "바이오",
     "top3": "원전",
-    "notionUrl": "https://app.notion.com/3ddf9b25fc1381cab85be2fb3a84d9f3"
+    "notionUrl": "https://app.notion.com/3ddf9b25fc1381cab85be2fb3a84d9f3",
+    "kospiMaD": [
+      {
+        "w": 5,
+        "pos": "위",
+        "dev": 3.91
+      },
+      {
+        "w": 20,
+        "pos": "위",
+        "dev": 3.98
+      },
+      {
+        "w": 60,
+        "pos": "아래",
+        "dev": -3.0
+      }
+    ],
+    "kosdaqMaD": [
+      {
+        "w": 5,
+        "pos": "위",
+        "dev": 1.48
+      },
+      {
+        "w": 20,
+        "pos": "아래",
+        "dev": -1.11
+      },
+      {
+        "w": 60,
+        "pos": "아래",
+        "dev": -1.78
+      }
+    ]
   },
   {
     "date": "2026-09-08",
@@ -592,7 +676,41 @@
     "top1": "원전",
     "top2": "바이오",
     "top3": "반도체소부장",
-    "notionUrl": "https://app.notion.com/3ddf9b25fc1381188c06f859ea7d1661"
+    "notionUrl": "https://app.notion.com/3ddf9b25fc1381188c06f859ea7d1661",
+    "kospiMaD": [
+      {
+        "w": 5,
+        "pos": "위",
+        "dev": 2.94
+      },
+      {
+        "w": 20,
+        "pos": "위",
+        "dev": 2.87
+      },
+      {
+        "w": 60,
+        "pos": "아래",
+        "dev": -3.31
+      }
+    ],
+    "kosdaqMaD": [
+      {
+        "w": 5,
+        "pos": "위",
+        "dev": 0.44
+      },
+      {
+        "w": 20,
+        "pos": "아래",
+        "dev": -2.09
+      },
+      {
+        "w": 60,
+        "pos": "아래",
+        "dev": -2.59
+      }
+    ]
   },
   {
     "date": "2026-09-10",
@@ -606,7 +724,41 @@
     "top1": "반도체소부장",
     "top2": "반도체",
     "top3": "정유",
-    "notionUrl": "https://app.notion.com/3ddf9b25fc13811492e7d5a02b8cf4d8"
+    "notionUrl": "https://app.notion.com/3ddf9b25fc13811492e7d5a02b8cf4d8",
+    "kospiMaD": [
+      {
+        "w": 5,
+        "pos": "위",
+        "dev": 1.29
+      },
+      {
+        "w": 20,
+        "pos": "위",
+        "dev": 3.16
+      },
+      {
+        "w": 60,
+        "pos": "아래",
+        "dev": -1.48
+      }
+    ],
+    "kosdaqMaD": [
+      {
+        "w": 5,
+        "pos": "위",
+        "dev": 1.69
+      },
+      {
+        "w": 20,
+        "pos": "위",
+        "dev": 1.23
+      },
+      {
+        "w": 60,
+        "pos": "위",
+        "dev": 1.19
+      }
+    ]
   },
   {
     "date": "2026-09-11",
@@ -620,7 +772,41 @@
     "top1": "MLCC",
     "top2": "보안(정보)",
     "top3": "조선",
-    "notionUrl": "https://app.notion.com/3dbf9b25fc13811dbe8bd874fcb9ce1e"
+    "notionUrl": "https://app.notion.com/3dbf9b25fc13811dbe8bd874fcb9ce1e",
+    "kospiMaD": [
+      {
+        "w": 5,
+        "pos": "아래",
+        "dev": -1.13
+      },
+      {
+        "w": 20,
+        "pos": "위",
+        "dev": 1.27
+      },
+      {
+        "w": 60,
+        "pos": "아래",
+        "dev": -2.77
+      }
+    ],
+    "kosdaqMaD": [
+      {
+        "w": 5,
+        "pos": "아래",
+        "dev": -0.46
+      },
+      {
+        "w": 20,
+        "pos": "아래",
+        "dev": -0.5
+      },
+      {
+        "w": 60,
+        "pos": "아래",
+        "dev": -0.35
+      }
+    ]
   },
   {
     "date": "2026-09-14",
@@ -634,7 +820,41 @@
     "top1": "보안(정보)",
     "top2": "광통신",
     "top3": "방산",
-    "notionUrl": "https://app.notion.com/3dbf9b25fc1381308f8ff8ac3f0eec14"
+    "notionUrl": "https://app.notion.com/3dbf9b25fc1381308f8ff8ac3f0eec14",
+    "kospiMaD": [
+      {
+        "w": 5,
+        "pos": "아래",
+        "dev": -3.5
+      },
+      {
+        "w": 20,
+        "pos": "아래",
+        "dev": -1.82
+      },
+      {
+        "w": 60,
+        "pos": "아래",
+        "dev": -5.41
+      }
+    ],
+    "kosdaqMaD": [
+      {
+        "w": 5,
+        "pos": "아래",
+        "dev": -1.77
+      },
+      {
+        "w": 20,
+        "pos": "아래",
+        "dev": -1.83
+      },
+      {
+        "w": 60,
+        "pos": "아래",
+        "dev": -1.65
+      }
+    ]
   },
   {
     "date": "2026-09-15",
@@ -648,7 +868,41 @@
     "top1": "2차전지",
     "top2": "로봇",
     "top3": "원전",
-    "notionUrl": "https://app.notion.com/3dcf9b25fc1381b9b418f5244f11a4f5"
+    "notionUrl": "https://app.notion.com/3dcf9b25fc1381b9b418f5244f11a4f5",
+    "kospiMaD": [
+      {
+        "w": 5,
+        "pos": "아래",
+        "dev": -3.41
+      },
+      {
+        "w": 20,
+        "pos": "아래",
+        "dev": -2.49
+      },
+      {
+        "w": 60,
+        "pos": "아래",
+        "dev": -5.68
+      }
+    ],
+    "kosdaqMaD": [
+      {
+        "w": 5,
+        "pos": "아래",
+        "dev": -1.1
+      },
+      {
+        "w": 20,
+        "pos": "아래",
+        "dev": -1.02
+      },
+      {
+        "w": 60,
+        "pos": "아래",
+        "dev": -0.65
+      }
+    ]
   },
   {
     "date": "2026-09-16",
@@ -662,7 +916,41 @@
     "top1": "반도체",
     "top2": "광통신",
     "top3": "MLCC",
-    "notionUrl": "https://app.notion.com/3ddf9b25fc1381f5af9df347031178a1"
+    "notionUrl": "https://app.notion.com/3ddf9b25fc1381f5af9df347031178a1",
+    "kospiMaD": [
+      {
+        "w": 5,
+        "pos": "아래",
+        "dev": -1.13
+      },
+      {
+        "w": 20,
+        "pos": "아래",
+        "dev": -1.33
+      },
+      {
+        "w": 60,
+        "pos": "아래",
+        "dev": -3.85
+      }
+    ],
+    "kosdaqMaD": [
+      {
+        "w": 5,
+        "pos": "아래",
+        "dev": -0.31
+      },
+      {
+        "w": 20,
+        "pos": "아래",
+        "dev": -0.53
+      },
+      {
+        "w": 60,
+        "pos": "위",
+        "dev": 0.1
+      }
+    ]
   },
   {
     "date": "2026-09-17",
@@ -676,7 +964,41 @@
     "top1": "방산",
     "top2": "반도체",
     "top3": "조선",
-    "notionUrl": "https://app.notion.com/p/3dff9b25fc1381fe9a95e4bc5078947d"
+    "notionUrl": "https://app.notion.com/p/3dff9b25fc1381fe9a95e4bc5078947d",
+    "kospiMaD": [
+      {
+        "w": 5,
+        "pos": "아래",
+        "dev": -0.23
+      },
+      {
+        "w": 20,
+        "pos": "아래",
+        "dev": -1.27
+      },
+      {
+        "w": 60,
+        "pos": "아래",
+        "dev": -3.54
+      }
+    ],
+    "kosdaqMaD": [
+      {
+        "w": 5,
+        "pos": "위",
+        "dev": 0.81
+      },
+      {
+        "w": 20,
+        "pos": "위",
+        "dev": 0.34
+      },
+      {
+        "w": 60,
+        "pos": "위",
+        "dev": 1.0
+      }
+    ]
   },
   {
     "date": "2026-09-18",
@@ -690,7 +1012,41 @@
     "top1": "반도체",
     "top2": "광통신",
     "top3": "전력설비",
-    "notionUrl": "https://app.notion.com/p/3dff9b25fc138182a45cc8c8d0ca3da6"
+    "notionUrl": "https://app.notion.com/p/3dff9b25fc138182a45cc8c8d0ca3da6",
+    "kospiMaD": [
+      {
+        "w": 5,
+        "pos": "위",
+        "dev": 2.47
+      },
+      {
+        "w": 20,
+        "pos": "위",
+        "dev": 1.37
+      },
+      {
+        "w": 60,
+        "pos": "아래",
+        "dev": -0.6
+      }
+    ],
+    "kosdaqMaD": [
+      {
+        "w": 5,
+        "pos": "위",
+        "dev": 1.25
+      },
+      {
+        "w": 20,
+        "pos": "위",
+        "dev": 0.79
+      },
+      {
+        "w": 60,
+        "pos": "위",
+        "dev": 1.78
+      }
+    ]
   },
   {
     "date": "2026-09-21",
@@ -703,7 +1059,41 @@
     "screened": 27,
     "top1": "반도체 대형주(수출 호조)",
     "top2": "반도체 장비·소재·후공정(OSAT)",
-    "top3": "신규상장(IPO 첫날 급등)"
+    "top3": "신규상장(IPO 첫날 급등)",
+    "kospiMaD": [
+      {
+        "w": 5,
+        "pos": "위",
+        "dev": 3.17
+      },
+      {
+        "w": 20,
+        "pos": "위",
+        "dev": 2.81
+      },
+      {
+        "w": 60,
+        "pos": "위",
+        "dev": 1.51
+      }
+    ],
+    "kosdaqMaD": [
+      {
+        "w": 5,
+        "pos": "위",
+        "dev": 1.64
+      },
+      {
+        "w": 20,
+        "pos": "위",
+        "dev": 1.76
+      },
+      {
+        "w": 60,
+        "pos": "위",
+        "dev": 3.01
+      }
+    ]
   },
   {
     "date": "2026-09-22",
@@ -716,7 +1106,41 @@
     "screened": 28,
     "top1": "반도체 기판·MLCC",
     "top2": "전력인프라",
-    "top3": "원전 수주"
+    "top3": "원전 수주",
+    "kospiMaD": [
+      {
+        "w": 5,
+        "pos": "위",
+        "dev": 2.14
+      },
+      {
+        "w": 20,
+        "pos": "위",
+        "dev": 2.75
+      },
+      {
+        "w": 60,
+        "pos": "위",
+        "dev": 2.0
+      }
+    ],
+    "kosdaqMaD": [
+      {
+        "w": 5,
+        "pos": "위",
+        "dev": 0.87
+      },
+      {
+        "w": 20,
+        "pos": "위",
+        "dev": 1.49
+      },
+      {
+        "w": 60,
+        "pos": "위",
+        "dev": 2.82
+      }
+    ]
   },
   {
     "date": "2026-09-23",
@@ -729,7 +1153,41 @@
     "screened": 26,
     "top1": "AI반도체·메모리 랠리(SK하이닉스 지분가치 재평가)",
     "top2": "신규상장 IPO 따상",
-    "top3": "양자컴퓨팅/양자암호통신"
+    "top3": "양자컴퓨팅/양자암호통신",
+    "kospiMaD": [
+      {
+        "w": 5,
+        "pos": "위",
+        "dev": 1.98
+      },
+      {
+        "w": 20,
+        "pos": "위",
+        "dev": 3.46
+      },
+      {
+        "w": 60,
+        "pos": "위",
+        "dev": 3.24
+      }
+    ],
+    "kosdaqMaD": [
+      {
+        "w": 5,
+        "pos": "위",
+        "dev": 1.39
+      },
+      {
+        "w": 20,
+        "pos": "위",
+        "dev": 2.6
+      },
+      {
+        "w": 60,
+        "pos": "위",
+        "dev": 4.22
+      }
+    ]
   },
   {
     "date": "2026-09-28",
@@ -742,7 +1200,41 @@
     "screened": 21,
     "top1": "태양광",
     "top2": "PCB·AI서버 기판",
-    "top3": "제약·바이오·의료기기"
+    "top3": "제약·바이오·의료기기",
+    "kospiMaD": [
+      {
+        "w": 5,
+        "pos": "아래",
+        "dev": -1.27
+      },
+      {
+        "w": 20,
+        "pos": "위",
+        "dev": 0.69
+      },
+      {
+        "w": 60,
+        "pos": "위",
+        "dev": 0.85
+      }
+    ],
+    "kosdaqMaD": [
+      {
+        "w": 5,
+        "pos": "위",
+        "dev": 1.05
+      },
+      {
+        "w": 20,
+        "pos": "위",
+        "dev": 2.8
+      },
+      {
+        "w": 60,
+        "pos": "위",
+        "dev": 4.63
+      }
+    ]
   },
   {
     "date": "2026-09-29",
@@ -755,7 +1247,41 @@
     "screened": 24,
     "top1": "신규상장 IPO 첫날 급등",
     "top2": "반도체 전공정 장비(ALD·CVD·이온주입)",
-    "top3": "AI서버 PCB·반도체 기판"
+    "top3": "AI서버 PCB·반도체 기판",
+    "kospiMaD": [
+      {
+        "w": 5,
+        "pos": "아래",
+        "dev": -1.47
+      },
+      {
+        "w": 20,
+        "pos": "위",
+        "dev": 0.35
+      },
+      {
+        "w": 60,
+        "pos": "위",
+        "dev": 0.92
+      }
+    ],
+    "kosdaqMaD": [
+      {
+        "w": 5,
+        "pos": "위",
+        "dev": 0.89
+      },
+      {
+        "w": 20,
+        "pos": "위",
+        "dev": 3.12
+      },
+      {
+        "w": 60,
+        "pos": "위",
+        "dev": 5.2
+      }
+    ]
   },
   {
     "date": "2026-09-30",
@@ -768,7 +1294,41 @@
     "screened": 21,
     "top1": "신규상장(공모주)",
     "top2": "방산(정밀유도·항법전자)",
-    "top3": "반도체 장비(소부장)"
+    "top3": "반도체 장비(소부장)",
+    "kospiMaD": [
+      {
+        "w": 5,
+        "pos": "아래",
+        "dev": -1.46
+      },
+      {
+        "w": 20,
+        "pos": "아래",
+        "dev": -0.14
+      },
+      {
+        "w": 60,
+        "pos": "위",
+        "dev": 0.64
+      }
+    ],
+    "kosdaqMaD": [
+      {
+        "w": 5,
+        "pos": "위",
+        "dev": 1.14
+      },
+      {
+        "w": 20,
+        "pos": "위",
+        "dev": 3.73
+      },
+      {
+        "w": 60,
+        "pos": "위",
+        "dev": 5.98
+      }
+    ]
   },
   {
     "date": "2026-10-01",
@@ -781,7 +1341,41 @@
     "screened": 41,
     "top1": "반도체(마이크론 실적 모멘텀)",
     "top2": "신규상장(IPO 수급)",
-    "top3": "PCB·AI서버 기판"
+    "top3": "PCB·AI서버 기판",
+    "kospiMaD": [
+      {
+        "w": 5,
+        "pos": "위",
+        "dev": 0.59
+      },
+      {
+        "w": 20,
+        "pos": "위",
+        "dev": 1.7
+      },
+      {
+        "w": 60,
+        "pos": "위",
+        "dev": 2.88
+      }
+    ],
+    "kosdaqMaD": [
+      {
+        "w": 5,
+        "pos": "위",
+        "dev": 4.2
+      },
+      {
+        "w": 20,
+        "pos": "위",
+        "dev": 7.9
+      },
+      {
+        "w": 60,
+        "pos": "위",
+        "dev": 10.68
+      }
+    ]
   },
   {
     "date": "2026-10-02",
@@ -794,7 +1388,41 @@
     "screened": 42,
     "top1": "반도체 후공정·장비(HBM)",
     "top2": "AI 데이터센터 광통신/광센서",
-    "top3": "방산·우주항공"
+    "top3": "방산·우주항공",
+    "kospiMaD": [
+      {
+        "w": 5,
+        "pos": "위",
+        "dev": 1.29
+      },
+      {
+        "w": 20,
+        "pos": "위",
+        "dev": 1.85
+      },
+      {
+        "w": 60,
+        "pos": "위",
+        "dev": 3.63
+      }
+    ],
+    "kosdaqMaD": [
+      {
+        "w": 5,
+        "pos": "위",
+        "dev": 2.92
+      },
+      {
+        "w": 20,
+        "pos": "위",
+        "dev": 7.2
+      },
+      {
+        "w": 60,
+        "pos": "위",
+        "dev": 10.45
+      }
+    ]
   },
   {
     "date": "2026-10-06",
@@ -807,7 +1435,41 @@
     "screened": 52,
     "top1": "PCB(기판)",
     "top2": "반도체 장비·소재",
-    "top3": "2차전지"
+    "top3": "2차전지",
+    "kospiMaD": [
+      {
+        "w": 5,
+        "pos": "위",
+        "dev": 0.24
+      },
+      {
+        "w": 20,
+        "pos": "위",
+        "dev": 0.68
+      },
+      {
+        "w": 60,
+        "pos": "위",
+        "dev": 2.89
+      }
+    ],
+    "kosdaqMaD": [
+      {
+        "w": 5,
+        "pos": "위",
+        "dev": 4.22
+      },
+      {
+        "w": 20,
+        "pos": "위",
+        "dev": 9.55
+      },
+      {
+        "w": 60,
+        "pos": "위",
+        "dev": 13.53
+      }
+    ]
   },
   {
     "date": "2026-10-07",
@@ -820,7 +1482,41 @@
     "screened": 27,
     "top1": "화장품/뷰티",
     "top2": "반도체장비/소재",
-    "top3": "사이버보안"
+    "top3": "사이버보안",
+    "kospiMaD": [
+      {
+        "w": 5,
+        "pos": "아래",
+        "dev": -1.56
+      },
+      {
+        "w": 20,
+        "pos": "아래",
+        "dev": -1.4
+      },
+      {
+        "w": 60,
+        "pos": "위",
+        "dev": 0.96
+      }
+    ],
+    "kosdaqMaD": [
+      {
+        "w": 5,
+        "pos": "위",
+        "dev": 0.68
+      },
+      {
+        "w": 20,
+        "pos": "위",
+        "dev": 6.45
+      },
+      {
+        "w": 60,
+        "pos": "위",
+        "dev": 10.62
+      }
+    ]
   },
   {
     "date": "2026-10-08",
@@ -833,7 +1529,41 @@
     "screened": 24,
     "top1": "반도체·디스플레이 장비",
     "top2": "2차전지(배터리) 소재·부품",
-    "top3": "반도체 테스트(OSAT)·파운드리"
+    "top3": "반도체 테스트(OSAT)·파운드리",
+    "kospiMaD": [
+      {
+        "w": 5,
+        "pos": "아래",
+        "dev": -3.54
+      },
+      {
+        "w": 20,
+        "pos": "아래",
+        "dev": -3.72
+      },
+      {
+        "w": 60,
+        "pos": "아래",
+        "dev": -1.52
+      }
+    ],
+    "kosdaqMaD": [
+      {
+        "w": 5,
+        "pos": "아래",
+        "dev": -0.82
+      },
+      {
+        "w": 20,
+        "pos": "위",
+        "dev": 5.28
+      },
+      {
+        "w": 60,
+        "pos": "위",
+        "dev": 9.64
+      }
+    ]
   },
   {
     "date": "2026-10-12",
@@ -846,7 +1576,41 @@
     "screened": 17,
     "top1": "호남 반도체 클러스터",
     "top2": "사이버보안(AI인증)",
-    "top3": "해운(탱커·벌크)"
+    "top3": "해운(탱커·벌크)",
+    "kospiMaD": [
+      {
+        "w": 5,
+        "pos": "아래",
+        "dev": -5.44
+      },
+      {
+        "w": 20,
+        "pos": "아래",
+        "dev": -6.85
+      },
+      {
+        "w": 60,
+        "pos": "아래",
+        "dev": -4.85
+      }
+    ],
+    "kosdaqMaD": [
+      {
+        "w": 5,
+        "pos": "아래",
+        "dev": -4.65
+      },
+      {
+        "w": 20,
+        "pos": "아래",
+        "dev": -0.02
+      },
+      {
+        "w": 60,
+        "pos": "위",
+        "dev": 4.32
+      }
+    ]
   },
   {
     "date": "2026-10-13",
@@ -859,7 +1623,41 @@
     "screened": 26,
     "top1": "반도체장비/후공정",
     "top2": "2차전지",
-    "top3": "LED·조명(개별 수급)"
+    "top3": "LED·조명(개별 수급)",
+    "kospiMaD": [
+      {
+        "w": 5,
+        "pos": "아래",
+        "dev": -7.97
+      },
+      {
+        "w": 20,
+        "pos": "아래",
+        "dev": -11.28
+      },
+      {
+        "w": 60,
+        "pos": "아래",
+        "dev": -9.88
+      }
+    ],
+    "kosdaqMaD": [
+      {
+        "w": 5,
+        "pos": "아래",
+        "dev": -4.81
+      },
+      {
+        "w": 20,
+        "pos": "아래",
+        "dev": -1.49
+      },
+      {
+        "w": 60,
+        "pos": "위",
+        "dev": 2.75
+      }
+    ]
   },
   {
     "date": "2026-10-14",
@@ -872,7 +1670,41 @@
     "screened": 22,
     "top1": "2차전지 소재·ESS",
     "top2": "해운",
-    "top3": "뷰티(K-뷰티)"
+    "top3": "뷰티(K-뷰티)",
+    "kospiMaD": [
+      {
+        "w": 5,
+        "pos": "아래",
+        "dev": -5.69
+      },
+      {
+        "w": 20,
+        "pos": "아래",
+        "dev": -11.0
+      },
+      {
+        "w": 60,
+        "pos": "아래",
+        "dev": -10.09
+      }
+    ],
+    "kosdaqMaD": [
+      {
+        "w": 5,
+        "pos": "아래",
+        "dev": -4.22
+      },
+      {
+        "w": 20,
+        "pos": "아래",
+        "dev": -2.96
+      },
+      {
+        "w": 60,
+        "pos": "위",
+        "dev": 1.05
+      }
+    ]
   },
   {
     "date": "2026-10-15",
@@ -885,7 +1717,41 @@
     "screened": 7,
     "top1": "신규상장(IPO)",
     "top2": "사이버보안·정부 AI사업",
-    "top3": "제약바이오"
+    "top3": "제약바이오",
+    "kospiMaD": [
+      {
+        "w": 5,
+        "pos": "아래",
+        "dev": -9.27
+      },
+      {
+        "w": 20,
+        "pos": "아래",
+        "dev": -16.9
+      },
+      {
+        "w": 60,
+        "pos": "아래",
+        "dev": -16.53
+      }
+    ],
+    "kosdaqMaD": [
+      {
+        "w": 5,
+        "pos": "아래",
+        "dev": -8.63
+      },
+      {
+        "w": 20,
+        "pos": "아래",
+        "dev": -10.07
+      },
+      {
+        "w": 60,
+        "pos": "아래",
+        "dev": -6.55
+      }
+    ]
   },
   {
     "date": "2026-10-16",
@@ -898,7 +1764,41 @@
     "screened": 36,
     "top1": "바이오·헬스케어",
     "top2": "반도체 장비(HBM 후공정)",
-    "top3": "자동차"
+    "top3": "자동차",
+    "kospiMaD": [
+      {
+        "w": 5,
+        "pos": "아래",
+        "dev": -4.42
+      },
+      {
+        "w": 20,
+        "pos": "아래",
+        "dev": -14.55
+      },
+      {
+        "w": 60,
+        "pos": "아래",
+        "dev": -14.57
+      }
+    ],
+    "kosdaqMaD": [
+      {
+        "w": 5,
+        "pos": "아래",
+        "dev": -2.26
+      },
+      {
+        "w": 20,
+        "pos": "아래",
+        "dev": -5.99
+      },
+      {
+        "w": 60,
+        "pos": "아래",
+        "dev": -2.38
+      }
+    ]
   },
   {
     "date": "2026-10-19",
@@ -911,7 +1811,41 @@
     "screened": 38,
     "top1": "2차전지(셀·완성)",
     "top2": "2차전지 소재(양극재)",
-    "top3": "자동차(완성차)"
+    "top3": "자동차(완성차)",
+    "kospiMaD": [
+      {
+        "w": 5,
+        "pos": "아래",
+        "dev": -0.67
+      },
+      {
+        "w": 20,
+        "pos": "아래",
+        "dev": -12.47
+      },
+      {
+        "w": 60,
+        "pos": "아래",
+        "dev": -12.9
+      }
+    ],
+    "kosdaqMaD": [
+      {
+        "w": 5,
+        "pos": "위",
+        "dev": 0.47
+      },
+      {
+        "w": 20,
+        "pos": "아래",
+        "dev": -4.3
+      },
+      {
+        "w": 60,
+        "pos": "아래",
+        "dev": -0.77
+      }
+    ]
   },
   {
     "date": "2026-10-20",
@@ -924,7 +1858,41 @@
     "screened": 13,
     "top1": "로봇(로보틱스)",
     "top2": "AI반도체기판(PCB/FC-BGA)",
-    "top3": "탈모치료제"
+    "top3": "탈모치료제",
+    "kospiMaD": [
+      {
+        "w": 5,
+        "pos": "아래",
+        "dev": -2.76
+      },
+      {
+        "w": 20,
+        "pos": "아래",
+        "dev": -14.99
+      },
+      {
+        "w": 60,
+        "pos": "아래",
+        "dev": -15.9
+      }
+    ],
+    "kosdaqMaD": [
+      {
+        "w": 5,
+        "pos": "아래",
+        "dev": -1.52
+      },
+      {
+        "w": 20,
+        "pos": "아래",
+        "dev": -7.3
+      },
+      {
+        "w": 60,
+        "pos": "아래",
+        "dev": -4.13
+      }
+    ]
   },
   {
     "date": "2026-10-21",
@@ -937,7 +1905,41 @@
     "screened": 31,
     "top1": "반도체(메모리·HBM)",
     "top2": "SK그룹주(반도체 가치재평가)",
-    "top3": "로봇"
+    "top3": "로봇",
+    "kospiMaD": [
+      {
+        "w": 5,
+        "pos": "위",
+        "dev": 1.41
+      },
+      {
+        "w": 20,
+        "pos": "아래",
+        "dev": -11.52
+      },
+      {
+        "w": 60,
+        "pos": "아래",
+        "dev": -12.9
+      }
+    ],
+    "kosdaqMaD": [
+      {
+        "w": 5,
+        "pos": "위",
+        "dev": 0.62
+      },
+      {
+        "w": 20,
+        "pos": "아래",
+        "dev": -5.86
+      },
+      {
+        "w": 60,
+        "pos": "아래",
+        "dev": -2.89
+      }
+    ]
   }
 ],
     dailyDetail: {
@@ -9062,6 +10064,26 @@
   var fmt = function (n, d) { return Number(n).toLocaleString('ko-KR', {minimumFractionDigits: d || 0, maximumFractionDigits: d || 0}); };
   function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;'); }
 
+  // 5/20/60일선 이격도를 "글자(위/아래)" 대신 그래픽 화살표로 표시.
+  // 화살표 크기·애니메이션 속도는 이격도(%) 크기에 비례(클수록 크고 빠르게 움직임).
+  var MA_DEV_CAP = 15; // 이 이상 벌어지면 화살표 크기를 더 키우지 않음(과도한 비대 방지)
+  function maArrowsHtml(maD) {
+    if (!maD || !maD.length) return '<span class="mkt-ma-na">—</span>';
+    var up = '<path d="M12 3 L20 15 L14.2 15 L14.2 21 L9.8 21 L9.8 15 L4 15 Z"/>';
+    var down = '<path d="M12 21 L4 9 L9.8 9 L9.8 3 L14.2 3 L14.2 9 L20 9 Z"/>';
+    return '<span class="mkt-ma-group">' + maD.map(function (m) {
+      if (m.pos == null || m.dev == null) return '';
+      var isUp = m.pos === '위';
+      var mag = Math.min(Math.abs(m.dev), MA_DEV_CAP) / MA_DEV_CAP; // 0~1
+      var scale = (0.75 + mag * 1.35).toFixed(2);   // 이격도 0% -> 0.75배, 15%+ -> 2.1배
+      var dur = (2.3 - mag * 1.6).toFixed(2);        // 이격도 0% -> 2.3s(느림), 15%+ -> 0.7s(빠름)
+      var title = m.w + '일선 ' + m.pos + ' ' + (m.dev >= 0 ? '+' : '') + m.dev.toFixed(2) + '%';
+      return '<span class="ma-arrow ' + (isUp ? 'ma-up' : 'ma-down') + '" style="--mscale:' + scale + ';--mdur:' + dur + 's" title="' + esc(title) + '">' +
+        '<svg class="ma-arrow-svg" viewBox="0 0 24 24" aria-hidden="true">' + (isUp ? up : down) + '</svg>' +
+        '<span class="ma-w">' + m.w + '</span></span>';
+    }).join('') + '</span>';
+  }
+
   // ISO 8601 주차 (엑셀 원본의 "36W" 표기와 동일한 산정 방식)
   function isoWeek(dateStr) {
     var d = new Date(dateStr + 'T00:00:00Z');
@@ -9227,12 +10249,16 @@
       var pct = Math.max(2, (v / maxVal) * 100);
       return '<td class="mkt-bar-cell"><div class="mkt-bar-wrap"><div class="mkt-bar" style="width:' + pct + '%"></div><span class="mkt-bar-label">' + v + '</span></div></td>';
     }
+    function maCell(maD) {
+      return '<td class="mkt-ma-cell">' + maArrowsHtml(maD) + '</td>';
+    }
     var tbody = document.querySelector('#dayTable-market tbody');
     tbody.innerHTML = rows.map(function (d) {
       var active = d.date === DAY_SEL.market;
       return '<tr class="mkt-row' + (active ? ' active' : '') + '" data-date="' + d.date + '" tabindex="0">' +
         '<td class="mkt-date">' + d.date.slice(5) + '</td>' +
-        pctCell(d.kospiChange) + barCell(d.kospiValue) + pctCell(d.kosdaqChange) + barCell(d.kosdaqValue) +
+        pctCell(d.kospiChange) + barCell(d.kospiValue) + maCell(d.kospiMaD) +
+        pctCell(d.kosdaqChange) + barCell(d.kosdaqValue) + maCell(d.kosdaqMaD) +
         '</tr>';
     }).join('');
     tbody.onclick = function (e) {
@@ -9282,14 +10308,16 @@
     function y1(val) { return padT + plotH - (val - axisMin) / (axisMax - axisMin) * plotH; }
     function y2(val) { return padT + plotH - (val + secTop) / (2 * secTop) * plotH; }
 
+    // 보조선(그리드)은 막대(등락률, 좌측 축) 눈금이 아니라 꺾은선(거래대금, 우측 축) 눈금에 맞춘다
+    // — 거래대금 추이를 읽는 기준선 역할을 하도록(2026-10-22 사용자 요청). 좌측 등락률 눈금은 숫자만 표시.
     var gridSvg = '', axisLSvg = '', axisRSvg = '';
     primaryTicks.forEach(function (t) {
-      var y = y1(t);
-      gridSvg += '<line class="grid-line" x1="' + padL + '" y1="' + y + '" x2="' + (W - padR) + '" y2="' + y + '"/>';
-      axisLSvg += '<text class="axis-label" x="2" y="' + (y + 3) + '">' + t + '</text>';
+      axisLSvg += '<text class="axis-label" x="2" y="' + (y1(t) + 3) + '">' + t + '</text>';
     });
     secTicks.forEach(function (t) {
-      axisRSvg += '<text class="axis-label" x="' + (W - padR + 4) + '" y="' + (y2(t) + 3) + '">' + t + '</text>';
+      var y = y2(t);
+      gridSvg += '<line class="grid-line" x1="' + padL + '" y1="' + y + '" x2="' + (W - padR) + '" y2="' + y + '"/>';
+      axisRSvg += '<text class="axis-label-r" x="' + (W - padR + 4) + '" y="' + (y + 3) + '">' + t + '</text>';
     });
     var zeroSvg = '<line class="zero-line" x1="' + padL + '" y1="' + y1(0) + '" x2="' + (W - padR) + '" y2="' + y1(0) + '"/>';
 
@@ -9645,16 +10673,243 @@
   }
   var KEBAB_SVG = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>';
 
+  // 관심종목 탭 전용 "큰 틀" 테마 매핑. 리포트/테마 탭이 쓰는 daily_detail의 날짜별 세분화 테마
+  // (narrow, 218종까지 늘어났었음)는 그대로 두고, 관심종목만 아래 상위 테마(약 18개)로 묶어서 보여준다
+  // — 2026-10-22 사용자 요청("관심종목을 너무 다양하게 만들지 마"). 매핑에 없는 새 narrow 테마는
+  // 자기 자신을 상위 테마로 써서(그레이스풀 폴백) 앞으로 생기는 테마도 깨지지 않게 한다.
+  var THEME_PARENT = {
+    "2차전지": "2차전지",
+    "2차전지 부품/장비": "2차전지",
+    "2차전지 소재": "2차전지",
+    "2차전지 소재(양극재)": "2차전지",
+    "2차전지 소재(음극재/동박)": "2차전지",
+    "2차전지 소재(전고체·전해질)": "2차전지",
+    "2차전지 소재·ESS": "2차전지",
+    "2차전지 장비": "2차전지",
+    "2차전지(배터리) 소재·부품": "2차전지",
+    "2차전지(셀·완성)": "2차전지",
+    "2차전지/ESS 부품": "2차전지",
+    "2차전지/에너지솔루션": "2차전지",
+    "AI": "기타",
+    "AI 데이터센터 IT서비스": "반도체·AI인프라",
+    "AI 데이터센터 광통신/광센서": "통신",
+    "AI 데이터센터 냉각부품": "반도체·AI인프라",
+    "AI 마케팅": "기타",
+    "AI 소프트웨어·로봇": "로봇",
+    "AI기판": "반도체·AI인프라",
+    "AI데이터센터 스토리지(SSD 컨트롤러)": "반도체·AI인프라",
+    "AI데이터센터 전력인프라(변압기·UC)": "원전·전력인프라",
+    "AI반도체·메모리 랠리(SK하이닉스 지분가치 재평가)": "반도체·AI인프라",
+    "AI반도체기판(PCB/FC-BGA)": "반도체·AI인프라",
+    "AI서버 PCB·반도체 기판": "반도체·AI인프라",
+    "AI서버용 PCB/기판": "반도체·AI인프라",
+    "ESS/연료전지 부품": "2차전지",
+    "HBM 후공정 장비(TC본더)": "반도체·AI인프라",
+    "HLB그룹 바이오(리보세라닙 FDA 기대)": "바이오·제약",
+    "HLB그룹(바이오)": "바이오·제약",
+    "HLB그룹주": "바이오·제약",
+    "IPO 신규상장": "IPO·신규상장",
+    "K-푸드(라면)": "음식료",
+    "LED 드라이버 IC": "반도체·AI인프라",
+    "LED·조명(개별 수급)": "반도체·AI인프라",
+    "MLCC": "반도체·AI인프라",
+    "PCB": "반도체·AI인프라",
+    "PCB(기판)": "반도체·AI인프라",
+    "PCB·AI서버 기판": "반도체·AI인프라",
+    "SK그룹주(반도체 가치재평가)": "반도체·AI인프라",
+    "SK그룹주(반도체 계열사 재평가)": "반도체·AI인프라",
+    "SOFC": "에너지·신재생",
+    "SOFC·수소연료전지": "에너지·신재생",
+    "가상자산": "금융·지주",
+    "가상자산 관련주": "금융·지주",
+    "가상자산(비트코인) 관련주": "금융·지주",
+    "감염병(진단/의료기기)": "바이오·제약",
+    "건설": "건설·부동산",
+    "건설·플랜트(원전·해외수주)": "건설·부동산",
+    "게임": "엔터·게임",
+    "경기방어주(필수소비재)": "기타",
+    "고속버스·터미널 재개발": "건설·부동산",
+    "고속버스터미널 재개발": "건설·부동산",
+    "광통신": "통신",
+    "광통신 부품": "통신",
+    "광통신(AI 인프라)": "통신",
+    "광통신(CPO)": "통신",
+    "글래스기판(TGV)/폴더블 부품": "반도체·AI인프라",
+    "금융": "금융·지주",
+    "금융(저평가)": "금융·지주",
+    "금융지주": "금융·지주",
+    "기타": "기타",
+    "단조/조선기자재": "조선·해운",
+    "두산그룹(원전·로봇 밸류체인)": "로봇",
+    "디스플레이·반도체 장비": "반도체·AI인프라",
+    "디지털결제·스테이블코인": "금융·지주",
+    "디지털헬스케어(웨어러블)": "바이오·제약",
+    "레이저·정밀검사 장비(반도체·2차전지 공정)": "2차전지",
+    "로봇": "로봇",
+    "로봇(로보틱스)": "로봇",
+    "로봇/AI데이터센터 ESS부품": "로봇",
+    "로봇·ESS": "로봇",
+    "로봇·미래차 부품": "로봇",
+    "로봇·피지컬AI": "로봇",
+    "미국 메디케어 보험사업 승인 수혜": "바이오·제약",
+    "미래차 경량소재": "자동차·모빌리티",
+    "바이오": "바이오·제약",
+    "바이오(기술이전/신약 공동개발)": "바이오·제약",
+    "바이오(약효지속 플랫폼)": "바이오·제약",
+    "바이오/신약": "바이오·제약",
+    "바이오/제약": "바이오·제약",
+    "바이오·헬스케어": "바이오·제약",
+    "바이오소재": "바이오·제약",
+    "반도체": "반도체·AI인프라",
+    "반도체 기판(유리기판)": "반도체·AI인프라",
+    "반도체 기판·MLCC": "반도체·AI인프라",
+    "반도체 대형주(수출 호조)": "반도체·AI인프라",
+    "반도체 설계·파운드리": "반도체·AI인프라",
+    "반도체 소재·부품": "반도체·AI인프라",
+    "반도체 장비(HBM 후공정)": "반도체·AI인프라",
+    "반도체 장비(소부장)": "반도체·AI인프라",
+    "반도체 장비(파운드리·메모리 CAPEX 확대 수혜)": "반도체·AI인프라",
+    "반도체 장비·소재": "반도체·AI인프라",
+    "반도체 장비·소재·후공정(OSAT)": "반도체·AI인프라",
+    "반도체 장비·후공정": "반도체·AI인프라",
+    "반도체 전공정 장비(ALD·CVD·이온주입)": "반도체·AI인프라",
+    "반도체 테스트(OSAT)·파운드리": "반도체·AI인프라",
+    "반도체 테스트소켓": "반도체·AI인프라",
+    "반도체 패키지기판(FC-BGA)": "반도체·AI인프라",
+    "반도체 후공정·장비(HBM)": "반도체·AI인프라",
+    "반도체(마이크론 실적 모멘텀)": "반도체·AI인프라",
+    "반도체(메모리·HBM)": "반도체·AI인프라",
+    "반도체·디스플레이 장비": "반도체·AI인프라",
+    "반도체소부장": "반도체·AI인프라",
+    "반도체장비/소재": "반도체·AI인프라",
+    "반도체장비/후공정": "반도체·AI인프라",
+    "방산": "방산·우주항공",
+    "방산(우주항공·조선)": "방산·우주항공",
+    "방산(위성시스템)": "방산·우주항공",
+    "방산(정밀유도·항법전자)": "방산·우주항공",
+    "방산·2차전지": "방산·우주항공",
+    "방산·우주": "방산·우주항공",
+    "방산·우주항공": "방산·우주항공",
+    "방위산업": "방산·우주항공",
+    "방위산업(방산)": "방산·우주항공",
+    "밸류업": "금융·지주",
+    "보안": "사이버보안",
+    "보안(정보)": "사이버보안",
+    "보험": "금융·지주",
+    "부동산 개발(자산 재평가)": "건설·부동산",
+    "뷰티": "화장품·뷰티",
+    "뷰티(K-뷰티)": "화장품·뷰티",
+    "비만치료제(GLP-1)": "바이오·제약",
+    "사이버보안": "사이버보안",
+    "사이버보안(AI인증)": "사이버보안",
+    "사이버보안·정부 AI사업": "사이버보안",
+    "삼성그룹주(반도체 계열사 후광)": "반도체·AI인프라",
+    "생명보험": "금융·지주",
+    "손해보험": "금융·지주",
+    "수소·연료전지(AI데이터센터 전력)": "에너지·신재생",
+    "스테이블코인": "금융·지주",
+    "스페이스X 관련주": "방산·우주항공",
+    "시멘트": "건설·부동산",
+    "시멘트·부동산개발": "건설·부동산",
+    "신규상장 IPO 따상": "IPO·신규상장",
+    "신규상장 IPO 첫날 급등": "IPO·신규상장",
+    "신규상장(IPO 수급)": "IPO·신규상장",
+    "신규상장(IPO 첫날 급등)": "IPO·신규상장",
+    "신규상장(IPO)": "IPO·신규상장",
+    "신규상장(공모주)": "IPO·신규상장",
+    "양자보안(PQC)": "사이버보안",
+    "양자암호통신": "사이버보안",
+    "양자컴퓨팅/양자암호통신": "사이버보안",
+    "에너지": "에너지·신재생",
+    "에너지(도시가스)": "에너지·신재생",
+    "엔터": "엔터·게임",
+    "엔터/게임": "엔터·게임",
+    "엔터테인먼트": "엔터·게임",
+    "연료전지/슈퍼커패시터": "에너지·신재생",
+    "우주항공(뉴스페이스)": "방산·우주항공",
+    "운송(버스)": "기타",
+    "원전": "원전·전력인프라",
+    "원전 수주": "원전·전력인프라",
+    "원전/두산그룹": "원전·전력인프라",
+    "원전·방산 소재": "방산·우주항공",
+    "유리기판": "반도체·AI인프라",
+    "은행": "금융·지주",
+    "음식료(라면 수출)": "음식료",
+    "음식료·건강식품": "음식료",
+    "의료기기": "바이오·제약",
+    "의료기기(TMS)": "바이오·제약",
+    "인터넷/AI 플랫폼": "기타",
+    "인프라·SOC": "건설·부동산",
+    "자동차": "자동차·모빌리티",
+    "자동차 부품(열관리)": "자동차·모빌리티",
+    "자동차 열관리시스템": "자동차·모빌리티",
+    "자동차(완성차)": "자동차·모빌리티",
+    "자동차부품(로봇 전환)": "로봇",
+    "자동차부품(열관리)": "자동차·모빌리티",
+    "전고체 배터리 소재": "2차전지",
+    "전기차 부품(테슬라 밸류체인)": "자동차·모빌리티",
+    "전기차 부품(테슬라·로보택시)": "자동차·모빌리티",
+    "전력기기(AI데이터센터)": "원전·전력인프라",
+    "전력기기(변압기)": "원전·전력인프라",
+    "전력기기/변압기(AI데이터센터 전력수요)": "원전·전력인프라",
+    "전력기기·전선": "원전·전력인프라",
+    "전력설비": "원전·전력인프라",
+    "전력인프라": "원전·전력인프라",
+    "전자부품(카메라모듈)": "반도체·AI인프라",
+    "정유": "에너지·신재생",
+    "정유/에너지": "에너지·신재생",
+    "정유·화학(유가 상승)": "에너지·신재생",
+    "제약·바이오": "바이오·제약",
+    "제약·바이오·의료기기": "바이오·제약",
+    "제약바이오": "바이오·제약",
+    "조선": "조선·해운",
+    "조선·조선기자재": "조선·해운",
+    "조선기자재": "조선·해운",
+    "증권": "금융·지주",
+    "지주사": "금융·지주",
+    "진단기기(감염병)": "바이오·제약",
+    "철강": "기타",
+    "콩/대두": "기타",
+    "탈모": "바이오·제약",
+    "탈모치료제": "바이오·제약",
+    "태양광": "에너지·신재생",
+    "태양광/반도체소재": "에너지·신재생",
+    "태양광/신재생에너지": "에너지·신재생",
+    "태양광·화학소재": "에너지·신재생",
+    "통신": "통신",
+    "통신장비": "통신",
+    "통신장비/네트워크": "통신",
+    "폴더블폰 부품": "반도체·AI인프라",
+    "폴더블폰부품": "반도체·AI인프라",
+    "품절주(저유통물량 수급주)": "기타",
+    "풍력에너지": "에너지·신재생",
+    "한화 지주사 재편": "금융·지주",
+    "항공": "기타",
+    "항공우주": "방산·우주항공",
+    "해운": "조선·해운",
+    "해운(탱커·벌크)": "조선·해운",
+    "헬스케어 솔루션(해외진출)": "바이오·제약",
+    "헬스케어 웨어러블": "바이오·제약",
+    "호남 반도체 벨트": "반도체·AI인프라",
+    "호남 반도체 클러스터": "반도체·AI인프라",
+    "화장품": "화장품·뷰티",
+    "화장품/건강기능식품 원료": "화장품·뷰티",
+    "화장품/뷰티": "화장품·뷰티",
+    "화학소재": "에너지·신재생"
+  };
+  function themeParentOf(narrow) { return THEME_PARENT[narrow] || narrow; }
+
   function computeWatchlist() {
     var themes = {};
     Object.keys(SNAPSHOT.dailyDetail || {}).sort().forEach(function (date) {
       SNAPSHOT.dailyDetail[date].groups.forEach(function (g) {
-        var t = themes[g.theme] || (themes[g.theme] = { theme: g.theme, last: '', lastRank: 99, lastSum: 0, stocks: {} });
-        if (date > t.last || (date === t.last && g.rank < t.lastRank)) { t.last = date; t.lastRank = g.rank; t.lastSum = g.sumValue; }
+        var parent = themeParentOf(g.theme);
+        var t = themes[parent] || (themes[parent] = { theme: parent, last: '', lastRank: 99, lastSum: 0, subTheme: '', stocks: {} });
+        if (date > t.last || (date === t.last && g.rank < t.lastRank)) { t.last = date; t.lastRank = g.rank; t.lastSum = g.sumValue; t.subTheme = g.theme; }
         g.stocks.forEach(function (s) {
           var e = t.stocks[s.name];
           if (!e || date > e.last || (date === e.last && s.value > e.value)) {
-            t.stocks[s.name] = { name: s.name, last: date, value: s.value, change: s.change };
+            t.stocks[s.name] = { name: s.name, last: date, value: s.value, change: s.change, sub: g.theme };
           }
         });
       });
@@ -9679,7 +10934,7 @@
       var t = byName[theme];
       if (!t) { t = byName[theme] = { theme: theme, last: '', lastRank: 99, lastSum: 0, list: [], custom: true }; themes.push(t); }
       WATCH_EDITS.added[theme].forEach(function (n) {
-        if (!t.list.some(function (s) { return s.name === n; })) t.list.push({ name: n, last: '', value: 0, change: 0 });
+        if (!t.list.some(function (s) { return s.name === n; })) t.list.push({ name: n, last: '', value: 0, change: 0, sub: '' });
       });
     });
     themes.forEach(function (t) {
@@ -9769,15 +11024,17 @@
       }).join('');
       var isLead = s.name === t.leader;
       var crown = isLead ? crownSvg(t.leader === t.autoLeader ? '대장주 · 이 테마 최근 등장일 거래대금 1위' : '대장주 · 직접 지정') : '<span class="crown-gap"></span>';
-      return '<div class="wrow"><div class="wstock">' + crown + '<span class="wn">' + esc(s.name) + '</span>' + mkt +
+      var subTag = s.sub && s.sub !== t.theme ? '<span class="wsubtag" title="세부 테마: ' + esc(s.sub) + '">' + esc(s.sub) + '</span>' : '';
+      return '<div class="wrow"><div class="wstock">' + crown + '<span class="wn">' + esc(s.name) + '</span>' + mkt + subTag +
         '<span class="wsince">' + (s.last ? s.last.slice(5) : '추가') + '</span></div>' + cells +
         '<button type="button" class="kebab" aria-label="' + esc(s.name) + ' 수정 메뉴" aria-haspopup="menu" data-theme="' + esc(t.theme) + '" data-name="' + esc(s.name) + '">' + KEBAB_SVG + '</button></div>';
     }).join('');
     var more = t.list.length > WATCH_SHOW
       ? '<button type="button" class="more-btn" data-more="' + esc(t.theme) + '">' + (expanded ? '접기' : '더보기 (+' + (t.list.length - WATCH_SHOW) + ')') + '</button>' : '';
+    var subHead = t.subTheme && t.subTheme !== t.theme ? '<span class="wsub">최근 세부 테마: ' + esc(t.subTheme) + '</span>' : '';
     body.innerHTML = '<div class="watch-card"><div class="watch-card-head"><span class="wname">' + esc(t.theme) + '</span>' +
       (t.last ? '<span class="wbadge' + (hot && t.lastRank <= 3 ? ' hot' : '') + '">' + t.last.slice(5) + ' ' + (t.lastRank <= 3 ? t.lastRank + '위' : '4등') + '</span>' : '<span class="wbadge">직접 추가</span>') +
-      '<span class="wbadge">' + t.list.length + '종목</span></div>' +
+      '<span class="wbadge">' + t.list.length + '종목</span>' + subHead + '</div>' +
       '<div class="watch-body">' + head + rows + '</div>' + more + '</div>';
     renderWatchFoot();
   }
