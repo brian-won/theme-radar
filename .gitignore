@@ -14,6 +14,7 @@ data/*
 !data/recent_prices.json
 !data/supabase_config.json
 !data/site_password.json
+!data/theme_taxonomy.json
 
 # 원본 참고 엑셀(개인 자료, Pages 서빙에 불필요)
 reference/

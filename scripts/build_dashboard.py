@@ -49,21 +49,31 @@ def main():
         raise RuntimeError("data/site_password.json이 없습니다 — python scripts/set_dashboard_password.py 를 먼저 실행하세요")
     site_password = json.loads(pw_path.read_text(encoding="utf-8"))
 
+    taxonomy = json.loads((ROOT / "data" / "theme_taxonomy.json").read_text(encoding="utf-8"))
+    unmapped = sorted({g["theme"] for day in daily_detail.values() for g in day["groups"]} - set(taxonomy["mapping"]))
+    if unmapped:
+        print(f"경고: data/theme_taxonomy.json에 큰 틀 매핑이 없는 세부 테마 {len(unmapped)}개(그대로 큰 틀로 표시됨): {unmapped}")
+
     snapshot_js = (
         "{\n"
         "    generatedAt: " + json.dumps(max(d["date"] for d in daily_reports)) + ",\n"
         "    dailyReports: " + json.dumps(daily_reports, ensure_ascii=False, indent=2) + ",\n"
         "    dailyDetail: " + json.dumps(daily_detail, ensure_ascii=False, indent=2) + ",\n"
+        "    themeParent: " + json.dumps(taxonomy["mapping"], ensure_ascii=False) + ",\n"
         "    recentPrices: " + json.dumps(recent_prices, ensure_ascii=False) + "\n"
         "  }"
     )
 
+    # D3(차트)는 CDN이 아니라 파일에 내장 — 인터넷 없이 더블클릭으로 열어도 차트가 그려지도록
+    d3_js = (ROOT / "dashboard" / "vendor" / "d3.v7.9.0.min.js").read_text(encoding="utf-8")
+
     template = TEMPLATE.read_text(encoding="utf-8")
-    for marker in ("/*__SNAPSHOT__*/", "/*__SUPABASE_CONFIG__*/", "/*__SITE_PASSWORD__*/"):
+    for marker in ("/*__SNAPSHOT__*/", "/*__SUPABASE_CONFIG__*/", "/*__SITE_PASSWORD__*/", "<!--__D3__-->"):
         if marker not in template:
             raise RuntimeError(f"dashboard/template.html에 {marker} 플레이스홀더가 없습니다")
     output = (
         template
+        .replace("<!--__D3__-->", "<script>" + d3_js.replace("</script", "<\\/script") + "</script>")
         .replace("/*__SNAPSHOT__*/", snapshot_js)
         .replace("/*__SUPABASE_CONFIG__*/", json.dumps(supabase_config, ensure_ascii=False))
         .replace("/*__SITE_PASSWORD__*/", json.dumps(site_password, ensure_ascii=False))
