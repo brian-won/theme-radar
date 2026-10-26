@@ -329,6 +329,11 @@
     0%, 100% { transform: translateY(0); filter: drop-shadow(0 0 1px var(--skull-glow)); }
     50% { transform: translateY(-1.5px); filter: drop-shadow(0 0 4px var(--skull-glow)); }
   }
+  /* ---- 시황 표: 이평선 정배열(금색)/역배열(보라회색) 바탕 — 쌍 경계 분할, 완전 배열은 진하게 ---- */
+  :root { --ma-al-up: #FFF0C7; --ma-al-up-full: #FBE09A; --ma-al-dn: #EAE6F4; --ma-al-dn-full: #D8D0EB; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --ma-al-up: #2B2614; --ma-al-up-full: #4A3D12; --ma-al-dn: #24212F; --ma-al-dn-full: #3A3252; } }
+  :root[data-theme="dark"] { --ma-al-up: #2B2614; --ma-al-up-full: #4A3D12; --ma-al-dn: #24212F; --ma-al-dn-full: #3A3252; }
+  .mkt-legend i.mkt-al { display: inline-block; width: 12px; height: 12px; border-radius: 3px; border: 1px solid var(--border); margin-right: -2px; }
   .mkt-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px; font-size: 12px; color: var(--text-secondary); }
   .mkt-legend span { display: inline-flex; align-items: center; gap: 5px; }
   .mkt-legend .ma-xbadge { position: static; display: inline-block; }
@@ -904,9 +909,10 @@
     var crosses = maCrossMap(reports);
     function maCells(maD, date, key) {
       var cx = crosses[date + '|' + key] || {};
+      var bg = maAlignBg(maD);
       return [0, 1, 2].map(function (i) {
         var w = maD && maD[i] && maD[i].w;
-        return '<td class="mkt-ma-cell">' + maArrowHtml(maD && maD[i], cx[w]) + '</td>';
+        return '<td class="mkt-ma-cell"' + (bg ? ' style="background:' + bg[i] + '"' : '') + '>' + maArrowHtml(maD && maD[i], cx[w]) + '</td>';
       }).join('');
     }
     var tbody = document.querySelector('#dayTable-market tbody');
@@ -936,6 +942,9 @@
     document.getElementById('marketCrossLegend').innerHTML =
       '<span>' + crossBadgeHtml('gold') + '골든크로스(짧은 이평선이 긴 이평선을 상향 돌파)</span>' +
       '<span>' + crossBadgeHtml('dead') + '데드크로스(하향 돌파)</span>' +
+      '<span><i class="mkt-al" style="background:var(--ma-al-up)"></i><i class="mkt-al" style="background:var(--ma-al-up-full)"></i>정배열(진하게 = 5·20·60 완전 정배열)</span>' +
+      '<span><i class="mkt-al" style="background:var(--ma-al-dn)"></i><i class="mkt-al" style="background:var(--ma-al-dn-full)"></i>역배열(진하게 = 완전 역배열)</span>' +
+      '<span>바탕색: 5일선 칸~20일선 칸 왼쪽 절반 = 5·20일선 관계, 20일선 칸 오른쪽 절반~60일선 칸 = 20·60일선 관계</span>' +
       '<span>5일선 칸 = 5·20일선 교차 · 20일선 칸 = 20·60일선 교차</span>';
     renderMarketDetail(DAY_SEL.market);
     marketComboChart(document.getElementById('marketComboChart'), rows);
@@ -1785,6 +1794,19 @@
   // 직전 거래일 대비 (짧은선, 긴선) 위아래가 뒤집힌 날을 찾는다. 5·20일선, 20·60일선 두 쌍만 본다.
   // 반환: { 'YYYY-MM-DD|kospi': { 5: {type, s, l}, 20: {...} } } — 배지는 짧은 이평선 칸에 붙는다.
   var MA_CROSS_PAIRS = [[5, 20], [20, 60]];
+
+  // 정배열/역배열 바탕색 [5일 칸, 20일 칸, 60일 칸]. 이평선 값 = 종가/(1+이격도) → 이격도가 작은 쪽이 위.
+  // 5·20일선 관계는 5일 칸 전체+20일 칸 왼쪽 절반, 20·60일선 관계는 20일 칸 오른쪽 절반+60일 칸 전체.
+  // 두 쌍이 같은 방향(완전 정배열/완전 역배열)이면 진한 색. 이격도가 없으면 null(바탕 없음).
+  function maAlignBg(maD) {
+    var dev = {};
+    (maD || []).forEach(function (e) { if (e && e.dev != null) dev[e.w] = e.dev; });
+    if (dev[5] == null || dev[20] == null || dev[60] == null) return null;
+    var a = dev[5] < dev[20], b = dev[20] < dev[60]; // true = 정배열(짧은선이 위)
+    var full = a === b ? '-full' : '';
+    var ca = 'var(--ma-al-' + (a ? 'up' : 'dn') + full + ')', cb = 'var(--ma-al-' + (b ? 'up' : 'dn') + full + ')';
+    return [ca, 'linear-gradient(90deg, ' + ca + ' 50%, ' + cb + ' 50%)', cb];
+  }
   function maCrossMap(reports) {
     var out = {};
     [['kospi', 'kospiMaD'], ['kosdaq', 'kosdaqMaD']].forEach(function (k) {
