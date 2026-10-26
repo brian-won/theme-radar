@@ -285,14 +285,57 @@
   .mkt-bar { position: absolute; left: 0; top: 0; height: 100%; border-radius: 2px; background: linear-gradient(90deg, #8FDBAE, #63C384); }
   .mkt-bar-label { position: relative; z-index: 1; font-family: "JetBrains Mono", monospace; font-size: 11.5px; padding-left: 4px; color: var(--text-primary); }
 
-  /* ---- 시황 표: 5/20/60일선 이격도 화살표 (글자 대신 그래픽, 이격도 클수록 크고 빠르게 움직임) ---- */
-  td.mkt-ma-cell { padding: 4px 3px; }
-  .ma-arrow.ma-up .ma-arrow-svg { fill: var(--up); animation: maBobUp var(--mdur, 1.6s) ease-in-out infinite; }
-  .ma-arrow.ma-down .ma-arrow-svg { fill: var(--down); animation: maBobDown var(--mdur, 1.6s) ease-in-out infinite; }
+  /* ---- 시황 표: 5/20/60일선 이격도 화살표 (2026-10-26 개편: 머리 크기는 고정, 길이만 이격도 비례 + 밑동에서 끝까지 차올랐다 사라지는 흐름 애니메이션) ---- */
+  td.mkt-ma-cell { padding: 4px 3px; position: relative; }
+  .ma-arrow { position: relative; display: block; margin: 0 auto; width: 14px; height: var(--mlen, 12px); }
+  .ma-arrow svg { position: absolute; inset: 0; width: 14px; height: 100%; display: block; overflow: visible; }
+  .ma-arrow .ma-track { opacity: 0.2; }
+  .ma-arrow .ma-flow { position: absolute; inset: 0; animation: var(--manim) 2.4s cubic-bezier(.45, 0, .25, 1) infinite; }
+  .ma-arrow.ma-up svg { fill: var(--up); }
+  .ma-arrow.ma-down svg { fill: var(--down); }
+  .ma-arrow.ma-up { --manim: maFillUp; }
+  .ma-arrow.ma-down { --manim: maFillDown; }
   .mkt-ma-na { color: var(--text-muted); }
-  @keyframes maBobUp { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-2.5px); } }
-  @keyframes maBobDown { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(2.5px); } }
-  @media (prefers-reduced-motion: reduce) { .ma-arrow-svg { animation: none !important; } }
+  @keyframes maFillUp {
+    0% { clip-path: inset(100% 0 0 0); opacity: 1; }
+    55% { clip-path: inset(0 0 0 0); opacity: 1; }
+    78% { clip-path: inset(0 0 0 0); opacity: 1; }
+    100% { clip-path: inset(0 0 0 0); opacity: 0; }
+  }
+  @keyframes maFillDown {
+    0% { clip-path: inset(0 0 100% 0); opacity: 1; }
+    55% { clip-path: inset(0 0 0 0); opacity: 1; }
+    78% { clip-path: inset(0 0 0 0); opacity: 1; }
+    100% { clip-path: inset(0 0 0 0); opacity: 0; }
+  }
+
+  /* ---- 시황 표: 골든크로스(금빛 별)·데드크로스(해골) 배지 — 짧은 이평선 칸 오른쪽 위에 표시 ---- */
+  :root { --skull-fill: #2E2A33; --skull-eye: #FFFFFF; --skull-glow: rgba(120, 60, 170, 0.55); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --skull-fill: #ECE6DA; --skull-eye: #1B1820; --skull-glow: rgba(190, 140, 255, 0.55); } }
+  :root[data-theme="dark"] { --skull-fill: #ECE6DA; --skull-eye: #1B1820; --skull-glow: rgba(190, 140, 255, 0.55); }
+  .ma-xbadge { position: absolute; top: 1px; right: 2px; width: 17px; height: 17px; pointer-events: none; }
+  .ma-xbadge svg { width: 100%; height: 100%; display: block; overflow: visible; }
+  .ma-xbadge.gold svg { animation: starGlow 2.2s ease-in-out infinite; transform-origin: 50% 50%; }
+  .ma-xbadge.gold .spark { fill: #FFF3B0; transform-origin: 50% 50%; transform-box: fill-box; animation: starSpark 2.2s ease-in-out infinite; }
+  .ma-xbadge.dead svg { animation: skullHaunt 3s ease-in-out infinite; }
+  .ma-xbadge.dead .skull { fill: var(--skull-fill); }
+  .ma-xbadge.dead .eye { fill: var(--skull-eye); }
+  @keyframes starGlow {
+    0%, 100% { transform: scale(0.92) rotate(0deg); filter: drop-shadow(0 0 1px rgba(255, 200, 40, 0.7)) drop-shadow(0 0 3px rgba(255, 170, 0, 0.35)); }
+    50% { transform: scale(1.08) rotate(8deg); filter: drop-shadow(0 0 2px rgba(255, 215, 80, 1)) drop-shadow(0 0 7px rgba(255, 176, 0, 0.75)); }
+  }
+  @keyframes starSpark { 0%, 35%, 100% { opacity: 0; transform: scale(0.3); } 55% { opacity: 1; transform: scale(1); } 75% { opacity: 0; transform: scale(0.5); } }
+  @keyframes skullHaunt {
+    0%, 100% { transform: translateY(0); filter: drop-shadow(0 0 1px var(--skull-glow)); }
+    50% { transform: translateY(-1.5px); filter: drop-shadow(0 0 4px var(--skull-glow)); }
+  }
+  .mkt-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px; font-size: 12px; color: var(--text-secondary); }
+  .mkt-legend span { display: inline-flex; align-items: center; gap: 5px; }
+  .mkt-legend .ma-xbadge { position: static; display: inline-block; }
+  @media (prefers-reduced-motion: reduce) {
+    .ma-arrow .ma-flow, .ma-xbadge svg, .ma-xbadge .spark { animation: none !important; }
+    .ma-arrow .ma-flow { clip-path: none; opacity: 1; }
+  }
 
   /* ---- 시황: 콤보 차트(막대+선, 이중 축) — 원본 엑셀 차트와 동일한 고정 다크 배경 ---- */
 
@@ -370,9 +413,7 @@
   table.mkt-table .g2 { border-left: 2px solid var(--border); }
   table.mkt-table tbody tr.mkt-row:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
   table.mkt-table tbody tr.mkt-row.active td { box-shadow: inset 0 2px 0 var(--accent), inset 0 -2px 0 var(--accent); }
-  td.mkt-ma-cell { padding: 2px; height: 32px; }
-  .ma-arrow { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; vertical-align: middle; }
-  .ma-arrow-svg { width: calc(9px * var(--mscale, 1)); height: calc(9px * var(--mscale, 1)); display: block; transform-origin: 50% 50%; }
+  td.mkt-ma-cell { padding: 2px; height: 32px; position: relative; }
 
   /* ---- 시황 차트: 위아래 2단(등락률 막대 / 거래대금 선), 수치 표시 ---- */
   .mkt-chart-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px 8px; box-shadow: var(--shadow); }
@@ -394,6 +435,13 @@
   .mkt2 .l-q { fill: none; stroke: var(--idx-kosdaq); stroke-width: 2.2; }
   .mkt2 .d-k { fill: var(--idx-kospi); stroke: var(--surface); stroke-width: 2; }
   .mkt2 .d-q { fill: var(--idx-kosdaq); stroke: var(--surface); stroke-width: 2; }
+  .mkt2 .avg-k, .mkt2 .avg-q { stroke-width: 1.4; stroke-dasharray: 6 4; opacity: 0.85; }
+  .mkt2 .avg-k { stroke: var(--idx-kospi); }
+  .mkt2 .avg-q { stroke: var(--idx-kosdaq); }
+  .mkt2 .avg-t { font-size: 10px; font-weight: 700; font-family: "JetBrains Mono", "Noto Sans KR", monospace; paint-order: stroke; stroke: var(--surface); stroke-width: 3px; stroke-linejoin: round; }
+  .mkt2 .avg-t.k { fill: var(--idx-kospi); }
+  .mkt2 .avg-t.q { fill: var(--idx-kosdaq); }
+  .mkt2-legend i.avg { width: 16px; height: 0; border-top: 2px dashed var(--text-muted); border-radius: 0; }
   .mkt2 .v { fill: var(--text-secondary); font-size: 9.5px; font-weight: 600; font-family: "JetBrains Mono", monospace; }
   .mkt2 .sel { fill: var(--accent-soft); }
   .mkt2 .cross { stroke: var(--text-muted); stroke-dasharray: 3 3; pointer-events: none; }
@@ -505,7 +553,7 @@
   <section class="tab-panel" data-tab-panel="market" hidden>
     <div class="section-head">
       <h2>시황</h2>
-      <span class="note">거래일(주말·공휴일 제외)만 표시 · 이평선 화살표는 크기·움직임 속도가 이격도에 비례(마우스를 올리면 수치) · 표의 행이나 차트의 날짜를 누르면 아래에 상세가 표시됩니다</span>
+      <span class="note">거래일(주말·공휴일 제외)만 표시 · 이평선 화살표 길이는 이격도에 비례(마우스를 올리면 수치) · 표의 행이나 차트의 날짜를 누르면 아래에 상세가 표시됩니다</span>
     </div>
     <div class="month-nav" id="monthNav-market"></div>
     <div class="table-scroll">
@@ -518,6 +566,7 @@
         <tbody><tr><td colspan="11" class="skeleton" style="height:14px;"></td></tr></tbody>
       </table>
     </div>
+    <div class="mkt-legend" id="marketCrossLegend"></div>
     <div class="mkt-chart-panel">
       <div class="mkt2" id="marketComboChart"></div>
     </div>
@@ -852,16 +901,21 @@
       var pct = Math.max(2, (v / maxVal) * 100);
       return '<td class="mkt-bar-cell"><div class="mkt-bar-wrap"><div class="mkt-bar" style="width:' + pct + '%"></div><span class="mkt-bar-label">' + v + '</span></div></td>';
     }
-    function maCells(maD) {
-      return [0, 1, 2].map(function (i) { return '<td class="mkt-ma-cell">' + maArrowHtml(maD && maD[i]) + '</td>'; }).join('');
+    var crosses = maCrossMap(reports);
+    function maCells(maD, date, key) {
+      var cx = crosses[date + '|' + key] || {};
+      return [0, 1, 2].map(function (i) {
+        var w = maD && maD[i] && maD[i].w;
+        return '<td class="mkt-ma-cell">' + maArrowHtml(maD && maD[i], cx[w]) + '</td>';
+      }).join('');
     }
     var tbody = document.querySelector('#dayTable-market tbody');
     tbody.innerHTML = rows.length ? rows.map(function (d) {
       var active = d.date === DAY_SEL.market;
       return '<tr class="mkt-row' + (active ? ' active' : '') + '" data-date="' + d.date + '" tabindex="0" aria-selected="' + active + '">' +
         '<td class="mkt-date">' + d.date.slice(5) + '</td>' +
-        pctCell(d.kospiChange) + barCell(d.kospiValue) + maCells(d.kospiMaD) +
-        pctCell(d.kosdaqChange, 'g2') + barCell(d.kosdaqValue) + maCells(d.kosdaqMaD) +
+        pctCell(d.kospiChange) + barCell(d.kospiValue) + maCells(d.kospiMaD, d.date, 'kospi') +
+        pctCell(d.kosdaqChange, 'g2') + barCell(d.kosdaqValue) + maCells(d.kosdaqMaD, d.date, 'kosdaq') +
         '</tr>';
     }).join('') : '<tr><td colspan="11" style="color:var(--text-muted);padding:14px 8px;">이 달에는 기록이 없습니다.</td></tr>';
     function pick(date) {
@@ -879,6 +933,10 @@
       if (row && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); pick(row.dataset.date); }
     };
 
+    document.getElementById('marketCrossLegend').innerHTML =
+      '<span>' + crossBadgeHtml('gold') + '골든크로스(짧은 이평선이 긴 이평선을 상향 돌파)</span>' +
+      '<span>' + crossBadgeHtml('dead') + '데드크로스(하향 돌파)</span>' +
+      '<span>5일선 칸 = 5·20일선 교차 · 20일선 칸 = 20·60일선 교차</span>';
     renderMarketDetail(DAY_SEL.market);
     marketComboChart(document.getElementById('marketComboChart'), rows);
   }
@@ -908,9 +966,9 @@
     if (!rows.length) { container.innerHTML = '<p class="mkt2-empty">이 달에는 데이터가 없습니다.</p>'; return; }
 
     d3.select(container).append('div').attr('class', 'mkt2-legend')
-      .html('<span><i class="k"></i>코스피</span><span><i class="q"></i>코스닥</span><span>위: 등락률(%) 막대 · 아래: 거래대금(조) 선</span>');
+      .html('<span><i class="k"></i>코스피</span><span><i class="q"></i>코스닥</span><span>위: 등락률(%) 막대 · 아래: 거래대금(조) 선</span><span><i class="avg"></i>거래대금 월평균</span>');
 
-    var H = 420, m = { t: 22, r: 16, b: 26, l: 46 }, gap = 40, h1 = 196;
+    var H = 420, m = { t: 22, r: 62, b: 26, l: 46 }, gap = 40, h1 = 196;
     var dates = rows.map(function (r) { return r.date; });
     var x = d3.scaleBand().domain(dates).range([m.l, W - m.r]).paddingInner(0.22).paddingOuter(0.12);
     var x1 = d3.scaleBand().domain(['k', 'q']).range([0, x.bandwidth()]).padding(0.08);
@@ -986,6 +1044,24 @@
         .text(function (d) { return d[s[0]].toFixed(vdec); });
     });
 
+    // 거래대금 월평균선(그 달 거래일 평균, 지수별 점선) + 오른쪽 끝 라벨
+    var avgs = [['kospiValue', 'k', '코스피'], ['kosdaqValue', 'q', '코스닥']].map(function (s) {
+      return { key: s[1], name: s[2], v: d3.mean(rows, function (d) { return d[s[0]]; }) };
+    });
+    var avgG = svg.append('g').attr('class', 'avg');
+    avgs.forEach(function (a) {
+      avgG.append('line').attr('class', 'avg-' + a.key).attr('x1', m.l).attr('x2', W - m.r).attr('y1', y2(a.v)).attr('y2', y2(a.v));
+    });
+    // 라벨은 점 수치와 겹치지 않게 그래프 오른쪽 바깥 여백에 2줄로(두 선이 가까우면 위아래로 벌림)
+    var ya = avgs.map(function (a) { return y2(a.v); });
+    var gapY = Math.abs(ya[0] - ya[1]), push = gapY < 26 ? (26 - gapY) / 2 : 0;
+    avgs.forEach(function (a, i) {
+      var ly = ya[i] + (ya[i] <= ya[1 - i] ? -push : push);
+      var tx = avgG.append('text').attr('class', 'avg-t ' + a.key).attr('x', W - m.r + 6).attr('y', ly - 2);
+      tx.append('tspan').attr('x', W - m.r + 6).text('월평균');
+      tx.append('tspan').attr('x', W - m.r + 6).attr('dy', '1.15em').text(a.v.toFixed(2) + '조');
+    });
+
     // 마우스 오버: 세로 크로스헤어 + 툴팁 / 클릭: 그 날짜 선택(표와 연동)
     var cross = svg.append('line').attr('class', 'cross').attr('y1', m.t - 6).attr('y2', bot2).attr('opacity', 0);
     svg.append('g').selectAll('rect').data(rows).join('rect').attr('class', 'hit')
@@ -995,7 +1071,8 @@
         cross.attr('x1', cx(d)).attr('x2', cx(d)).attr('opacity', 1);
         showTip(ev, '<b>' + d.date + '</b><br>' +
           '코스피 <span class="m">' + (d.kospiChange >= 0 ? '+' : '') + d.kospiChange.toFixed(2) + '%</span> · <span class="m">' + d.kospiValue + '조</span><br>' +
-          '코스닥 <span class="m">' + (d.kosdaqChange >= 0 ? '+' : '') + d.kosdaqChange.toFixed(2) + '%</span> · <span class="m">' + d.kosdaqValue + '조</span>');
+          '코스닥 <span class="m">' + (d.kosdaqChange >= 0 ? '+' : '') + d.kosdaqChange.toFixed(2) + '%</span> · <span class="m">' + d.kosdaqValue + '조</span><br>' +
+          '<span style="opacity:.75">월평균 거래대금 코스피 ' + avgs[0].v.toFixed(2) + '조 · 코스닥 ' + avgs[1].v.toFixed(2) + '조</span>');
       })
       .on('mouseleave', function () { cross.attr('opacity', 0); hideTip(); })
       .on('click', function (ev, d) { hideTip(); DAY_SEL.market = d.date; renderMarketTab(); });
@@ -1685,17 +1762,66 @@
   }
 
 
-  // 이평선 이격도 화살표 1개(한 칸에 하나). 글씨 없이 크기·속도로 이격도를 표현, 수치는 마우스 오버(title)로.
-  function maArrowHtml(m) {
+  // 이평선 이격도 화살표 1개(한 칸에 하나). 머리 크기는 고정, 몸통 길이만 이격도에 비례(2026-10-26 사용자 요청).
+  // 흐린 화살표(전체 길이) 위로 진한 화살표가 밑동→끝으로 차올랐다가 사라지는 흐름을 반복. 수치는 마우스 오버(title)로.
+  function maArrowHtml(m, cross) {
     if (!m || m.pos == null || m.dev == null) return '<span class="mkt-ma-na">—</span>';
     var isUp = m.pos === '위';
     var mag = Math.min(Math.abs(m.dev), MA_DEV_CAP) / MA_DEV_CAP; // 0~1
-    var scale = (0.75 + mag * 1.35).toFixed(2);   // 이격도 0% -> 0.75배, 15%+ -> 2.1배
-    var dur = (2.3 - mag * 1.6).toFixed(2);        // 이격도 0% -> 2.3s(느림), 15%+ -> 0.7s(빠름)
+    var L = Math.round(11 + mag * 15);   // 이격도 0% -> 11px, 15%+ -> 26px
+    var hd = 8;                          // 화살촉 높이(고정)
+    var path = isUp
+      ? 'M7 0L14 ' + hd + 'L9.3 ' + hd + 'L9.3 ' + L + 'L4.7 ' + L + 'L4.7 ' + hd + 'L0 ' + hd + 'Z'
+      : 'M7 ' + L + 'L14 ' + (L - hd) + 'L9.3 ' + (L - hd) + 'L9.3 0L4.7 0L4.7 ' + (L - hd) + 'L0 ' + (L - hd) + 'Z';
+    var svg = '<svg viewBox="0 0 14 ' + L + '" aria-hidden="true"><path d="' + path + '"/></svg>';
     var title = m.w + '일선 ' + m.pos + ' ' + (m.dev >= 0 ? '+' : '') + m.dev.toFixed(2) + '%';
-    var path = isUp ? 'M12 3 L20 15 L14.2 15 L14.2 21 L9.8 21 L9.8 15 L4 15 Z' : 'M12 21 L4 9 L9.8 9 L9.8 3 L14.2 3 L14.2 9 L20 9 Z';
-    return '<span class="ma-arrow ' + (isUp ? 'ma-up' : 'ma-down') + '" style="--mscale:' + scale + ';--mdur:' + dur + 's" title="' + esc(title) + '" role="img" aria-label="' + esc(title) + '">' +
-      '<svg class="ma-arrow-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="' + path + '"/></svg></span>';
+    if (cross) title += ' · ' + (cross.type === 'gold' ? '골든크로스' : '데드크로스') + '(' + cross.s + '일선이 ' + cross.l + '일선을 ' + (cross.type === 'gold' ? '상향' : '하향') + ' 돌파)';
+    return '<span class="ma-arrow ' + (isUp ? 'ma-up' : 'ma-down') + '" style="--mlen:' + L + 'px" title="' + esc(title) + '" role="img" aria-label="' + esc(title) + '">' +
+      '<span class="ma-track">' + svg + '</span><span class="ma-flow">' + svg + '</span></span>' +
+      (cross ? crossBadgeHtml(cross.type) : '');
+  }
+
+  // 골든/데드크로스: 같은 날 종가 기준이라 이평선 값 = 종가/(1+이격도) → 이격도가 작을수록 이평선이 위.
+  // 직전 거래일 대비 (짧은선, 긴선) 위아래가 뒤집힌 날을 찾는다. 5·20일선, 20·60일선 두 쌍만 본다.
+  // 반환: { 'YYYY-MM-DD|kospi': { 5: {type, s, l}, 20: {...} } } — 배지는 짧은 이평선 칸에 붙는다.
+  var MA_CROSS_PAIRS = [[5, 20], [20, 60]];
+  function maCrossMap(reports) {
+    var out = {};
+    [['kospi', 'kospiMaD'], ['kosdaq', 'kosdaqMaD']].forEach(function (k) {
+      var prev = null;
+      reports.forEach(function (r) {
+        var dev = {};
+        (r[k[1]] || []).forEach(function (e) { if (e && e.dev != null) dev[e.w] = e.dev; });
+        if (prev) {
+          MA_CROSS_PAIRS.forEach(function (p) {
+            var s = p[0], l = p[1];
+            if (dev[s] == null || dev[l] == null || prev[s] == null || prev[l] == null) return;
+            var was = prev[s] < prev[l], now = dev[s] < dev[l]; // true = 짧은선이 긴선 위
+            if (was === now) return;
+            var key = r.date + '|' + k[0];
+            (out[key] = out[key] || {})[s] = { type: now ? 'gold' : 'dead', s: s, l: l };
+          });
+        }
+        prev = Object.keys(dev).length ? dev : null;
+      });
+    });
+    return out;
+  }
+
+  var CROSS_SEQ = 0;
+  function crossBadgeHtml(type) {
+    if (type === 'gold') {
+      var id = 'gstar' + (++CROSS_SEQ);
+      return '<span class="ma-xbadge gold" aria-hidden="true"><svg viewBox="0 0 24 24">' +
+        '<defs><linearGradient id="' + id + '" x1="0" y1="0" x2="1" y2="1">' +
+        '<stop offset="0" stop-color="#FFF4B5"/><stop offset="0.45" stop-color="#FFC928"/><stop offset="1" stop-color="#E08A00"/></linearGradient></defs>' +
+        '<path d="M12 1.8l2.9 6.4 7 .7-5.3 4.7 1.6 6.9L12 16.9l-6.2 3.6 1.6-6.9L2.1 8.9l7-.7z" fill="url(#' + id + ')" stroke="#B86E00" stroke-width="0.8" stroke-linejoin="round"/>' +
+        '<path class="spark" d="M19.5 1.5l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z"/></svg></span>';
+    }
+    return '<span class="ma-xbadge dead" aria-hidden="true"><svg viewBox="0 0 24 24">' +
+      '<path class="skull" d="M12 2C7.1 2 3.8 5.5 3.8 9.9c0 2.6 1.2 4.6 3 5.8V18c0 .7.5 1.2 1.2 1.2h1v1.6c0 .5.4.9.9.9h.3c.5 0 .9-.4.9-.9v-1.6h1.8v1.6c0 .5.4.9.9.9h.3c.5 0 .9-.4.9-.9v-1.6h1c.7 0 1.2-.5 1.2-1.2v-2.3c1.8-1.2 3-3.2 3-5.8C20.2 5.5 16.9 2 12 2z"/>' +
+      '<circle class="eye" cx="8.7" cy="10.6" r="2.1"/><circle class="eye" cx="15.3" cy="10.6" r="2.1"/>' +
+      '<path class="eye" d="M12 13.4l-1.2 2.2h2.4z"/></svg></span>';
   }
 
   var STATS_COLOR_KEY = 'themeRadar.chartColors';
