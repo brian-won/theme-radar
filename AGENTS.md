@@ -40,7 +40,7 @@ docs/product-spec.md       # 기능 명세, 완료 정의(Definition of Done)
 docs/security.md           # 인증/권한, 민감정보 처리, 데이터 보호
 skills/                    # 재사용 가능한 작업 절차 (SKILL.md 표준)
   ├── skill-creator/         # 새 스킬 생성/수정 방법
-  └── daily-market-report/   # 일일 시황 스크리닝→Notion 기록→대시보드 갱신 전체 절차
+  └── daily-market-report/   # 일일 시황 스크리닝→Notion 기록→대시보드 갱신 전체 절차 (상승 이유 출처·인포스탁 소급 검증·추정 종목 규칙 포함 — 스크리닝 전 반드시 읽을 것)
 ```
 
 ## 6. 에이전트 오답 노트 (실제로 발생한 실수만 기록)
