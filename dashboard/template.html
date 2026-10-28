@@ -495,6 +495,40 @@
   .wsubhead .wsname { font-size: 12.5px; font-weight: 700; color: var(--accent-strong); }
   .wsubhead .wsmeta { font-size: 11px; color: var(--text-muted); font-family: "JetBrains Mono", monospace; }
   .wsubhead + .wrow { border-top: none; }
+
+  /* ---- 관심종목(해외): 미국 섹터 종목 ↔ 한국 연관 종목 (skills/us-kr-sector-mapping/references/us_kr_sector_mapping.md) ---- */
+  .us-row { padding: 12px 0; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 8px; }
+  .us-row:first-child { border-top: none; padding-top: 2px; }
+  .us-row-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .us-id { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--text-muted); }
+  .us-sub { font-size: 14px; font-weight: 700; }
+  .us-str { font-size: 11px; font-weight: 700; padding: 2px 9px; border-radius: 999px; border: 1px solid transparent; white-space: nowrap; }
+  .us-str.s5 { background: var(--accent); color: #fff; }
+  .us-str.s4 { background: var(--accent-soft); color: var(--accent-strong); border-color: var(--accent); }
+  .us-str.s3 { background: var(--accent-soft); color: var(--accent-strong); }
+  .us-str.s2 { background: var(--surface-alt); color: var(--text-secondary); }
+  .us-str.s1 { background: none; color: var(--text-muted); border-color: var(--border); }
+  .us-str.st { background: none; color: var(--gold); border: 1px dashed var(--gold); }
+  .us-pair { display: grid; grid-template-columns: minmax(0, 1fr) 22px minmax(0, 1fr); gap: 8px; align-items: start; }
+  .us-side { min-width: 0; display: flex; flex-direction: column; gap: 5px; }
+  .us-label { font-size: 10.5px; font-weight: 700; color: var(--text-muted); letter-spacing: 0.04em; }
+  .us-link { align-self: center; text-align: center; color: var(--text-muted); font-size: 14px; }
+  .us-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+  .uchip { display: inline-flex; align-items: baseline; gap: 5px; font-size: 12.5px; padding: 3px 9px; border-radius: 8px; background: var(--surface-alt); border: 1px solid var(--border); white-space: nowrap; }
+  .uchip .tk { font-family: "JetBrains Mono", monospace; font-size: 11px; font-weight: 700; color: var(--accent-strong); }
+  .uchip .tk.na { color: var(--text-muted); font-weight: 400; }
+  .uchip .kchg { font-family: "JetBrains Mono", monospace; font-size: 10.5px; font-weight: 700; }
+  .uchip.none { background: none; border-style: dashed; color: var(--text-muted); font-size: 12px; }
+  .us-note { margin: 0; font-size: 12px; line-height: 1.6; color: var(--text-secondary); }
+  .us-tag { font-size: 10px; font-weight: 700; padding: 0 5px; border-radius: 4px; margin-right: 2px; background: var(--surface-alt); color: var(--text-secondary); }
+  .us-tag.fact { background: var(--accent-soft); color: var(--accent-strong); }
+  .us-extra { margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--border); display: flex; flex-direction: column; gap: 6px; }
+  .us-extra h3 { margin: 0; font-size: 12px; font-weight: 700; color: var(--text-secondary); }
+  .us-extra ul { margin: 0; padding-left: 18px; font-size: 12px; line-height: 1.7; color: var(--text-secondary); }
+  @media (max-width: 640px) {
+    .us-pair { grid-template-columns: minmax(0, 1fr); }
+    .us-link { display: none; }
+  }
 </style>
 
 </head>
@@ -518,7 +552,8 @@
       <button type="button" class="tab-btn" data-tab="market" role="tab">시황</button>
       <button type="button" class="tab-btn" data-tab="report" role="tab">리포트</button>
       <button type="button" class="tab-btn" data-tab="theme" role="tab">테마</button>
-      <button type="button" class="tab-btn" data-tab="watch" role="tab">관심종목</button>
+      <button type="button" class="tab-btn" data-tab="watch" role="tab">관심종목(국내)</button>
+      <button type="button" class="tab-btn" data-tab="watchUs" role="tab">관심종목(해외)</button>
       <button type="button" class="tab-btn" data-tab="stats" role="tab">통계</button>
       <button type="button" class="tab-btn" data-tab="analysis" role="tab">분석 <span class="tab-soon">준비중</span></button>
     </nav>
@@ -594,7 +629,7 @@
   <!-- ---- 관심종목 ---- -->
   <section class="tab-panel" data-tab-panel="watch" hidden>
     <div class="section-head">
-      <h2>관심종목</h2>
+      <h2>관심종목(국내)</h2>
       <span class="note">리포트에 등장한 종목을 인포스탁 기준 큰 틀별로 자동 누적 · 카드 안은 세부 테마(작은 틀)별로 묶고, 여러 세부 테마에 속한 종목은 각각 표시 · 큰 틀의 대장주에 왕관 · 오른쪽은 최근 5거래일 등락률/거래대금(KIS KRX+NXT 통합 기준)</span>
     </div>
     <div class="theme-tabs" id="watchTabs" role="tablist"></div>
@@ -602,6 +637,17 @@
     <p class="watch-foot" id="watchFoot"></p>
   </section>
   <div class="watch-menu" id="watchMenu" role="menu" hidden></div>
+
+  <!-- ---- 관심종목(해외) ---- -->
+  <section class="tab-panel" data-tab-panel="watchUs" hidden>
+    <div class="section-head">
+      <h2>관심종목(해외)</h2>
+      <span class="note" id="watchUsNote"></span>
+    </div>
+    <div class="theme-tabs" id="watchUsTabs" role="tablist"></div>
+    <div id="watchUsBody"></div>
+    <p class="watch-foot" id="watchUsFoot"></p>
+  </section>
 
   <!-- ---- 통계 ---- -->
   <section class="tab-panel" data-tab-panel="stats" hidden>
@@ -778,7 +824,7 @@
   // =========================================================
   // 탭 전환
   // =========================================================
-  var TAB_KEYS = ['market', 'report', 'theme', 'watch', 'stats', 'analysis'];
+  var TAB_KEYS = ['market', 'report', 'theme', 'watch', 'watchUs', 'stats', 'analysis'];
   function activateTab(key) {
     TAB_KEYS.forEach(function (k) {
       var btn = document.querySelector('.tab-btn[data-tab="' + k + '"]');
@@ -2005,6 +2051,103 @@
     return '<div class="rsubs">' + shown + (subs.length > max ? '<span class="subchip more">+' + (subs.length - max) + '</span>' : '') + '</div>';
   }
   // =========================================================
+  // 관심종목(해외) 탭: 미국 섹터별 주요 종목 ↔ 한국 연관 종목 (skills/us-kr-sector-mapping/references/us_kr_sector_mapping.md를 빌드 시 내장)
+  // 섹터(탭) > 세부 섹터(행). 한국 종목은 관심종목(국내) 시세(recentPrices)에 있으면 최근 거래일 등락률을 함께 표시
+  // =========================================================
+  var WATCH_US_KEY = 'themeRadar.watchUsSector';
+  var WATCH_US_SEL = null;
+  var US_STRENGTH_CLASS = { '강함': 's5', '중간~강함': 's4', '중간': 's3', '약함~중간': 's2', '약함': 's1', '테마성': 'st' };
+
+  function usNoteHtml(note) {
+    return esc(note)
+      .replace(/\[사실\]/g, '<span class="us-tag fact">사실</span>')
+      .replace(/\[(추론|보도)\]/g, '<span class="us-tag">$1</span>');
+  }
+
+  function renderWatchUsTab() {
+    var map = SNAPSHOT.usKrMap || { rows: [], triggers: [], cautions: [] };
+    var rows = map.rows || [];
+    var sectors = [];
+    rows.forEach(function (r) { if (sectors.indexOf(r.sector) === -1) sectors.push(r.sector); });
+    if (!WATCH_US_SEL || sectors.indexOf(WATCH_US_SEL) === -1) WATCH_US_SEL = sectors[0] || null;
+
+    var rp = SNAPSHOT.recentPrices || { dates: [], prices: {} };
+    var lastDate = rp.dates && rp.dates.length ? rp.dates[rp.dates.length - 1] : null;
+
+    document.getElementById('watchUsNote').textContent =
+      '미국 섹터별 주요 종목과 사업상 연결된 한국 종목 · 연결강도는 공급·고객·경쟁·업황 공유 기준의 정성 판단(주가 상관계수 아님)' +
+      (map.asOf ? ' · 기준일 ' + map.asOf : '');
+
+    document.getElementById('watchUsTabs').innerHTML = sectors.map(function (s) {
+      var n = rows.filter(function (r) { return r.sector === s; }).length;
+      return '<button type="button" class="theme-tab" role="tab" data-sector="' + esc(s) + '" aria-selected="' + (s === WATCH_US_SEL) + '">' +
+        esc(s) + '<span class="tcount">' + n + '</span></button>';
+    }).join('');
+
+    var body = document.getElementById('watchUsBody');
+    if (!WATCH_US_SEL) { body.innerHTML = '<div class="placeholder-note">skills/us-kr-sector-mapping/references/us_kr_sector_mapping.md 매핑표가 비어 있습니다.</div>'; return; }
+
+    function usChip(u) {
+      return '<span class="uchip">' + (u.ticker ? '<span class="tk">' + esc(u.ticker) + '</span>' : '<span class="tk na">' + esc(u.tickerNote || '티커 없음') + '</span>') +
+        (u.name.toUpperCase() === u.ticker ? '' : esc(u.name)) + '</span>'; // AMD·ARM·KLA·ASML처럼 이름이 곧 티커면 한 번만
+    }
+    function krChip(name) {
+      var p = rp.prices && rp.prices[name];
+      var v = p && p.days && lastDate && p.days[lastDate];
+      var chg = v ? '<span class="kchg" style="color:' + (v.change >= 0 ? 'var(--up)' : 'var(--down)') + '">' + (v.change >= 0 ? '+' : '') + v.change.toFixed(2) + '%</span>' : '';
+      return '<span class="uchip">' + esc(name) + chg + '</span>';
+    }
+    var secRows = rows.filter(function (r) { return r.sector === WATCH_US_SEL; });
+    var ids = secRows.map(function (r) { return r.id; });
+    var related = function (list) { return (list || []).filter(function (x) { return x.ids.some(function (id) { return ids.indexOf(id) !== -1; }); }); };
+    var triggers = related(map.triggers), cautions = related(map.cautions);
+    var usCount = {}, krCount = {};
+    secRows.forEach(function (r) { r.us.forEach(function (u) { usCount[u.name] = 1; }); r.kr.forEach(function (k) { krCount[k] = 1; }); });
+
+    var html = secRows.map(function (r) {
+      return '<div class="us-row">' +
+        '<div class="us-row-head"><span class="us-id">' + esc(r.id) + '</span><span class="us-sub">' + esc(r.sub) + '</span>' +
+        '<span class="us-str ' + (US_STRENGTH_CLASS[r.strength] || 's2') + '" title="연결강도">' + esc(r.strength) + '</span></div>' +
+        '<div class="us-pair">' +
+          '<div class="us-side"><span class="us-label">미국</span><div class="us-chips">' +
+            (r.us.length ? r.us.map(usChip).join('') : '<span class="uchip none">' + esc(r.usEmpty || '없음') + '</span>') + '</div></div>' +
+          '<span class="us-link" aria-hidden="true">↔</span>' +
+          '<div class="us-side"><span class="us-label">한국</span><div class="us-chips">' +
+            (r.kr.length ? r.kr.map(krChip).join('') : '<span class="uchip none">' + esc(r.krEmpty || '없음') + '</span>') + '</div></div>' +
+        '</div>' +
+        (r.note ? '<p class="us-note">' + usNoteHtml(r.note) + '</p>' : '') +
+        '</div>';
+    }).join('');
+    var extra = '';
+    if (triggers.length) extra += '<h3>이벤트 트리거 (시차 매매 참고)</h3><ul>' + triggers.map(function (x) { return '<li>' + esc(x.text) + '</li>'; }).join('') + '</ul>';
+    if (cautions.length) extra += '<h3>미확인·주의</h3><ul>' + cautions.map(function (x) { return '<li>' + esc(x.text) + '</li>'; }).join('') + '</ul>';
+
+    body.innerHTML = '<div class="watch-card"><div class="watch-card-head"><span class="wname">' + esc(WATCH_US_SEL) + '</span>' +
+      '<span class="wbadge">세부 ' + secRows.length + '개</span>' +
+      '<span class="wbadge">미국 ' + Object.keys(usCount).length + '종목</span>' +
+      '<span class="wbadge">한국 ' + Object.keys(krCount).length + '종목</span></div>' +
+      html + (extra ? '<div class="us-extra">' + extra + '</div>' : '') + '</div>';
+
+    var common = (map.cautions || []).filter(function (x) { return !x.ids.length; });
+    document.getElementById('watchUsFoot').innerHTML =
+      '한국 종목 옆 등락률은 관심종목(국내) 시세에 있는 종목만 ' + (lastDate ? lastDate.slice(5) + ' 기준으로 ' : '') + '표시합니다(KIS KRX+NXT 통합). ' +
+      '매핑 내용은 skills/us-kr-sector-mapping/references/us_kr_sector_mapping.md를 고친 뒤 다시 빌드하면 반영됩니다.' +
+      (common.length ? ' ' + common.map(function (x) { return esc(x.text); }).join(' · ') : '');
+  }
+
+  function initWatchUs() {
+    try { WATCH_US_SEL = localStorage.getItem(WATCH_US_KEY); } catch (e) {}
+    renderWatchUsTab();
+    document.getElementById('watchUsTabs').addEventListener('click', function (e) {
+      var tab = e.target.closest('.theme-tab');
+      if (!tab) return;
+      WATCH_US_SEL = tab.dataset.sector;
+      try { localStorage.setItem(WATCH_US_KEY, WATCH_US_SEL); } catch (e2) {}
+      renderWatchUsTab();
+    });
+  }
+
+  // =========================================================
   // 초기 렌더
   // =========================================================
   function render(data) {
@@ -2015,6 +2158,7 @@
     renderThemeTab();
     initWatch();
     renderWatchTab();
+    initWatchUs();
     renderStatsTab();
     initSearch();
   }

@@ -13,6 +13,7 @@
   data/recent_prices.json          # (선택) 관심종목 탭의 최근 5일 시세 — scripts/fetch_recent_prices.py로 생성
   data/supabase_config.json        # 관심종목 수정 동기화용 Supabase 프로젝트 URL + anon key (공개해도 되는 값)
   data/site_password.json          # 대시보드 접근 비밀번호의 SHA-256 해시(평문 아님) — scripts/set_dashboard_password.py로 설정
+  skills/us-kr-sector-mapping/references/us_kr_sector_mapping.md  # (선택) 관심종목(해외) 탭 — 미국 섹터 종목 ↔ 한국 연관 종목 매핑표(파일을 고치고 다시 빌드하면 반영)
 
 출력:
   dashboard/index.html  # 완전한 standalone 웹페이지 (데이터 내장, 서버/네트워크 불필요, 로컬 미리보기용)
@@ -21,6 +22,7 @@
 새 날짜를 추가하려면: data/daily_reports.json에 항목 추가 + data/daily_detail_with_reasons.json에
 날짜 키 추가 후 이 스크립트를 다시 실행하면 된다. daily-market-report 스킬의 6단계 참고.
 """
+import re
 import json
 from pathlib import Path
 
@@ -28,6 +30,50 @@ ROOT = Path(__file__).parent.parent
 TEMPLATE = ROOT / "dashboard" / "template.html"
 OUTPUT = ROOT / "dashboard" / "index.html"
 PAGES_OUTPUT = ROOT / "docs" / "index.html"
+US_KR_MAPPING = ROOT / "skills" / "us-kr-sector-mapping" / "references" / "us_kr_sector_mapping.md"
+
+
+def parse_us_kr_mapping(path: Path) -> dict:
+    """관심종목(해외) 탭용: skills/us-kr-sector-mapping/references/us_kr_sector_mapping.md의 매핑표·이벤트 트리거·미확인 항목을 읽는다."""
+    if not path.exists():
+        return {"asOf": None, "rows": [], "triggers": [], "cautions": []}
+    text = path.read_text(encoding="utf-8")
+    m = re.search(r"^as_of:\s*(\S+)", text, re.M)
+    as_of = m.group(1) if m else None
+
+    def section(title):
+        m = re.search(r"^## " + re.escape(title) + r"\s*$(.*?)(?=^## |\Z)", text, re.M | re.S)
+        return m.group(1) if m else ""
+
+    def split_list(cell):
+        cell = cell.strip()
+        if not cell or (cell.startswith("(") and cell.endswith(")") and ", " not in cell):
+            return [], cell.strip("()")  # 예: "(마땅한 대응주 없음)" → 종목 없음 + 안내 문구
+        return [x.strip() for x in cell.split(", ") if x.strip()], None
+
+    def ids_of(line):
+        return re.findall(r"(?<![\d-])(\d-\d+)(?![\d-])", line)  # "(6-1)", "7-3에서" 등 섹터 id
+
+    rows = []
+    for line in section("매핑표").splitlines():
+        cells = [c.strip() for c in line.strip().strip("|").split("|")]
+        if len(cells) != 7 or not re.fullmatch(r"\d+-\d+", cells[0]):
+            continue
+        us_items, us_empty = split_list(cells[3])
+        us = []
+        for item in us_items:
+            mm = re.fullmatch(r"(.+?)\(([^)]*)\)", item)
+            name, ticker = (mm.group(1).strip(), mm.group(2).strip()) if mm else (item, "")
+            us.append({"name": name, "ticker": ticker if re.fullmatch(r"[A-Z.]+", ticker) else "", "tickerNote": "" if re.fullmatch(r"[A-Z.]+", ticker) else ticker})
+        kr, kr_empty = split_list(cells[4])
+        rows.append({
+            "id": cells[0], "sector": cells[1], "sub": cells[2], "us": us, "usEmpty": us_empty,
+            "kr": kr, "krEmpty": kr_empty, "strength": cells[5], "note": cells[6],
+        })
+    bullets = lambda s: [ln.strip()[2:].strip() for ln in s.splitlines() if ln.strip().startswith("- ")]
+    triggers = [{"text": b, "ids": ids_of(b)} for b in bullets(section("이벤트 트리거 (시차 매매 참고)"))]
+    cautions = [{"text": b, "ids": ids_of(b)} for b in bullets(section("미확인·주의 항목"))]
+    return {"asOf": as_of, "rows": rows, "triggers": triggers, "cautions": cautions}
 
 
 def main():
@@ -54,13 +100,16 @@ def main():
     if unmapped:
         print(f"경고: data/theme_taxonomy.json에 큰 틀 매핑이 없는 세부 테마 {len(unmapped)}개(그대로 큰 틀로 표시됨): {unmapped}")
 
+    us_kr = parse_us_kr_mapping(US_KR_MAPPING)
+
     snapshot_js = (
         "{\n"
         "    generatedAt: " + json.dumps(max(d["date"] for d in daily_reports)) + ",\n"
         "    dailyReports: " + json.dumps(daily_reports, ensure_ascii=False, indent=2) + ",\n"
         "    dailyDetail: " + json.dumps(daily_detail, ensure_ascii=False, indent=2) + ",\n"
         "    themeParent: " + json.dumps(taxonomy["mapping"], ensure_ascii=False) + ",\n"
-        "    recentPrices: " + json.dumps(recent_prices, ensure_ascii=False) + "\n"
+        "    recentPrices: " + json.dumps(recent_prices, ensure_ascii=False) + ",\n"
+        "    usKrMap: " + json.dumps(us_kr, ensure_ascii=False) + "\n"
         "  }"
     )
 
@@ -86,6 +135,7 @@ def main():
     print(f"빌드 완료: {OUTPUT}")
     print(f"           {PAGES_OUTPUT} (GitHub Pages용, 동일 내용)")
     print(f"  거래일 {len(daily_reports)}개, 누적 종목 {total_stocks}개, 테마 로그 {len(daily_detail)}일치")
+    print(f"  관심종목(해외) 매핑 {len(us_kr['rows'])}행 (기준일 {us_kr['asOf']})")
 
 
 if __name__ == "__main__":
