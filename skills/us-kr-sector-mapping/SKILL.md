@@ -35,6 +35,6 @@ description: 미국 섹터별 주요 종목 ↔ 한국 연관 종목 매핑을 �
 
 ## 대시보드 연결 (참고)
 - `scripts/build_dashboard.py`의 `parse_us_kr_mapping()`이 빌드 때 원본을 읽어 `SNAPSHOT.usKrMap`으로 HTML에 내장한다(파일이 없으면 탭이 빈 안내만 표시).
-- 화면(트레이딩뷰 워치리스트 형태): 탭 = 섹터, 카드 안 = 세부 섹터별로 미국 종목 행(티커·이름·최근 5거래일 등락률/거래대금) → 그 아래 `국내` 참조 행(한국 종목 최근 5거래일 등락률/거래대금) → `+ 국내 종목 추가` 버튼. 연결강도·근거·이벤트 트리거·미확인 항목은 화면에 표시하지 않는다(원본 파일에만 유지).
+- 화면(트레이딩뷰 워치리스트 형태): 탭 = 섹터, 카드 안 = 세부 섹터별로 미국 종목 행(티커·이름·최근 5거래일 등락률/거래대금) → `▸ 국내 N` 토글(기본 접힘, 펼침 상태는 브라우저 localStorage `themeRadar.watchUsOpen`에 기억) → 펼치면 `국내` 참조 행(한국 종목 최근 5거래일 등락률/거래대금)과 `+ 국내 종목 추가` 버튼. 연결강도·근거·이벤트 트리거·미확인 항목은 화면에 표시하지 않는다(원본 파일에만 유지).
 - 시세: 미국은 `python scripts/fetch_us_prices.py`(→ `data/us_recent_prices.json`), 국내는 `python scripts/fetch_recent_prices.py`(매핑표 한국 종목도 조회 대상). 매핑표에 종목을 추가했으면 두 스크립트를 다시 돌린 뒤 빌드해야 시세가 붙는다. 국내 종목명이 pykrx 표기와 다르면(예: 네이버→NAVER) `fetch_recent_prices.py`의 `NAME_ALIAS`에 추가.
 - 화면에서 추가·삭제한 국내 연관 종목은 관심종목(국내) 수정과 같은 저장소(브라우저 localStorage + Supabase `watch_state`의 `usAdded`/`usRemoved`, 키 = 세부 섹터 id)에 저장되고 원본 파일은 바뀌지 않는다. 영구 반영하려면 원본 매핑표에 옮겨 적는다.

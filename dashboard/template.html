@@ -97,17 +97,31 @@
   .num { font-family: "JetBrains Mono", ui-monospace, monospace; font-variant-numeric: tabular-nums; }
 
   /* ---- 앱 레이아웃: 왼쪽 세로 메뉴 + 오른쪽 본문(화면 전체 폭 사용) ---- */
-  .app { display: grid; grid-template-columns: 200px minmax(0, 1fr); min-height: 100vh; }
+  .app { display: grid; grid-template-columns: 200px minmax(0, 1fr); min-height: 100vh; transition: grid-template-columns 0.2s ease; }
   .side {
     position: sticky; top: 0; height: 100vh; overflow-y: auto; background: var(--surface);
-    border-right: 1px solid var(--border); padding: 24px 12px; display: flex; flex-direction: column; gap: 24px;
+    border-right: 1px solid var(--border); padding: 24px 12px; display: flex; flex-direction: column; gap: 24px; overflow-x: hidden;
   }
-  .brand { display: flex; flex-direction: column; gap: 4px; padding: 0 8px; }
+  /* 사이드바 접기: 아이콘만 표시(상태는 localStorage themeRadar.sideCollapsed) */
+  .side-toggle { flex-shrink: 0; width: 32px; height: 32px; border: none; background: none; color: var(--text-muted); border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .side-toggle svg { width: 18px; height: 18px; }
+  .side-toggle:hover { background: var(--surface-alt); color: var(--text-primary); }
+  .side-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .app.side-collapsed .side-toggle .chev { transform: translateX(-2px) scaleX(-1); transform-origin: 14px 12px; }
+  .app.side-collapsed { grid-template-columns: 64px minmax(0, 1fr); }
+  .app.side-collapsed .side { padding: 24px 8px; }
+  .app.side-collapsed .brand { justify-content: center; padding: 0; }
+  .app.side-collapsed .brand-name, .app.side-collapsed .tab-label, .app.side-collapsed .tab-soon { display: none; }
+  .app.side-collapsed .tab-btn { justify-content: center; padding: 10px 0; }
+  .brand { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 0 4px 0 8px; }
   .brand-name { font-size: 21px; font-weight: 900; letter-spacing: -0.01em; }
   .main { min-width: 0; padding: 24px 32px 64px; display: flex; flex-direction: column; gap: 24px; }
   @media (max-width: 900px) {
     .app { grid-template-columns: minmax(0, 1fr); }
     .side { position: sticky; z-index: 30; height: auto; flex-direction: row; align-items: center; gap: 14px; padding: 10px 16px; border-right: none; border-bottom: 1px solid var(--border); }
+    .app.side-collapsed { grid-template-columns: minmax(0, 1fr); }
+    .app.side-collapsed .side { padding: 10px 16px; }
+    .app.side-collapsed .tab-btn { padding: 8px 12px; }
     .brand-name { font-size: 17px; white-space: nowrap; }
     .main { padding: 18px 16px 48px; }
   }
@@ -157,10 +171,11 @@
   .tab-bar { display: flex; flex-direction: column; gap: 2px; }
   .tab-btn {
     font-size: 14.5px; font-weight: 700; padding: 10px 12px; border: none; background: none; color: var(--text-secondary);
-    cursor: pointer; font-family: inherit; border-radius: 10px; white-space: nowrap; display: flex; align-items: center; gap: 6px; text-align: left;
+    cursor: pointer; font-family: inherit; border-radius: 10px; white-space: nowrap; display: flex; align-items: center; gap: 10px; text-align: left;
     border-left: 3px solid transparent;
   }
   .tab-btn:hover { background: var(--surface-alt); }
+  .tab-ico { width: 18px; height: 18px; flex-shrink: 0; }
   .tab-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
   .tab-btn[aria-selected="true"] { color: var(--accent-strong); background: var(--accent-soft); border-left-color: var(--accent); }
   @media (max-width: 900px) {
@@ -177,16 +192,6 @@
   .month-arrow { width: 30px; height: 30px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); color: var(--text-secondary); cursor: pointer; font-size: 15px; line-height: 1; flex-shrink: 0; }
   .month-arrow:disabled { opacity: 0.35; cursor: default; }
 
-  /* ---- 테마 누적: 1~4순위 하이라이트 ---- */
-  .rank-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
-  .rank-card { min-width: 0; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 16px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 8px; }
-  .rank-card.top1 { border-color: var(--accent); background: var(--accent-soft); }
-  .rank-badge { align-self: flex-start; font-family: "JetBrains Mono", monospace; font-size: 11px; font-weight: 700; color: #fff; background: var(--accent); padding: 2px 9px; border-radius: 999px; }
-  .rank-card .rname { font-size: 18px; font-weight: 900; }
-  .rank-card .rstat { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-secondary); }
-  .rank-card .rsub { font-size: 11px; color: var(--text-muted); }
-  table.day-table tbody tr.ranked { background: var(--accent-soft); }
-  table.day-table tbody tr.ranked td:first-child { font-weight: 700; color: var(--accent-strong); }
   table.day-table td.dim { color: var(--text-muted); }
 
   /* ---- 관심종목 ---- */
@@ -383,7 +388,11 @@
   details.table-view summary { cursor: pointer; font-size: 12px; color: var(--accent); font-weight: 600; padding: 8px 0; }
   table.plain { width: 100%; border-collapse: collapse; font-size: 12.5px; }
   table.plain th, table.plain td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--border); }
-  table.plain th { color: var(--text-muted); font-weight: 600; }
+  table.plain th { color: var(--text-muted); font-weight: 600; white-space: nowrap; }
+  table.plain td.num { white-space: nowrap; }
+  table.plain tbody tr.ranked { background: var(--accent-soft); }
+  table.plain tbody tr.ranked td:first-child { font-weight: 700; color: var(--accent-strong); }
+  table.plain td.up { color: var(--up); } table.plain td.down { color: var(--down); } table.plain td.dim { color: var(--text-muted); }
 
   footer { border-top: 1px solid var(--border); padding-top: 18px; font-size: 12px; color: var(--text-muted); line-height: 1.7; }
   footer b { color: var(--text-secondary); }
@@ -490,7 +499,6 @@
   .rsubs { display: flex; flex-wrap: wrap; gap: 4px; }
   .subchip { font-size: 11px; padding: 2px 8px; border-radius: 999px; background: var(--surface-alt); color: var(--text-secondary); white-space: nowrap; }
   .subchip.more { color: var(--text-muted); background: none; border: 1px dashed var(--border); }
-  .rank-card .rsubs { margin-top: 2px; }
   .wsubhead { display: flex; align-items: baseline; gap: 8px; padding: 10px 0 4px; border-top: 1px solid var(--border); min-width: 690px; }
   .wsubhead .wsname { font-size: 12.5px; font-weight: 700; color: var(--accent-strong); }
   .wsubhead .wsmeta { font-size: 11px; color: var(--text-muted); font-family: "JetBrains Mono", monospace; }
@@ -507,6 +515,8 @@
   .kadd-row { min-width: 690px; padding: 4px 0 8px 16px; }
   .kadd-btn { border: 1px dashed var(--border); background: none; color: var(--accent-strong); border-radius: 8px; padding: 4px 10px; font-family: inherit; font-size: 11.5px; font-weight: 700; cursor: pointer; }
   .kadd-btn:hover { background: var(--accent-soft); }
+  .kref-toggle { border: none; background: none; padding: 2px 4px; color: var(--text-muted); font-family: inherit; font-size: 11.5px; font-weight: 700; cursor: pointer; border-radius: 6px; }
+  .kref-toggle:hover, .kref-toggle[aria-expanded="true"] { color: var(--accent-strong); background: var(--accent-soft); }
 </style>
 
 </head>
@@ -525,15 +535,17 @@
   <aside class="side">
     <div class="brand">
       <div class="brand-name">Won's 투자</div>
+      <button type="button" class="side-toggle" id="sideToggle" aria-expanded="true" aria-label="메뉴 접기" title="메뉴 접기">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/><path class="chev" d="M15 10l-2 2 2 2"/></svg>
+      </button>
     </div>
     <nav class="tab-bar" role="tablist" aria-orientation="vertical" aria-label="카테고리">
-      <button type="button" class="tab-btn" data-tab="market" role="tab">시황</button>
-      <button type="button" class="tab-btn" data-tab="report" role="tab">리포트</button>
-      <button type="button" class="tab-btn" data-tab="theme" role="tab">테마</button>
-      <button type="button" class="tab-btn" data-tab="watch" role="tab">관심종목(국내)</button>
-      <button type="button" class="tab-btn" data-tab="watchUs" role="tab">관심종목(해외)</button>
-      <button type="button" class="tab-btn" data-tab="stats" role="tab">통계</button>
-      <button type="button" class="tab-btn" data-tab="analysis" role="tab">분석 <span class="tab-soon">준비중</span></button>
+      <button type="button" class="tab-btn" data-tab="market" role="tab" title="시황"><svg class="tab-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 6-6"/><path d="M16 8h4v4"/></svg><span class="tab-label">시황</span></button>
+      <button type="button" class="tab-btn" data-tab="report" role="tab" title="리포트"><svg class="tab-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/><path d="M8 13h8M8 17h5"/></svg><span class="tab-label">리포트</span></button>
+      <button type="button" class="tab-btn" data-tab="watch" role="tab" title="관심종목(국내)"><svg class="tab-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9z"/></svg><span class="tab-label">관심종목(국내)</span></button>
+      <button type="button" class="tab-btn" data-tab="watchUs" role="tab" title="관심종목(해외)"><svg class="tab-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18a14 14 0 0 1 0-18z"/></svg><span class="tab-label">관심종목(해외)</span></button>
+      <button type="button" class="tab-btn" data-tab="stats" role="tab" title="통계"><svg class="tab-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg><span class="tab-label">통계</span></button>
+      <button type="button" class="tab-btn" data-tab="analysis" role="tab" title="분석"><svg class="tab-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1 2V16h5.2v-.2c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/></svg><span class="tab-label">분석</span> <span class="tab-soon">준비중</span></button>
     </nav>
   </aside>
 
@@ -589,21 +601,6 @@
     <div class="report-card" id="reportDetail"></div>
   </section>
 
-  <!-- ---- 테마 ---- -->
-  <section class="tab-panel" data-tab-panel="theme" hidden>
-    <div class="section-head">
-      <h2>테마 누적</h2>
-      <span class="note">인포스탁 기준 큰 틀로 누적 · 순위는 1~3위에 든 날의 평균 거래대금·평균 등락률을 각각 순위 매겨 합산(낮을수록 상위, 동점이면 거래대금 우선) · 세부 테마는 그 큰 틀로 등장한 작은 틀(등장일 많은 순)</span>
-    </div>
-    <div class="rank-cards" id="themeHighlights"></div>
-    <div class="table-scroll">
-      <table class="day-table" id="themeCumTable">
-        <thead><tr><th>순위</th><th>테마(큰 틀)</th><th>세부 테마(작은 틀)</th><th>1~3위 횟수</th><th>평균 거래대금</th><th>평균 등락률</th><th>전체 등장일</th><th>최근 등장</th></tr></thead>
-        <tbody></tbody>
-      </table>
-    </div>
-  </section>
-
   <!-- ---- 관심종목 ---- -->
   <section class="tab-panel" data-tab-panel="watch" hidden>
     <div class="section-head">
@@ -654,10 +651,11 @@
       <summary>전체 테마 표로 보기</summary>
       <div class="table-scroll">
         <table class="plain" id="themeTable">
-          <thead><tr><th>테마(큰 틀)</th><th>1~3위 횟수</th><th>평균 등락률</th><th>평균 거래대금(억)</th><th>합계 거래대금(억)</th></tr></thead>
+          <thead><tr><th>순위</th><th>테마(큰 틀)</th><th>세부 테마(작은 틀)</th><th>1~3위 횟수</th><th>평균 등락률</th><th>평균 거래대금(억)</th><th>합계 거래대금(억)</th><th>등장일</th><th>최근 등장</th></tr></thead>
           <tbody></tbody>
         </table>
       </div>
+      <p class="st-note">선택 기간 기준 · 순위 = 1~3위에 든 날의 평균 거래대금 순위 + 평균 등락률 순위 합산(낮을수록 상위, 동점이면 거래대금 우선) · 등장일은 4등 포함 · 세부 테마는 등장일 많은 순</p>
     </details>
   </section>
 
@@ -802,7 +800,7 @@
   // =========================================================
   // 탭 전환
   // =========================================================
-  var TAB_KEYS = ['market', 'report', 'theme', 'watch', 'watchUs', 'stats', 'analysis'];
+  var TAB_KEYS = ['market', 'report', 'watch', 'watchUs', 'stats', 'analysis'];
   function activateTab(key) {
     TAB_KEYS.forEach(function (k) {
       var btn = document.querySelector('.tab-btn[data-tab="' + k + '"]');
@@ -813,7 +811,28 @@
     });
     try { localStorage.setItem('themeRadar.tab', key); } catch (e) {}
   }
+  // 사이드바 접기/펴기. 본문 폭이 바뀌므로 전환이 끝난 뒤 resize를 보내 차트를 새 폭으로 다시 그린다
+  function setSideCollapsed(collapsed) {
+    var app = document.querySelector('.app');
+    var btn = document.getElementById('sideToggle');
+    app.classList.toggle('side-collapsed', collapsed);
+    btn.setAttribute('aria-expanded', String(!collapsed));
+    btn.setAttribute('aria-label', collapsed ? '메뉴 펼치기' : '메뉴 접기');
+    btn.title = collapsed ? '메뉴 펼치기' : '메뉴 접기';
+  }
+  function initSide() {
+    var collapsed = false;
+    try { collapsed = localStorage.getItem('themeRadar.sideCollapsed') === '1'; } catch (e) {}
+    setSideCollapsed(collapsed);
+    document.getElementById('sideToggle').addEventListener('click', function () {
+      collapsed = !collapsed;
+      setSideCollapsed(collapsed);
+      try { localStorage.setItem('themeRadar.sideCollapsed', collapsed ? '1' : '0'); } catch (e) {}
+      setTimeout(function () { window.dispatchEvent(new Event('resize')); }, 220);
+    });
+  }
   function initTabs() {
+    initSide();
     document.querySelectorAll('.tab-btn').forEach(function (btn) {
       btn.addEventListener('click', function () { activateTab(btn.dataset.tab); });
     });
@@ -1242,10 +1261,20 @@
     var stats = computeThemeStats(FRAME_DETAIL, dates).sort(function (a, b) { return b.freq - a.freq || b.avgValue - a.avgValue; });
     STATS_VIEW = { dates: dates, rows: stats.slice(0, TOP_N) };
     renderStatsCharts();
-    document.querySelector('#themeTable tbody').innerHTML = stats.map(function (r) {
-      return '<tr><td>' + esc(r.theme) + '</td><td class="num">' + r.freq + '회</td><td class="num">' + (r.avgChange >= 0 ? '+' : '') + r.avgChange.toFixed(2) + '%</td>' +
-        '<td class="num">' + fmt(r.avgValue) + '</td><td class="num">' + fmt(r.sumValue) + '</td></tr>';
-    }).join('') || '<tr><td colspan="5" style="color:var(--text-muted)">이 기간 데이터 없음</td></tr>';
+    document.querySelector('#themeTable tbody').innerHTML = computeThemeCumulative(dates).map(function (r) {
+      var up = r.avgChange !== null && r.avgChange >= 0;
+      return '<tr class="' + (r.pos && r.pos <= 4 ? 'ranked' : '') + '">' +
+        '<td class="num">' + (r.pos ? r.pos + '순위' : '—') + '</td>' +
+        '<td>' + esc(r.theme) + '</td>' +
+        '<td style="min-width:200px;">' + subChips(r.subs, 6) + '</td>' +
+        '<td class="num">' + r.top3 + '회</td>' +
+        (r.top3 ? '<td class="num ' + (up ? 'up' : 'down') + '">' + (up ? '+' : '') + r.avgChange.toFixed(2) + '%</td>' +
+          '<td class="num">' + fmt(r.avgValue) + '</td><td class="num">' + fmt(r.valSum) + '</td>'
+          : '<td class="num dim">—</td><td class="num dim">—</td><td class="num dim">—</td>') +
+        '<td class="num">' + r.dayCount + '일</td>' +
+        '<td class="num">' + r.last.slice(5) + '</td>' +
+        '</tr>';
+    }).join('') || '<tr><td colspan="9" style="color:var(--text-muted)">이 기간 데이터 없음</td></tr>';
     if (!STATS_BOUND) {
       STATS_BOUND = true;
       var visible = function () { var p = document.querySelector('.tab-panel[data-tab-panel="stats"]'); return p && !p.hidden; };
@@ -1263,10 +1292,11 @@
     }
   }
 
-  // 큰 틀 누적 + 1~4순위. 순위 = (1~3위 든 날의 평균 거래대금 순위) + (평균 등락률 순위), 낮을수록 상위, 동점이면 평균 거래대금 큰 쪽
-  function computeThemeCumulative() {
+  // 통계 표: 선택 기간(dates)의 큰 틀 누적 + 순위. 순위 = (1~3위 든 날의 평균 거래대금 순위) + (평균 등락률 순위), 낮을수록 상위, 동점이면 평균 거래대금 큰 쪽
+  function computeThemeCumulative(dates) {
     var by = {};
-    Object.keys(FRAME_DETAIL).sort().forEach(function (date) {
+    dates.forEach(function (date) {
+      if (!FRAME_DETAIL[date]) return;
       FRAME_DETAIL[date].groups.forEach(function (g) {
         var t = by[g.theme] || (by[g.theme] = { theme: g.theme, days: {}, top3: 0, valSum: 0, chgSum: 0, last: '', subDays: {} });
         t.days[date] = true;
@@ -1279,7 +1309,7 @@
       var t = by[k];
       var subs = Object.keys(t.subDays).map(function (n) { return { theme: n, days: Object.keys(t.subDays[n]).length }; })
         .sort(function (a, b) { return b.days - a.days || (a.theme < b.theme ? -1 : 1); });
-      return { theme: t.theme, top3: t.top3, dayCount: Object.keys(t.days).length, last: t.last, subs: subs,
+      return { theme: t.theme, top3: t.top3, dayCount: Object.keys(t.days).length, last: t.last, subs: subs, valSum: t.valSum,
         avgValue: t.top3 ? t.valSum / t.top3 : null, avgChange: t.top3 ? t.chgSum / t.top3 : null };
     });
     var ranked = list.filter(function (r) { return r.top3 > 0; });
@@ -1295,37 +1325,6 @@
     var rest = list.filter(function (r) { return r.top3 === 0; })
       .sort(function (a, b) { return b.dayCount - a.dayCount || (a.theme < b.theme ? -1 : 1); });
     return ranked.concat(rest);
-  }
-
-  function renderThemeTab() {
-    var rows = computeThemeCumulative();
-    var top4 = rows.filter(function (r) { return r.pos && r.pos <= 4; });
-    document.getElementById('themeHighlights').innerHTML = top4.map(function (r) {
-      var up = r.avgChange >= 0;
-      return '<div class="rank-card' + (r.pos === 1 ? ' top1' : '') + '">' +
-        '<span class="rank-badge">' + r.pos + '순위</span>' +
-        '<div class="rname">' + esc(r.theme) + '</div>' +
-        subChips(r.subs, 3) +
-        '<div class="rstat"><span>평균 거래대금</span><span class="num">' + fmt(r.avgValue) + '억</span></div>' +
-        '<div class="rstat"><span>평균 등락률</span><span class="num" style="color:' + (up ? 'var(--up)' : 'var(--down)') + '">' + (up ? '+' : '') + r.avgChange.toFixed(2) + '%</span></div>' +
-        '<div class="rsub">1~3위 ' + r.top3 + '회 · 거래대금 ' + r.valRank + '위 + 등락률 ' + r.chgRank + '위 = ' + r.score + '</div>' +
-        '</div>';
-    }).join('');
-    document.querySelector('#themeCumTable tbody').innerHTML = rows.map(function (r) {
-      var isRanked = r.pos && r.pos <= 4;
-      var up = r.avgChange !== null && r.avgChange >= 0;
-      return '<tr class="' + (isRanked ? 'ranked' : '') + '">' +
-        '<td class="num">' + (r.pos ? r.pos + '순위' : '—') + '</td>' +
-        '<td>' + esc(r.theme) + '</td>' +
-        '<td style="white-space:normal;min-width:220px;">' + subChips(r.subs, 6) + '</td>' +
-        '<td class="num">' + r.top3 + '회</td>' +
-        (r.top3 ? '<td class="num">' + fmt(r.avgValue) + '억</td>' +
-          '<td class="num ' + (up ? 'up' : 'down') + '">' + (up ? '+' : '') + r.avgChange.toFixed(2) + '%</td>'
-          : '<td class="num dim">—</td><td class="num dim">—</td>') +
-        '<td class="num">' + r.dayCount + '일</td>' +
-        '<td class="num">' + r.last.slice(5) + '</td>' +
-        '</tr>';
-    }).join('');
   }
 
   // =========================================================
@@ -2037,6 +2036,8 @@
   var WATCH_US_KEY = 'themeRadar.watchUsSector';
   var WATCH_US_SEL = null;
   var WATCH_US_MENU = null;
+  var WATCH_US_OPEN_KEY = 'themeRadar.watchUsOpen';
+  var WATCH_US_OPEN = {}; // 국내 연관 종목을 펼친 세부 섹터 id (브라우저별 기억)
 
   function fmtUsd(v) {
     if (v >= 1e9) return '$' + (v / 1e9).toFixed(1) + 'B';
@@ -2125,11 +2126,14 @@
     var html = secRows.map(function (r) {
       var kr = usKrList(r);
       kr.forEach(function (n) { krTotal[n] = 1; });
+      var open = !!WATCH_US_OPEN[r.id]; // 국내 연관 종목은 기본 접힘
       return '<div class="wsubhead"><span class="wsname">' + esc(r.sub) + '</span>' +
         '<span class="wsmeta">미국 ' + r.us.length + ' · 국내 ' + kr.length + '</span></div>' +
         r.us.map(usRow).join('') +
-        kr.map(function (n) { return krRow(r.id, n); }).join('') +
-        '<div class="kadd-row"><button type="button" class="kadd-btn" aria-haspopup="menu" data-us-add="' + esc(r.id) + '">+ 국내 종목 추가</button></div>';
+        '<div class="kadd-row"><button type="button" class="kref-toggle" aria-expanded="' + open + '" data-us-toggle="' + esc(r.id) + '">' +
+          (open ? '▾' : '▸') + ' 국내 ' + kr.length + '</button></div>' +
+        (open ? kr.map(function (n) { return krRow(r.id, n); }).join('') +
+          '<div class="kadd-row"><button type="button" class="kadd-btn" aria-haspopup="menu" data-us-add="' + esc(r.id) + '">+ 국내 종목 추가</button></div>' : '');
     }).join('');
     // 미국·국내 거래일이 다르면 날짜 칸을 두 줄(위 미국, 아래 국내)로 표시
     var sameDates = udates.join() === kdates.join();
@@ -2197,13 +2201,21 @@
 
   function initWatchUs() {
     try { WATCH_US_SEL = localStorage.getItem(WATCH_US_KEY); } catch (e) {}
+    try { WATCH_US_OPEN = JSON.parse(localStorage.getItem(WATCH_US_OPEN_KEY) || '{}') || {}; } catch (e) { WATCH_US_OPEN = {}; }
     renderWatchUsTab();
     var panel = document.querySelector('.tab-panel[data-tab-panel="watchUs"]');
     var menu = document.getElementById('watchUsMenu');
     panel.addEventListener('click', function (e) {
       var tab = e.target.closest('.theme-tab');
       var btn = e.target.closest('.kebab, .kadd-btn');
-      if (tab) {
+      var toggle = e.target.closest('.kref-toggle');
+      if (toggle) {
+        var id = toggle.dataset.usToggle;
+        if (WATCH_US_OPEN[id]) delete WATCH_US_OPEN[id]; else WATCH_US_OPEN[id] = true;
+        try { localStorage.setItem(WATCH_US_OPEN_KEY, JSON.stringify(WATCH_US_OPEN)); } catch (e3) {}
+        closeWatchUsMenu();
+        renderWatchUsTab();
+      } else if (tab) {
         WATCH_US_SEL = tab.dataset.sector;
         try { localStorage.setItem(WATCH_US_KEY, WATCH_US_SEL); } catch (e2) {}
         closeWatchUsMenu();
@@ -2253,7 +2265,6 @@
     initTabs();
     renderMarketTab();
     renderReportTab();
-    renderThemeTab();
     initWatch();
     renderWatchTab();
     initWatchUs();
