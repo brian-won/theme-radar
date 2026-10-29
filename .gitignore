@@ -12,6 +12,7 @@ data/*
 !data/daily_reports.json
 !data/daily_detail_with_reasons.json
 !data/recent_prices.json
+!data/us_recent_prices.json
 !data/supabase_config.json
 !data/site_password.json
 !data/theme_taxonomy.json
