@@ -11,6 +11,7 @@
   data/daily_reports.json          # 일별 리포트 요약 (코스피/코스닥, top1~3, Notion URL 등) 배열
   data/daily_detail_with_reasons.json  # 날짜별 테마 그룹 + 종목별 등락률/거래대금/재료 상세
   data/recent_prices.json          # (선택) 관심종목 탭의 최근 5일 시세 — scripts/fetch_recent_prices.py로 생성
+  data/us_recent_prices.json       # (선택) 관심종목(해외) 탭의 미국 종목 최근 5일 시세 — scripts/fetch_us_prices.py로 생성
   data/supabase_config.json        # 관심종목 수정 동기화용 Supabase 프로젝트 URL + anon key (공개해도 되는 값)
   data/site_password.json          # 대시보드 접근 비밀번호의 SHA-256 해시(평문 아님) — scripts/set_dashboard_password.py로 설정
   skills/us-kr-sector-mapping/references/us_kr_sector_mapping.md  # (선택) 관심종목(해외) 탭 — 미국 섹터 종목 ↔ 한국 연관 종목 매핑표(파일을 고치고 다시 빌드하면 반영)
@@ -84,6 +85,8 @@ def main():
 
     prices_path = ROOT / "data" / "recent_prices.json"
     recent_prices = json.loads(prices_path.read_text(encoding="utf-8")) if prices_path.exists() else {"dates": [], "prices": {}}
+    us_prices_path = ROOT / "data" / "us_recent_prices.json"
+    us_prices = json.loads(us_prices_path.read_text(encoding="utf-8")) if us_prices_path.exists() else {"dates": [], "prices": {}}
 
     supabase_path = ROOT / "data" / "supabase_config.json"
     if not supabase_path.exists():
@@ -109,6 +112,7 @@ def main():
         "    dailyDetail: " + json.dumps(daily_detail, ensure_ascii=False, indent=2) + ",\n"
         "    themeParent: " + json.dumps(taxonomy["mapping"], ensure_ascii=False) + ",\n"
         "    recentPrices: " + json.dumps(recent_prices, ensure_ascii=False) + ",\n"
+        "    usPrices: " + json.dumps(us_prices, ensure_ascii=False) + ",\n"
         "    usKrMap: " + json.dumps(us_kr, ensure_ascii=False) + "\n"
         "  }"
     )
@@ -135,7 +139,7 @@ def main():
     print(f"빌드 완료: {OUTPUT}")
     print(f"           {PAGES_OUTPUT} (GitHub Pages용, 동일 내용)")
     print(f"  거래일 {len(daily_reports)}개, 누적 종목 {total_stocks}개, 테마 로그 {len(daily_detail)}일치")
-    print(f"  관심종목(해외) 매핑 {len(us_kr['rows'])}행 (기준일 {us_kr['asOf']})")
+    print(f"  관심종목(해외) 매핑 {len(us_kr['rows'])}행 (기준일 {us_kr['asOf']}), 미국 시세 {len(us_prices['prices'])}종목(최근 {(us_prices['dates'] or [None])[-1]})")
 
 
 if __name__ == "__main__":
