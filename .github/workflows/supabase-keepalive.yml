@@ -1,0 +1,34 @@
+# Supabase 무료 프로젝트가 활동 부족으로 자동 일시정지되는 것을 막기 위해
+# 3일마다 watch_state 테이블을 가볍게 조회한다(읽기 전용, 데이터 변경 없음).
+# anon(publishable) 키는 공개돼도 되는 값이라 data/supabase_config.json에서 그대로 읽는다.
+# 조회가 실패하면 job이 실패해 GitHub이 저장소 소유자에게 메일로 알려 준다(일시정지 조기 발견용).
+name: Supabase keepalive
+
+on:
+  schedule:
+    - cron: "0 0 */3 * *" # 3일마다 00:00 UTC (09:00 KST)
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: data/supabase_config.json
+          sparse-checkout-cone-mode: false
+
+      - name: Query watch_state
+        run: |
+          URL=$(jq -r .url data/supabase_config.json)
+          KEY=$(jq -r .anonKey data/supabase_config.json)
+          STATUS=$(curl -sS -o body.json -w '%{http_code}' --retry 3 --retry-delay 10 \
+            -H "apikey: $KEY" -H "Authorization: Bearer $KEY" \
+            "$URL/rest/v1/watch_state?select=id,updated_at&limit=1")
+          echo "HTTP $STATUS"
+          cat body.json; echo
+          test "$STATUS" -ge 200 -a "$STATUS" -lt 300
