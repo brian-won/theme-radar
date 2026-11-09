@@ -986,8 +986,14 @@
   }
 
   // ---- 시황 탭: 거래일만 표시하는 11칸 표(5·20·60일선 각각 칸) + 2단 차트(D3) ----
+  // 시황 탭 행 = 스크리닝한 날(dailyReports) + 지수만 채운 과거 날(marketHistory, 2026-11-09 추가). 같은 날짜는 dailyReports 우선.
+  function marketRows() {
+    var seen = {}, out = SNAPSHOT.dailyReports.map(function (r) { seen[r.date] = 1; return r; });
+    (SNAPSHOT.marketHistory || []).forEach(function (h) { if (!seen[h.date]) out.push(h); });
+    return out.sort(function (a, b) { return a.date < b.date ? -1 : 1; });
+  }
   function renderMarketTab() {
-    var reports = SNAPSHOT.dailyReports.slice().sort(function (a, b) { return a.date < b.date ? -1 : 1; });
+    var reports = marketRows();
     var months = monthsFromReports(reports);
     if (!months.length) return;
     if (!MONTH_SEL.market || months.indexOf(MONTH_SEL.market) === -1) MONTH_SEL.market = months[months.length - 1];

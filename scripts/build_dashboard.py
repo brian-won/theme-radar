@@ -13,6 +13,7 @@
   data/recent_prices.json          # (선택) 관심종목 탭의 최근 5일 시세 — scripts/fetch_recent_prices.py로 생성
   data/us_recent_prices.json       # (선택) 관심종목(해외) 탭의 미국 종목 최근 5일 시세 — scripts/fetch_us_prices.py로 생성
   data/investor_flows.json         # (선택) 시황 탭 '거래주체별 순매수' — scripts/fetch_investor_flows.py로 생성
+  data/market_history.json         # (선택) 시황 탭 과거 지수(스크리닝 없는 날) — scripts/backfill_market_history.py로 생성
   data/supabase_config.json        # 관심종목 수정 동기화용 Supabase 프로젝트 URL + anon key (공개해도 되는 값)
   data/site_password.json          # 대시보드 접근 비밀번호의 SHA-256 해시(평문 아님) — scripts/set_dashboard_password.py로 설정
   skills/us-kr-sector-mapping/references/us_kr_sector_mapping.md  # (선택) 관심종목(해외) 탭 — 미국 섹터 종목 ↔ 한국 연관 종목 매핑표(파일을 고치고 다시 빌드하면 반영)
@@ -108,6 +109,8 @@ def main():
 
     flows_path = ROOT / "data" / "investor_flows.json"
     investor_flows = json.loads(flows_path.read_text(encoding="utf-8")) if flows_path.exists() else {"order": [], "days": {}}
+    history_path = ROOT / "data" / "market_history.json"
+    market_history = json.loads(history_path.read_text(encoding="utf-8"))["days"] if history_path.exists() else []
     missing_flows = [r["date"] for r in daily_reports if r["date"] not in investor_flows["days"]]
     if missing_flows:
         print(f"경고: 거래주체별 순매수가 없는 리포트 날짜 {len(missing_flows)}개 — python scripts/fetch_investor_flows.py 실행 필요: {missing_flows}")
@@ -121,7 +124,8 @@ def main():
         "    recentPrices: " + json.dumps(recent_prices, ensure_ascii=False) + ",\n"
         "    usPrices: " + json.dumps(us_prices, ensure_ascii=False) + ",\n"
         "    usKrMap: " + json.dumps(us_kr, ensure_ascii=False) + ",\n"
-        "    investorFlows: " + json.dumps({"order": investor_flows["order"], "days": investor_flows["days"]}, ensure_ascii=False, separators=(",", ":")) + "\n"
+        "    investorFlows: " + json.dumps({"order": investor_flows["order"], "days": investor_flows["days"]}, ensure_ascii=False, separators=(",", ":")) + ",\n"
+        "    marketHistory: " + json.dumps(market_history, ensure_ascii=False, separators=(",", ":")) + "\n"
         "  }"
     )
 
@@ -147,6 +151,7 @@ def main():
     print(f"빌드 완료: {OUTPUT}")
     print(f"           {PAGES_OUTPUT} (GitHub Pages용, 동일 내용)")
     print(f"  거래일 {len(daily_reports)}개, 누적 종목 {total_stocks}개, 테마 로그 {len(daily_detail)}일치")
+    print(f"  시황 과거 지수 {len(market_history)}일치 ({market_history[0]['date'] if market_history else None} ~ {market_history[-1]['date'] if market_history else None})")
     print(f"  거래주체별 순매수 {len(investor_flows['days'])}일치 (최근 {max(investor_flows['days']) if investor_flows['days'] else None})")
     print(f"  관심종목(해외) 매핑 {len(us_kr['rows'])}행 (기준일 {us_kr['asOf']}), 미국 시세 {len(us_prices['prices'])}종목(최근 {(us_prices['dates'] or [None])[-1]})")
 
