@@ -635,7 +635,7 @@
   <section class="tab-panel" data-tab-panel="market" hidden>
     <div class="section-head">
       <h2>시황</h2>
-      <span class="note">거래일(주말·공휴일 제외)만 표시 · 이평선 화살표 길이는 이격도에 비례(마우스를 올리면 수치) · 표의 행이나 차트의 날짜를 누르면 아래에 상세가 표시됩니다</span>
+      <span class="note">거래일(주말·공휴일 제외)만 표시 · 이평선 화살표 길이는 이격도에 비례(마우스를 올리면 수치)</span>
     </div>
     <div class="month-nav" id="monthNav-market"></div>
     <div class="table-scroll">
@@ -652,7 +652,6 @@
     <div class="mkt-chart-panel">
       <div class="mkt2" id="marketComboChart"></div>
     </div>
-    <div class="report-card" id="marketDetail"></div>
 
     <!-- 거래주체별 순매수 (2026-11-09 추가): 위 시황 표와 별도로 자체 기간 선택 -->
     <div class="inv-card" id="investorFlows">
@@ -1048,7 +1047,6 @@
       '<span><i class="mkt-al" style="background:var(--ma-al-dn)"></i><i class="mkt-al" style="background:var(--ma-al-dn-full)"></i>역배열(진하게 = 완전 역배열)</span>' +
       '<span>바탕색: 5일선 칸~20일선 칸 왼쪽 절반 = 5·20일선 관계, 20일선 칸 오른쪽 절반~60일선 칸 = 20·60일선 관계</span>' +
       '<span>5일선 칸 = 5·20일선 교차 · 20일선 칸 = 20·60일선 교차</span>';
-    renderMarketDetail(DAY_SEL.market);
     marketComboChart(document.getElementById('marketComboChart'), rows);
   }
 
@@ -1187,26 +1185,6 @@
       })
       .on('mouseleave', function () { cross.attr('opacity', 0); hideTip(); })
       .on('click', function (ev, d) { hideTip(); DAY_SEL.market = d.date; renderMarketTab(); });
-  }
-
-  function renderMarketDetail(date) {
-    var box = document.getElementById('marketDetail');
-    var d = SNAPSHOT.dailyReports.filter(function (r) { return r.date === date; })[0];
-    if (!d) { box.innerHTML = '<p style="color:var(--text-muted);font-size:13px;">표에서 날짜를 선택하면 상세 정보가 표시됩니다.</p>'; return; }
-    var kUp = d.kospiChange >= 0, qUp = d.kosdaqChange >= 0;
-    function maBadges(ma) {
-      if (!ma) return '';
-      return '<div class="ma-row">' + ma.split(' · ').map(function (t) {
-        return '<span class="ma-badge' + (t.indexOf('위') !== -1 ? ' up' : '') + '">' + esc(t) + '</span>';
-      }).join('') + '</div>';
-    }
-    box.innerHTML =
-      '<div class="card-head"><span class="date">' + d.date + '</span><span class="week-badge">' + isoWeek(d.date) + 'W</span></div>' +
-      '<div class="idx-row">' +
-        '<div class="idx-pill"><div class="name">코스피</div><div class="chg ' + (kUp ? 'up' : 'down') + ' num">' + (kUp ? '+' : '') + d.kospiChange.toFixed(2) + '%</div><div class="vol num">거래대금 ' + d.kospiValue + '조</div>' + maBadges(d.kospiMa) + '</div>' +
-        '<div class="idx-pill"><div class="name">코스닥</div><div class="chg ' + (qUp ? 'up' : 'down') + ' num">' + (qUp ? '+' : '') + d.kosdaqChange.toFixed(2) + '%</div><div class="vol num">거래대금 ' + d.kosdaqValue + '조</div>' + maBadges(d.kosdaqMa) + '</div>' +
-      '</div>' +
-      '<p class="detail-hint">이 날 주도 테마·종목 상세는 "리포트" 탭에서 같은 날짜를 선택하면 볼 수 있습니다(1위 ' + esc(d.top1 || '—') + ').</p>';
   }
 
   // ---- 시황 탭: 거래주체별 순매수 (2026-11-09 추가) ----
