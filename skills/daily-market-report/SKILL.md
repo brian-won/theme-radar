@@ -66,6 +66,7 @@ python scripts/market_screen.py [YYYYMMDD]   # 생략 시 최근 영업일
 - `data/daily_detail_with_reasons.json`에 그날 전체 상세(순위별 테마 그룹 + 종목별 종목명/등락률/거래대금/재료 `reason`)를 날짜 키로 추가.
   - ⚠️ **발생빈도 = 테마에 속한 종목 수가 아니라, 그 테마가 어떤 날의 1~3위로 뽑힌 횟수다.** 4등 그룹은 통계에서 제외되지만, `daily_detail`에는 4등 종목도 전부 기록한다(상세표 표시용).
 - `python scripts/fetch_recent_prices.py` 실행 → 관심종목 탭의 최근 5거래일 시세와 코스피/코스닥 구분을 `data/recent_prices.json`에 갱신(새 날짜를 추가한 뒤 빌드 전에 항상 먼저 실행. KRX_ID/KRX_PW·KIS_APP_KEY/KIS_APP_SECRET 필요. 시세는 KIS 기간별 시세 API를 KRX+NXT 통합(UN) 기준으로 조회하며 172종목 기준 약 3분 소요, 모의투자 초당 2건 제한. 종목명은 공백·&·괄호를 뺀 표기로 pykrx와 매칭하며 미매칭·조회 실패 종목은 로그로 출력됨).
+- `python scripts/fetch_investor_flows.py` 실행(2026-11-09 추가) → 시황 탭 '거래주체별 순매수' 블록(개인·외국인·기관 + 기관 세부 금융투자·투신·연기금, 코스피·코스닥, 단위 억원)용 KRX 투자자별 순매수를 `data/investor_flows.json`에 합침. 인자 없으면 `daily_reports.json` 날짜 중 빠진 날 + 가장 최근 리포트 날짜를 받고, 날짜를 주면 그 날짜까지 받음(KRX_ID/KRX_PW 필요, 수 초). 장 마감 전이면 그날 값이 없다고 경고가 나오니 마감 후 다시 실행. `build_dashboard.py`가 빠진 날짜를 경고로 알려 줌.
 - `python scripts/build_dashboard.py` 실행 → `dashboard/index.html`(로컬 미리보기)과 `docs/index.html`(GitHub Pages 배포본, 내용 동일)을 재생성. 이 파일은 데이터가 내장된 완전한 정적 HTML이라 서버/네트워크/Claude API 없이 더블클릭만으로 어떤 브라우저·어떤 AI 도구에서도 열람/수정 가능하다.
 - **실제 서비스(웹/폰)에 반영하려면 빌드만으로 끝나지 않고 `git add -A && git commit && git push`까지 해야 한다** — `https://brian-won.github.io/theme-radar/`는 GitHub Pages가 `main` 브랜치 `docs/` 폴더를 서빙하는 것이라, 푸시 전까지는 로컬 파일만 갱신된 상태다.
 - HTML 골격/스타일/JS 로직을 바꿀 때는 `dashboard/template.html`(`/*__SNAPSHOT__*/` 플레이스홀더 포함)을 고치고 다시 빌드할 것 — `dashboard/index.html`을 직접 수정하면 다음 빌드 때 덮어써진다.

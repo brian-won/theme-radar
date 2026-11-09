@@ -405,6 +405,76 @@
   @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --idx-kospi: #3987e5; --idx-kosdaq: #d95926; } }
   :root[data-theme="dark"] { --idx-kospi: #3987e5; --idx-kosdaq: #d95926; }
 
+  /* ---- 시황: 거래주체별 순매수 (2026-11-09 추가, A+B 수정안) — 기간 선택 > 표(기간 합계 맨 위) > 날짜별 상세 막대 > 기간 누적 선 ---- */
+  :root { --p-ind: #C98A00; --p-for: #7656D1; --p-ins: #0E7C6B; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --p-ind: #F2B53A; --p-for: #A68BFF; --p-ins: #35D6B8; } }
+  :root[data-theme="dark"] { --p-ind: #F2B53A; --p-for: #A68BFF; --p-ins: #35D6B8; }
+  .inv-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 16px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+  .inv-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .inv-head h3 { margin: 0; font-size: 14px; font-weight: 700; }
+  .inv-head h4 { margin: 8px 0 0; font-size: 13px; font-weight: 700; }
+  .inv-head h4 .num { color: var(--text-muted); font-weight: 500; font-size: 12px; margin-left: 4px; }
+  .inv-head.sep { border-top: 1px dashed var(--border); padding-top: 4px; }
+  .inv-unit { font-size: 11.5px; color: var(--text-muted); }
+  .inv-period { display: flex; flex-direction: column; gap: 8px; background: var(--surface-alt); border-radius: 10px; padding: 10px 12px; }
+  .inv-prow { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 12px; color: var(--text-secondary); }
+  .inv-period select { font: inherit; font-family: "JetBrains Mono", monospace; font-size: 12px; padding: 4px 8px; border-radius: 7px; border: 1px solid var(--border); background: var(--surface); color: var(--text-primary); }
+  .inv-cnt { color: var(--text-muted); font-size: 11.5px; }
+  .inv-seg { display: inline-flex; flex-wrap: wrap; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .inv-seg button { font: inherit; font-size: 12px; padding: 4px 11px; border: 0; background: var(--surface); color: var(--text-secondary); cursor: pointer; }
+  .inv-seg button + button { border-left: 1px solid var(--border); }
+  .inv-seg button[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent-strong); font-weight: 700; }
+  .inv-seg button:focus-visible, .inv-period select:focus-visible, table.inv-t tr.inv-pick:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+  .inv-tbox { max-height: 360px; overflow: auto; border: 1px solid var(--border); border-radius: 10px; }
+  table.inv-t { width: 100%; min-width: 560px; border-collapse: collapse; font-size: 12px; }
+  table.inv-t thead { position: sticky; top: 0; z-index: 2; }
+  table.inv-t th, table.inv-t td { padding: 6px; text-align: right; border-bottom: 1px solid var(--border); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  table.inv-t th { background: var(--surface-alt); color: var(--text-secondary); font-weight: 700; font-size: 11.5px; text-align: center; }
+  table.inv-t th.sub { color: var(--text-muted); font-weight: 500; }
+  table.inv-t td:first-child { text-align: center; font-family: "JetBrains Mono", monospace; color: var(--text-secondary); }
+  table.inv-t td { font-family: "JetBrains Mono", monospace; }
+  table.inv-t .g { border-left: 2px solid var(--border); }
+  table.inv-t tr.inv-sum td { position: sticky; top: var(--inv-thead-h, 58px); z-index: 1; background: var(--surface-alt); font-weight: 700; border-bottom: 2px solid var(--border); }
+  table.inv-t tr.inv-sum td:first-child { font-family: "Noto Sans KR", sans-serif; font-size: 11.5px; color: var(--text-primary); }
+  table.inv-t tr.inv-pick { cursor: pointer; }
+  table.inv-t tr.inv-pick:hover td { filter: brightness(.97); }
+  table.inv-t tr.inv-pick.on td:first-child { background: var(--accent); color: #fff; font-weight: 700; }
+  .inv-up { color: var(--up); } .inv-down { color: var(--down); }
+  .inv-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+  .inv-panel { background: var(--surface-alt); border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+  .inv-panel .pname { font-size: 12.5px; font-weight: 700; }
+  .inv-row { display: grid; grid-template-columns: 76px 1fr 78px; align-items: center; gap: 8px; font-size: 12px; min-height: 22px; }
+  .inv-row .lab { font-weight: 600; }
+  .inv-row.sub .lab { color: var(--text-muted); font-weight: 400; padding-left: 10px; font-size: 11.5px; }
+  .inv-row .val { text-align: right; font-size: 11.5px; font-weight: 600; font-family: "JetBrains Mono", monospace; font-variant-numeric: tabular-nums; }
+  .inv-track { position: relative; height: 14px; }
+  .inv-track::before { content: ""; position: absolute; left: 50%; top: -3px; bottom: -3px; width: 1px; background: var(--text-muted); opacity: .5; }
+  .inv-bar { position: absolute; top: 0; height: 100%; border-radius: 3px; }
+  .inv-bar.pos { left: 50%; background: var(--up); }
+  .inv-bar.neg { right: 50%; background: var(--down); }
+  .inv-row.sub .inv-bar { opacity: .5; height: 70%; top: 15%; }
+  .inv-sep { border-top: 1px dashed var(--border); margin: 2px 0; }
+  .inv-legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--text-secondary); }
+  .inv-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+  .inv-legend .hint { color: var(--text-muted); }
+  .inv-chart { position: relative; }
+  .inv-chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .inv-chart .ax { fill: var(--text-muted); font-size: 10px; font-family: "JetBrains Mono", monospace; }
+  .inv-chart .grid { stroke: var(--border); stroke-dasharray: 2 3; }
+  .inv-chart .zero { stroke: var(--text-muted); stroke-width: 1; }
+  .inv-chart .pt { stroke: var(--surface); stroke-width: 1.5; }
+  .inv-chart .pt.hot { stroke-width: 2.5; }
+  .inv-chart .vline { stroke: var(--text-muted); stroke-dasharray: 3 3; }
+  .inv-chart .hit { fill: transparent; cursor: crosshair; }
+  .inv-tip { position: absolute; pointer-events: none; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; box-shadow: var(--shadow); padding: 7px 10px; font-size: 11.5px; line-height: 1.6; white-space: nowrap; z-index: 3; }
+  .inv-tip .td { font-family: "JetBrains Mono", monospace; font-weight: 700; color: var(--text-secondary); margin-bottom: 2px; }
+  .inv-tip .tr { display: flex; justify-content: space-between; gap: 14px; }
+  .inv-tip .tr i { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 5px; }
+  .inv-tip .tr .num { font-family: "JetBrains Mono", monospace; }
+  .inv-tip .day { color: var(--text-muted); font-size: 10.5px; }
+  .inv-empty { color: var(--text-muted); font-size: 13px; margin: 0; }
+  @media (prefers-reduced-motion: no-preference) { .inv-bar { transition: width .35s ease; } }
+
   /* ---- 월 선택: ‹ 드롭다운 › (시황·리포트 공용) ---- */
   .month-select { font: inherit; font-size: 13.5px; font-weight: 700; padding: 6px 12px; min-width: 140px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); color: var(--text-primary); cursor: pointer; font-family: "JetBrains Mono", "Noto Sans KR", monospace; }
   .month-select:focus-visible, .month-arrow:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
@@ -583,6 +653,31 @@
       <div class="mkt2" id="marketComboChart"></div>
     </div>
     <div class="report-card" id="marketDetail"></div>
+
+    <!-- 거래주체별 순매수 (2026-11-09 추가): 위 시황 표와 별도로 자체 기간 선택 -->
+    <div class="inv-card" id="investorFlows">
+      <div class="inv-head"><h3>거래주체별 순매수</h3><span class="inv-unit">단위 억원 · 기관 = 금융투자·보험·투신·사모·은행·기타금융·연기금 합계 · 출처 KRX</span></div>
+      <div class="inv-period">
+        <div class="inv-prow"><span>기간</span><select id="invFrom" aria-label="시작일"></select><span>~</span><select id="invTo" aria-label="종료일"></select><span class="inv-cnt" id="invCnt"></span></div>
+        <div class="inv-prow">
+          <div class="inv-seg" id="invPreset" role="group" aria-label="빠른 기간">
+            <button type="button" data-v="5" aria-pressed="false">최근 5일</button>
+            <button type="button" data-v="20" aria-pressed="false">최근 20일</button>
+            <button type="button" data-v="thism" aria-pressed="true">이번 달</button>
+            <button type="button" data-v="lastm" aria-pressed="false">지난 달</button>
+            <button type="button" data-v="all" aria-pressed="false">전체</button>
+          </div>
+        </div>
+      </div>
+      <div class="inv-tbox"><table class="inv-t" id="invTable"></table></div>
+      <div class="inv-head sep"><h4>날짜별 상세<span class="num" id="invDate"></span></h4><span class="inv-unit">표에서 날짜를 누르면 바뀝니다</span></div>
+      <div class="inv-grid" id="invGrid"></div>
+      <div class="inv-head sep"><h4>기간 누적 순매수<span class="num" id="invRange"></span></h4>
+        <div class="inv-seg" id="invMkt" role="group" aria-label="누적 그래프 시장"><button type="button" data-v="kospi" aria-pressed="true">코스피</button><button type="button" data-v="kosdaq" aria-pressed="false">코스닥</button></div>
+      </div>
+      <div class="inv-legend"><span><i style="background:var(--p-ind)"></i>개인</span><span><i style="background:var(--p-for)"></i>외국인</span><span><i style="background:var(--p-ins)"></i>기관</span><span class="hint">점에 마우스를 올리면(폰은 누르면) 그날까지 누적값과 그날 순매수가 보입니다</span></div>
+      <div class="inv-chart" id="invChart"><div class="inv-tip" id="invTip" hidden></div></div>
+    </div>
   </section>
 
   <!-- ---- 리포트 ---- -->
@@ -1112,6 +1207,167 @@
         '<div class="idx-pill"><div class="name">코스닥</div><div class="chg ' + (qUp ? 'up' : 'down') + ' num">' + (qUp ? '+' : '') + d.kosdaqChange.toFixed(2) + '%</div><div class="vol num">거래대금 ' + d.kosdaqValue + '조</div>' + maBadges(d.kosdaqMa) + '</div>' +
       '</div>' +
       '<p class="detail-hint">이 날 주도 테마·종목 상세는 "리포트" 탭에서 같은 날짜를 선택하면 볼 수 있습니다(1위 ' + esc(d.top1 || '—') + ').</p>';
+  }
+
+  // ---- 시황 탭: 거래주체별 순매수 (2026-11-09 추가) ----
+  // 위 시황 표의 날짜 선택과 무관하게 자체 기간(시작~끝)을 쓴다. 순서: 기간 선택 > 표(기간 합계 맨 위, 최신 날짜 위) > 날짜별 상세 막대 > 기간 누적 선(일자별 점 + 툴팁)
+  function initInvestorFlows() {
+    var box = document.getElementById('investorFlows');
+    var src = SNAPSHOT.investorFlows || { days: {} };
+    var DAYS = src.days, DATES = Object.keys(DAYS).sort();
+    if (!DATES.length) { box.innerHTML = '<p class="inv-empty">거래주체별 데이터가 없습니다(scripts/fetch_investor_flows.py 실행 필요).</p>'; return; }
+    var NAMES = ['개인', '외국인', '기관', '금융투자', '투신', '연기금'];
+    var PCOL = ['var(--p-ind)', 'var(--p-for)', 'var(--p-ins)'];
+    var SVGNS = 'http://www.w3.org/2000/svg';
+    var st = { from: null, to: null, sel: null, mkt: 'kospi' };
+    var fromSel = document.getElementById('invFrom'), toSel = document.getElementById('invTo');
+    var presetG = document.getElementById('invPreset'), mktG = document.getElementById('invMkt');
+    var table = document.getElementById('invTable'), host = document.getElementById('invChart'), tip = document.getElementById('invTip');
+
+    function fmt(v) { return (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v).toLocaleString('ko-KR'); }
+    function cls(v) { return v > 0 ? 'inv-up' : v < 0 ? 'inv-down' : ''; }
+    function md(d) { return (+d.slice(5, 7)) + '/' + (+d.slice(8)); }
+    function svgEl(tag, attrs, parent) {
+      var e = document.createElementNS(SVGNS, tag);
+      for (var k in attrs) e.setAttribute(k, attrs[k]);
+      if (parent) parent.appendChild(e);
+      return e;
+    }
+    function ticks(lo, hi, n) {
+      var raw = (hi - lo) / n, p = Math.pow(10, Math.floor(Math.log10(raw))), f = raw / p;
+      var s = (f < 1.5 ? 1 : f < 3 ? 2 : f < 7 ? 5 : 10) * p, out = [];
+      for (var t = Math.ceil(lo / s) * s; t <= hi + 1e-9; t += s) out.push(Math.round(t));
+      return out;
+    }
+    function press(g, b) { g.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); }); }
+    function period() { return DATES.filter(function (d) { return d >= st.from && d <= st.to; }); }
+    function applyPreset(v) {
+      var last = DATES[DATES.length - 1], m = last.slice(0, 7);
+      if (v === '5' || v === '20') { st.from = DATES[Math.max(0, DATES.length - +v)]; st.to = last; }
+      else if (v === 'thism') { st.from = DATES.filter(function (d) { return d.slice(0, 7) === m; })[0]; st.to = last; }
+      else if (v === 'lastm') {
+        var prev = DATES.filter(function (d) { return d.slice(0, 7) < m; });
+        var pm = prev.length ? prev[prev.length - 1].slice(0, 7) : m;
+        var ds = DATES.filter(function (d) { return d.slice(0, 7) === pm; });
+        st.from = ds[0]; st.to = ds[ds.length - 1];
+      } else { st.from = DATES[0]; st.to = last; }
+    }
+    function heat(v, max) {
+      if (!v) return '';
+      var a = Math.round(Math.min(1, Math.abs(v) / max) * 42 + 6);
+      return ' style="background:color-mix(in srgb, var(' + (v > 0 ? '--up' : '--down') + ') ' + a + '%, transparent)"';
+    }
+
+    function drawTable(ds) {
+      var max = 1, sum = [0, 0, 0, 0, 0, 0];
+      var rows = ds.slice().reverse().map(function (d) {
+        var v6 = DAYS[d].kospi.slice(0, 3).concat(DAYS[d].kosdaq.slice(0, 3));
+        v6.forEach(function (v, i) { sum[i] += v; max = Math.max(max, Math.abs(v)); });
+        return { d: d, v: v6 };
+      });
+      table.innerHTML =
+        '<thead><tr><th rowspan="2">일자</th><th colspan="3">코스피</th><th colspan="3" class="g">코스닥</th></tr>' +
+        '<tr><th class="sub">개인</th><th class="sub">외국인</th><th class="sub">기관</th><th class="sub g">개인</th><th class="sub">외국인</th><th class="sub">기관</th></tr></thead>' +
+        '<tbody><tr class="inv-sum"><td>기간 합계</td>' + sum.map(function (v, i) { return '<td class="' + cls(v) + (i === 3 ? ' g' : '') + '">' + fmt(v) + '</td>'; }).join('') + '</tr>' +
+        rows.map(function (r) {
+          return '<tr class="inv-pick' + (r.d === st.sel ? ' on' : '') + '" tabindex="0" data-d="' + r.d + '"><td>' + md(r.d) + '</td>' +
+            r.v.map(function (v, i) { return '<td' + (i === 3 ? ' class="g"' : '') + heat(v, max) + '>' + fmt(v) + '</td>'; }).join('') + '</tr>';
+        }).join('') + '</tbody>';
+      table.style.setProperty('--inv-thead-h', (table.tHead.offsetHeight || 58) + 'px');
+    }
+
+    function drawDetail() {
+      var d = st.sel;
+      document.getElementById('invDate').textContent = d;
+      document.getElementById('invGrid').innerHTML = ['kospi', 'kosdaq'].map(function (m) {
+        var n = DAYS[d][m], max = Math.max.apply(null, n.map(Math.abs)) || 1;
+        return '<div class="inv-panel"><div class="pname">' + (m === 'kospi' ? '코스피' : '코스닥') + '</div>' + n.map(function (v, i) {
+          return (i === 3 ? '<div class="inv-sep"></div>' : '') +
+            '<div class="inv-row' + (i >= 3 ? ' sub' : '') + '"><span class="lab">' + (i >= 3 ? 'ㄴ ' : '') + NAMES[i] + '</span>' +
+            '<div class="inv-track"><div class="inv-bar ' + (v >= 0 ? 'pos' : 'neg') + '" style="width:' + (Math.abs(v) / max * 50).toFixed(1) + '%"></div></div>' +
+            '<span class="val ' + cls(v) + '">' + fmt(v) + '</span></div>';
+        }).join('') + '</div>';
+      }).join('');
+    }
+
+    function drawChart(ds) {
+      document.getElementById('invRange').textContent = md(ds[0]) + ' ~ ' + md(ds[ds.length - 1]);
+      var mkt = st.mkt, cum = [[], [], []], acc = [0, 0, 0];
+      ds.forEach(function (d) { for (var i = 0; i < 3; i++) { acc[i] += DAYS[d][mkt][i]; cum[i].push(acc[i]); } });
+      var all = cum[0].concat(cum[1], cum[2], [0]);
+      var lo = Math.min.apply(null, all), hi = Math.max.apply(null, all), pad = (hi - lo) * 0.08 || 1;
+      lo -= pad; hi += pad;
+      var W = 900, H = 240, L = 58, R = 118, T = 12, B = 26;
+      var x = function (i) { return ds.length === 1 ? (L + W - R) / 2 : L + i * (W - L - R) / (ds.length - 1); };
+      var y = function (v) { return T + (hi - v) / (hi - lo) * (H - T - B); };
+      var old = host.querySelector('svg'); if (old) host.removeChild(old);
+      tip.hidden = true;
+      var svg = svgEl('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': '기간 누적 순매수 선 그래프' });
+      host.insertBefore(svg, tip);
+      ticks(lo, hi, 5).forEach(function (t) {
+        svgEl('line', { x1: L, x2: W - R, y1: y(t), y2: y(t), class: t === 0 ? 'zero' : 'grid' }, svg);
+        svgEl('text', { x: L - 6, y: y(t) + 3, 'text-anchor': 'end', class: 'ax' }, svg).textContent = t.toLocaleString('ko-KR');
+      });
+      var every = Math.ceil(ds.length / 10);
+      ds.forEach(function (d, i) { if (i % every === 0 || i === ds.length - 1) svgEl('text', { x: x(i), y: H - 8, 'text-anchor': 'middle', class: 'ax' }, svg).textContent = md(d); });
+      var vline = svgEl('line', { y1: T, y2: H - B, class: 'vline', visibility: 'hidden' }, svg);
+      var pts = [[], [], []], i, j;
+      for (i = 0; i < 3; i++) {
+        svgEl('path', { d: cum[i].map(function (v, k) { return (k ? 'L' : 'M') + x(k).toFixed(1) + ',' + y(v).toFixed(1); }).join(''), fill: 'none', stroke: PCOL[i], 'stroke-width': 2.2, 'stroke-linejoin': 'round' }, svg);
+      }
+      for (i = 0; i < 3; i++) for (j = 0; j < ds.length; j++) pts[i].push(svgEl('circle', { cx: x(j), cy: y(cum[i][j]), r: 3.6, fill: PCOL[i], class: 'pt' }, svg));
+      var ends = [0, 1, 2].map(function (k) { return { i: k, y: y(cum[k][cum[k].length - 1]) }; }).sort(function (a, b) { return a.y - b.y; });
+      for (var k = 1; k < ends.length; k++) if (ends[k].y - ends[k - 1].y < 14) ends[k].y = ends[k - 1].y + 14;
+      ends.forEach(function (e) {
+        svgEl('text', { x: x(ds.length - 1) + 9, y: e.y + 4, fill: PCOL[e.i], 'font-size': 11, 'font-weight': 700, 'font-family': 'JetBrains Mono, monospace' }, svg).textContent = NAMES[e.i] + ' ' + fmt(cum[e.i][cum[e.i].length - 1]);
+      });
+      function show(j) {
+        pts.forEach(function (arr) { arr.forEach(function (c, jj) { c.setAttribute('r', jj === j ? 6 : 3.6); c.classList.toggle('hot', jj === j); }); });
+        vline.setAttribute('x1', x(j)); vline.setAttribute('x2', x(j)); vline.setAttribute('visibility', 'visible');
+        var n = DAYS[ds[j]][mkt];
+        tip.innerHTML = '<div class="td">' + ds[j] + ' · ' + (mkt === 'kospi' ? '코스피' : '코스닥') + '</div>' + [0, 1, 2].map(function (q) {
+          return '<div class="tr"><span><i style="background:' + PCOL[q] + '"></i>' + NAMES[q] + '</span><span class="num ' + cls(cum[q][j]) + '">' + fmt(cum[q][j]) + ' <span class="day">(당일 ' + fmt(n[q]) + ')</span></span></div>';
+        }).join('');
+        tip.hidden = false;
+        var sc = svg.getBoundingClientRect().width / W, px = x(j) * sc, tw = tip.offsetWidth;
+        var left = px + 12; if (left + tw > host.clientWidth) left = px - tw - 12; if (left < 0) left = 0;
+        var top = Math.min(y(cum[0][j]), y(cum[1][j]), y(cum[2][j])) * sc - 10;
+        tip.style.left = left + 'px'; tip.style.top = Math.max(0, top) + 'px';
+      }
+      function hide() {
+        tip.hidden = true; vline.setAttribute('visibility', 'hidden');
+        pts.forEach(function (arr) { arr.forEach(function (c) { c.setAttribute('r', 3.6); c.classList.remove('hot'); }); });
+      }
+      var half = ds.length > 1 ? (x(1) - x(0)) / 2 : 40;
+      ds.forEach(function (d, jx) {
+        var r = svgEl('rect', { x: x(jx) - half, y: T, width: half * 2, height: H - T - B, class: 'hit' }, svg);
+        r.addEventListener('mouseenter', function () { show(jx); });
+        r.addEventListener('click', function () { show(jx); });
+      });
+      svg.addEventListener('mouseleave', hide);
+    }
+
+    function render() {
+      if (st.from > st.to) { var t = st.from; st.from = st.to; st.to = t; }
+      fromSel.value = st.from; toSel.value = st.to;
+      var ds = period();
+      document.getElementById('invCnt').textContent = ds.length + '거래일';
+      if (ds.indexOf(st.sel) < 0) st.sel = ds[ds.length - 1];
+      drawTable(ds); drawDetail(); drawChart(ds);
+    }
+    function pick(d) { st.sel = d; drawTable(period()); drawDetail(); }
+
+    var opts = DATES.map(function (d) { return '<option value="' + d + '">' + d + '</option>'; }).join('');
+    fromSel.innerHTML = opts; toSel.innerHTML = opts;
+    presetG.addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) return; press(presetG, b); applyPreset(b.dataset.v); render(); });
+    [fromSel, toSel].forEach(function (s) { s.addEventListener('change', function () { st.from = fromSel.value; st.to = toSel.value; press(presetG, null); render(); }); });
+    table.addEventListener('click', function (e) { var r = e.target.closest('tr.inv-pick'); if (r) pick(r.dataset.d); });
+    table.addEventListener('keydown', function (e) { var r = e.target.closest('tr.inv-pick'); if (r && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); pick(r.dataset.d); } });
+    mktG.addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) return; press(mktG, b); st.mkt = b.dataset.v; drawChart(period()); });
+    window.addEventListener('resize', function () { tip.hidden = true; });
+    // 시황 탭이 처음엔 숨겨져 있어 thead 높이가 0 → 탭이 보일 때 합계 행 고정 위치를 다시 잰다
+    if (window.ResizeObserver) new ResizeObserver(function () { if (table.tHead && table.tHead.offsetHeight) table.style.setProperty('--inv-thead-h', table.tHead.offsetHeight + 'px'); }).observe(table);
+    applyPreset('thism'); render();
   }
 
   // ---- 리포트 탭 ----
@@ -2264,6 +2520,7 @@
     STOCK_INDEX = buildStockIndex();
     initTabs();
     renderMarketTab();
+    initInvestorFlows();
     renderReportTab();
     initWatch();
     renderWatchTab();

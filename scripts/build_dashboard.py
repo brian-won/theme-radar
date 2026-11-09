@@ -12,6 +12,7 @@
   data/daily_detail_with_reasons.json  # 날짜별 테마 그룹 + 종목별 등락률/거래대금/재료 상세
   data/recent_prices.json          # (선택) 관심종목 탭의 최근 5일 시세 — scripts/fetch_recent_prices.py로 생성
   data/us_recent_prices.json       # (선택) 관심종목(해외) 탭의 미국 종목 최근 5일 시세 — scripts/fetch_us_prices.py로 생성
+  data/investor_flows.json         # (선택) 시황 탭 '거래주체별 순매수' — scripts/fetch_investor_flows.py로 생성
   data/supabase_config.json        # 관심종목 수정 동기화용 Supabase 프로젝트 URL + anon key (공개해도 되는 값)
   data/site_password.json          # 대시보드 접근 비밀번호의 SHA-256 해시(평문 아님) — scripts/set_dashboard_password.py로 설정
   skills/us-kr-sector-mapping/references/us_kr_sector_mapping.md  # (선택) 관심종목(해외) 탭 — 미국 섹터 종목 ↔ 한국 연관 종목 매핑표(파일을 고치고 다시 빌드하면 반영)
@@ -105,6 +106,12 @@ def main():
 
     us_kr = parse_us_kr_mapping(US_KR_MAPPING)
 
+    flows_path = ROOT / "data" / "investor_flows.json"
+    investor_flows = json.loads(flows_path.read_text(encoding="utf-8")) if flows_path.exists() else {"order": [], "days": {}}
+    missing_flows = [r["date"] for r in daily_reports if r["date"] not in investor_flows["days"]]
+    if missing_flows:
+        print(f"경고: 거래주체별 순매수가 없는 리포트 날짜 {len(missing_flows)}개 — python scripts/fetch_investor_flows.py 실행 필요: {missing_flows}")
+
     snapshot_js = (
         "{\n"
         "    generatedAt: " + json.dumps(max(d["date"] for d in daily_reports)) + ",\n"
@@ -113,7 +120,8 @@ def main():
         "    themeParent: " + json.dumps(taxonomy["mapping"], ensure_ascii=False) + ",\n"
         "    recentPrices: " + json.dumps(recent_prices, ensure_ascii=False) + ",\n"
         "    usPrices: " + json.dumps(us_prices, ensure_ascii=False) + ",\n"
-        "    usKrMap: " + json.dumps(us_kr, ensure_ascii=False) + "\n"
+        "    usKrMap: " + json.dumps(us_kr, ensure_ascii=False) + ",\n"
+        "    investorFlows: " + json.dumps({"order": investor_flows["order"], "days": investor_flows["days"]}, ensure_ascii=False, separators=(",", ":")) + "\n"
         "  }"
     )
 
@@ -139,6 +147,7 @@ def main():
     print(f"빌드 완료: {OUTPUT}")
     print(f"           {PAGES_OUTPUT} (GitHub Pages용, 동일 내용)")
     print(f"  거래일 {len(daily_reports)}개, 누적 종목 {total_stocks}개, 테마 로그 {len(daily_detail)}일치")
+    print(f"  거래주체별 순매수 {len(investor_flows['days'])}일치 (최근 {max(investor_flows['days']) if investor_flows['days'] else None})")
     print(f"  관심종목(해외) 매핑 {len(us_kr['rows'])}행 (기준일 {us_kr['asOf']}), 미국 시세 {len(us_prices['prices'])}종목(최근 {(us_prices['dates'] or [None])[-1]})")
 
 

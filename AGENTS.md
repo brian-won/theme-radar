@@ -19,6 +19,7 @@
 python scripts/market_screen.py [YYYYMMDD]   # 시황+종목 스크리닝 원본 JSON 출력 (테마/재료는 후속 LLM 단계에서 채움)
 python scripts/fetch_recent_prices.py        # 관심종목 탭용 최근 5거래일 시세(KIS KRX+NXT 통합)·코스피/코스닥 구분 → data/recent_prices.json (리포트 갱신 후 빌드 전에 실행, 약 3분)
 python scripts/fetch_us_prices.py            # 관심종목(해외) 탭용 미국 종목 최근 5거래일 시세(KIS 해외주식) → data/us_recent_prices.json (빌드 전 실행, 약 2분)
+python scripts/fetch_investor_flows.py [YYYYMMDD]   # 시황 탭 거래주체별 순매수(개인·외국인·기관·금융투자·투신·연기금, KRX) → data/investor_flows.json (빠진 리포트 날짜+해당일 갱신, 빌드 전 실행)
 python scripts/build_dashboard.py            # data/*.json → dashboard/index.html + docs/index.html (GitHub Pages 배포용, 내용 동일)
 git add -A && git commit -m "..." && git push    # docs/index.html 갱신을 실제 배포(https://brian-won.github.io/theme-radar/)에 반영하려면 푸시까지 해야 함
 python scripts/set_dashboard_password.py "새 비밀번호"   # 대시보드 접근 비밀번호 변경(해시만 저장됨) — 변경 후 build_dashboard.py 재실행 필요
@@ -28,6 +29,7 @@ lint/typecheck/test/build 파이프라인은 아직 미구성 (스크립트 위�
 
 ## 4. 핵심 절대 규칙 (Boundaries & Invariants)
 어떠한 경우에도 무시·우회할 수 없는 규칙입니다.
+- **사용자에게 하는 모든 답변(중간 안내·최종 보고 포함)은 무조건 한국어로 쓴다.** 도구 결과·참고 자료가 영어여도, 긴 대화·요약 뒤 이어서 할 때도 예외 없음(고유명사·코드·파일명만 원문).
 - `KRX_ID`/`KRX_PW`, 증권사 API 키, Telegram/Kakao 토큰 등은 환경 변수로만 관리하고 절대 코드/문서에 하드코딩하지 않는다.
 - `.env`, 시크릿·인증 토큰은 코드에 하드코딩하지 않는다.
 - `rm -rf`, `DROP TABLE` 등 파괴적 명령어는 실행 전 사용자에게 반드시 고지한다.
@@ -48,6 +50,7 @@ skills/                    # 재사용 가능한 작업 절차 (SKILL.md 표준)
 ## 6. 에이전트 오답 노트 (실제로 발생한 실수만 기록)
 - [x] [Error-001] 과거 날짜 리포트를 새로 만들 때, 세션 초반 엑셀 원본으로 벌크 임포트해둔 "테마별 종목 로그" 행을 안 지우고 그 위에 새로 추가해 중복 발생 → 새 날짜 작업 전 항상 해당 날짜 기존 행 존재 여부부터 확인할 것.
 - [x] [Error-002] Notion `query_data_sources`(SQL 쿼리)는 워크스페이스 사용량 한도가 있어 세션 중 막힐 수 있음 → 막히면 `notion-fetch`/`notion-create-pages` 등 비-SQL 도구로 대체하고, 집계는 페이지 본문에서 직접 값을 읽어 계산할 것.
+- [x] [Error-003] 2026-11-09 거래주체 시안 작업 중 최종 보고를 영어로 씀 → 4장 한국어 절대 규칙. 보내기 전에 답변 언어가 한국어인지 확인할 것.
 
 ## 7. 자동검증 연동
 - `scripts/verify-task.sh`는 git pre-commit hook과 연동 대상입니다(연동 방법은 스크립트 상단 주석 참고).
