@@ -19,8 +19,8 @@
 python scripts/market_screen.py [YYYYMMDD]   # 시황+종목 스크리닝 원본 JSON 출력 (테마/재료는 후속 LLM 단계에서 채움)
 python scripts/fetch_recent_prices.py        # 관심종목 탭용 최근 5거래일 시세(KIS KRX+NXT 통합)·코스피/코스닥 구분 → data/recent_prices.json (리포트 갱신 후 빌드 전에 실행, 약 3분)
 python scripts/fetch_us_prices.py            # 관심종목(해외) 탭용 미국 종목 최근 5거래일 시세(KIS 해외주식) → data/us_recent_prices.json (빌드 전 실행, 약 2분)
-python scripts/fetch_investor_flows.py [YYYYMMDD]   # 시황 탭 거래주체별 순매수(개인·외국인·기관·금융투자·투신·연기금, KRX) → data/investor_flows.json (빠진 리포트 날짜+해당일 갱신, 빌드 전 실행)
-python scripts/backfill_market_history.py 20260102 20260903   # 시황 탭 과거 지수만(스크리닝 없는 날) → data/market_history.json (리포트·통계 탭 영향 없음, --check로 daily_reports 값과 대조)
+python scripts/fetch_investor_flows.py [YYYYMMDD]   # 시황 탭 거래주체별 순매수(코스피·코스닥=KRX, 코스피200 선물·콜·풋=KIS) → data/investor_flows.json (빠진 리포트 날짜+해당일 갱신, 빌드 전 실행)
+python scripts/backfill_market_history.py 20260102 20260903   # 시황 탭 과거 지수만(스크리닝 없는 날) → data/market_history.json (리포트·통계 탭 영향 없음, --check로 daily_reports 값과 대조, --fill-reports로 daily_reports에 빠진 120일선 등 채움)
 python scripts/build_dashboard.py            # data/*.json → dashboard/index.html + docs/index.html (GitHub Pages 배포용, 내용 동일)
 git add -A && git commit -m "..." && git push    # docs/index.html 갱신을 실제 배포(https://brian-won.github.io/theme-radar/)에 반영하려면 푸시까지 해야 함
 python scripts/set_dashboard_password.py "새 비밀번호"   # 대시보드 접근 비밀번호 변경(해시만 저장됨) — 변경 후 build_dashboard.py 재실행 필요

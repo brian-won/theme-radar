@@ -9,7 +9,7 @@ pykrx(KRX 정규장 기준)로 1차 후보군을 넓게 추린 뒤, 당일(가�
     스크리닝에서 통째로 빠지는 문제가 있었다(사용자 실측 대비 확인됨).
 
 수집 데이터:
-  1. 코스피/코스닥 지수: 종가, 등락률, 거래대금(조), 5/20/60일 이동평균 대비 위치
+  1. 코스피/코스닥 지수: 종가, 등락률, 거래대금(조), 5/20/60/120일 이동평균 대비 위치
   2. 종목 스크리닝: ETF/ETN/스팩/우선주 제외, 시가총액 300억 이상만 대상으로
      (거래대금, 등락률) 임계값을 단계적으로 완화하며 20종목 초과할 때까지 선별
        1단계: 500억 이상 & 등락률 3% 이상
@@ -37,7 +37,7 @@ SCREEN_TIERS = [
 PRELIM_MIN_TRADING_VALUE_EOK = 150
 PRELIM_MIN_CHANGE_RATE = 1.5
 MIN_ROWS_BEFORE_RELAX = 20
-MA_WINDOWS = (5, 20, 60)
+MA_WINDOWS = (5, 20, 60, 120)
 INDEX_TICKERS = {"KOSPI": "1001", "KOSDAQ": "2001"}
 PREFERRED_STOCK_RE = re.compile(r"\d*우(B)?$")
 
@@ -57,7 +57,7 @@ def resolve_target_date(arg: str | None) -> str:
 def index_snapshot(target_date: str) -> dict:
     from pykrx import stock
     result = {}
-    lookback_start = (datetime.strptime(target_date, "%Y%m%d") - timedelta(days=120)).strftime("%Y%m%d")
+    lookback_start = (datetime.strptime(target_date, "%Y%m%d") - timedelta(days=200)).strftime("%Y%m%d")  # 120일선용 120거래일 이상 확보
     for name, ticker in INDEX_TICKERS.items():
         df = stock.get_index_ohlcv_by_date(lookback_start, target_date, ticker)
         if df.empty:

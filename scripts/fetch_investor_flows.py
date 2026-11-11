@@ -4,6 +4,10 @@
 
 KRX 투자자별 거래실적(pykrx get_market_trading_value_by_date, detail=True, 순매수)을
 코스피·코스닥 각각 받아 data/investor_flows.json에 날짜별로 합친다(기존 날짜는 새 값으로 덮어씀).
+2026-11-11 추가: 코스피200 선물·콜옵션·풋옵션 투자자별 순매수는 KIS 시장별 투자자매매동향(일별, FHPTJ04040000,
+시장 K2I / 업종 F001·OC01·OP01)으로 받는다. 한 번 호출에 최근 300거래일이 와서, 실행할 때마다 KRX 날짜 전체에 덮어쓴다.
+  fut  = 선물 순매수 계약 수(정수), call/put = 옵션 순매수 금액(억원, 소수 첫째 자리)
+  KIS 키(KIS_APP_KEY/KIS_APP_SECRET)가 없거나 실패하면 경고만 하고 코스피·코스닥만 저장한다.
 
 저장 값(단위 억원, 반올림 정수) — 순서는 파일의 "order"와 같다:
   개인, 외국인, 기관, 금융투자, 투신, 연기금
@@ -26,6 +30,9 @@ OUT = ROOT / "data" / "investor_flows.json"
 ORDER = ["개인", "외국인", "기관", "금융투자", "투신", "연기금"]
 INSTITUTION = ["금융투자", "보험", "투신", "사모", "은행", "기타금융", "연기금"]
 MARKETS = {"kospi": "KOSPI", "kosdaq": "KOSDAQ"}
+DERIVATIVES = {"fut": ("F001", "qty"), "call": ("OC01", "amt"), "put": ("OP01", "amt")}
+# KIS 필드 접두어: 개인 prsn, 외국인 frgn, 기관계 orgn, 증권(=금융투자) scrt, 투자신탁 ivtr, 기금(=연기금) fund
+KIS_PREFIX = ["prsn", "frgn", "orgn", "scrt", "ivtr", "fund"]
 
 
 def ymd(d: str) -> str:
@@ -35,6 +42,25 @@ def ymd(d: str) -> str:
 def dash(d: str) -> str:
     d = ymd(d)
     return f"{d[:4]}-{d[4:6]}-{d[6:]}"
+
+
+def fetch_derivatives(end: str) -> dict:
+    """KIS로 선물·콜·풋 투자자별 순매수(end 포함 최근 300거래일)를 받아 {날짜: {fut:[..], call:[..], put:[..]}}로 돌려준다."""
+    sys.path.insert(0, str(Path(__file__).parent))
+    from kis_client import KisClient
+    client = KisClient()
+    out = {}
+    for key, (code, unit) in DERIVATIVES.items():
+        params = {"FID_COND_MRKT_DIV_CODE": "U", "FID_INPUT_ISCD": "0001", "FID_INPUT_DATE_1": ymd(end),
+                  "FID_INPUT_ISCD_1": "K2I", "FID_INPUT_DATE_2": ymd(end), "FID_INPUT_ISCD_2": code}
+        data = client._get("/uapi/domestic-stock/v1/quotations/inquire-investor-daily-by-market", "FHPTJ04040000", params, f"파생 투자자({key})")
+        for row in data.get("output") or []:
+            if unit == "qty":
+                vals = [int(row[p + "_ntby_qty"]) for p in KIS_PREFIX]
+            else:  # 백만원 -> 억원
+                vals = [round(int(row[p + "_ntby_tr_pbmn"]) / 100, 1) for p in KIS_PREFIX]
+            out.setdefault(dash(row["stck_bsop_date"]), {})[key] = vals
+    return out
 
 
 def main():
@@ -71,13 +97,24 @@ def main():
         if set(m) == set(MARKETS):
             added += d not in days
             days[d] = m
+    deriv_n = 0
+    try:
+        with contextlib.redirect_stdout(sys.stderr):
+            deriv = fetch_derivatives(max(days) if days else end)
+        for d, m in deriv.items():
+            if d in days and set(m) == set(DERIVATIVES):
+                days[d].update(m)
+                deriv_n += 1
+    except Exception as e:  # KIS 키 없음·장애 시 현물만 저장
+        print(f"주의: 선물·옵션(KIS) 조회 실패 — 코스피·코스닥만 저장합니다: {e}")
     store = {
-        "_note": "KRX 투자자별 순매수(억원). 기관 = 금융투자·보험·투신·사모·은행·기타금융·연기금 합계. scripts/fetch_investor_flows.py로 갱신",
+        "_note": "kospi/kosdaq = KRX 투자자별 순매수(억원), 기관 = 금융투자·보험·투신·사모·은행·기타금융·연기금 합계. "
+                 "fut = 코스피200 선물 순매수(계약), call/put = 코스피200 콜·풋옵션 순매수(억원) — KIS 시장별 투자자매매동향. scripts/fetch_investor_flows.py로 갱신",
         "order": ORDER,
         "days": {k: days[k] for k in sorted(days)},
     }
     OUT.write_text(json.dumps(store, ensure_ascii=False, indent=1) + "\n", encoding="utf-8", newline="\n")
-    print(f"저장: {OUT} — 이번 조회 {len(fetched)}일(신규 {added}일), 전체 {len(days)}일, 최근 {max(days) if days else '-'}")
+    print(f"저장: {OUT} — 이번 조회 {len(fetched)}일(신규 {added}일), 전체 {len(days)}일, 최근 {max(days) if days else '-'} · 선물·옵션 {deriv_n}일")
     if end not in fetched:
         print(f"주의: {end} 값이 아직 없습니다(장 마감 전이거나 휴장일).")
 

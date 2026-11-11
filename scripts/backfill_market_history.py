@@ -14,6 +14,7 @@ data/daily_reports.json은 스크리닝(테마/종목)까지 한 날짜만 담�
 사용법:
   python scripts/backfill_market_history.py 20260102 20260903   # 기간 지정(기존 파일에 합침, 같은 날짜는 덮어씀)
   python scripts/backfill_market_history.py --check 20260904 20261109   # 저장하지 않고 daily_reports.json 값과 비교만
+  python scripts/backfill_market_history.py --fill-reports 20260701 20261111   # daily_reports.json에 빠진 이평선(120일선 등)만 채움
 필요 환경변수: KRX_ID, KRX_PW (pykrx KRX 로그인)
 """
 import sys
@@ -24,12 +25,12 @@ from pathlib import Path
 
 ROOT = Path(__file__).parent.parent
 OUT = ROOT / "data" / "market_history.json"
-MA_WINDOWS = (5, 20, 60)
+MA_WINDOWS = (5, 20, 60, 120)
 INDEX_TICKERS = {"kospi": "1001", "kosdaq": "2001"}
 
 
 def build_rows(start: str, end: str) -> dict:
-    lookback = (datetime.strptime(start, "%Y%m%d") - timedelta(days=130)).strftime("%Y%m%d")
+    lookback = (datetime.strptime(start, "%Y%m%d") - timedelta(days=200)).strftime("%Y%m%d")
     rows = {}
     with contextlib.redirect_stdout(sys.stderr):  # pykrx 로그인 메시지가 stdout에 섞이지 않게
         from pykrx import stock
@@ -58,14 +59,36 @@ def main():
     sys.stdout.reconfigure(encoding="utf-8")
     sys.stderr.reconfigure(encoding="utf-8")
     args = sys.argv[1:]
-    check = args and args[0] == "--check"
-    if check:
+    check = bool(args) and args[0] == "--check"
+    fill = bool(args) and args[0] == "--fill-reports"
+    if check or fill:
         args = args[1:]
     if len(args) != 2:
         print(__doc__)
         sys.exit(1)
     start, end = args
     rows = build_rows(start, end)
+
+    if fill:
+        # daily_reports.json의 kospiMaD/kosdaqMaD에 없는 이평선(예: 120일선, 2026-11-11 추가)만 계산값으로 채운다. 기존 값은 그대로 둔다.
+        rp = ROOT / "data" / "daily_reports.json"
+        raw = rp.read_text(encoding="utf-8")
+        reports = json.loads(raw)
+        added = 0
+        for o in reports:
+            r = rows.get(o["date"])
+            if not r:
+                continue
+            for k in ("kospiMaD", "kosdaqMaD"):
+                have = {e["w"] for e in o.get(k) or []}
+                for e in r[k]:
+                    if e["w"] not in have:
+                        o.setdefault(k, []).append(e)
+                        added += 1
+                o[k].sort(key=lambda e: e["w"])
+        rp.write_text(json.dumps(reports, ensure_ascii=False, indent=2) + ("\n" if raw.endswith("\n") else ""), encoding="utf-8", newline="\n")
+        print(f"daily_reports 이평선 채움: {added}개")
+        return
 
     if check:
         reports = {r["date"]: r for r in json.loads((ROOT / "data" / "daily_reports.json").read_text(encoding="utf-8"))}
