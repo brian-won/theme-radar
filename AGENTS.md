@@ -17,7 +17,7 @@
 ## 3. Commands
 ```bash
 python scripts/market_screen.py [YYYYMMDD]   # 시황+종목 스크리닝 원본 JSON 출력 (테마/재료는 후속 LLM 단계에서 채움)
-python scripts/fetch_recent_prices.py        # 관심종목 탭용 최근 5거래일 시세(KIS KRX+NXT 통합)·코스피/코스닥 구분 → data/recent_prices.json (리포트 갱신 후 빌드 전에 실행, 약 3분)
+python scripts/fetch_recent_prices.py        # 관심종목 탭용 최근 5거래일 시세(KIS KRX+NXT 통합)·코스피/코스닥 구분 → data/recent_prices.json (**사용자가 요청할 때만 실행** — 일일 스크리닝 때 자동 실행 금지, 2026-11-13 사용자 지시, 약 5분)
 python scripts/fetch_us_prices.py            # 관심종목(해외) 탭용 미국 종목 최근 5거래일 시세(KIS 해외주식) → data/us_recent_prices.json (빌드 전 실행, 약 2분)
 python scripts/fetch_investor_flows.py [YYYYMMDD]   # 시황 탭 거래주체별 순매수(코스피·코스닥=KRX, 코스피200 선물·콜·풋=KIS) → data/investor_flows.json (빠진 리포트 날짜+해당일 갱신, 빌드 전 실행)
 python scripts/backfill_market_history.py 20260102 20260903   # 시황 탭 과거 지수만(스크리닝 없는 날) → data/market_history.json (리포트·통계 탭 영향 없음, --check로 daily_reports 값과 대조, --fill-reports로 daily_reports에 빠진 120일선 등 채움)
