@@ -17,10 +17,15 @@
   data/supabase_config.json        # 관심종목 수정 동기화용 Supabase 프로젝트 URL + anon key (공개해도 되는 값)
   data/site_password.json          # 대시보드 접근 비밀번호의 SHA-256 해시(평문 아님) — scripts/set_dashboard_password.py로 설정
   skills/us-kr-sector-mapping/references/us_kr_sector_mapping.md  # (선택) 관심종목(해외) 탭 — 미국 섹터 종목 ↔ 한국 연관 종목 매핑표(파일을 고치고 다시 빌드하면 반영)
+  dashboard/bt/engine.js, strategies.js  # 분석 탭 백테스트 엔진 — 파일 내용을 그대로 내장(브라우저 전역 BT)
+  docs/bt/meta.js                  # (선택) 분석 탭 시세 조각 목록 — scripts/build_bt_data.py로 생성. 기준일·종목 수·달 목록만 SNAPSHOT.btMeta로 내장
+  data/bt_defaults.json            # (선택) 분석 탭 비교표의 기법별 기본값 결과 — node scripts/bt_run.js --defaults 로 생성 → SNAPSHOT.btDefaults
 
 출력:
   dashboard/index.html  # 완전한 standalone 웹페이지 (데이터 내장, 서버/네트워크 불필요, 로컬 미리보기용)
   docs/index.html       # 위와 동일 — GitHub Pages가 이 폴더를 서빙(웹/폰 공유 URL)
+  (분석 탭 시세 조각 docs/bt/*.js 는 이 스크립트가 만들거나 복사하지 않는다. 화면이 실행 때 'bt/' → 없으면 '../docs/bt/' 순서로 읽으므로
+   dashboard/index.html 로컬 미리보기도 docs/bt 를 그대로 쓴다. dashboard/bt 의 조각 복사본은 .gitignore 대상)
 
 새 날짜를 추가하려면: data/daily_reports.json에 항목 추가 + data/daily_detail_with_reasons.json에
 날짜 키 추가 후 이 스크립트를 다시 실행하면 된다. daily-market-report 스킬의 6단계 참고.
@@ -34,6 +39,10 @@ TEMPLATE = ROOT / "dashboard" / "template.html"
 OUTPUT = ROOT / "dashboard" / "index.html"
 PAGES_OUTPUT = ROOT / "docs" / "index.html"
 US_KR_MAPPING = ROOT / "skills" / "us-kr-sector-mapping" / "references" / "us_kr_sector_mapping.md"
+BT_ENGINE = ROOT / "dashboard" / "bt" / "engine.js"
+BT_STRATEGIES = ROOT / "dashboard" / "bt" / "strategies.js"
+BT_META = ROOT / "docs" / "bt" / "meta.js"
+BT_DEFAULTS = ROOT / "data" / "bt_defaults.json"
 
 
 def parse_us_kr_mapping(path: Path) -> dict:
@@ -79,6 +88,23 @@ def parse_us_kr_mapping(path: Path) -> dict:
     return {"asOf": as_of, "rows": rows, "triggers": triggers, "cautions": cautions}
 
 
+def load_bt_meta(path: Path):
+    """분석 탭용: 시세 조각 목록(docs/bt/meta.js, `window.__btChunk({...});` 한 줄)에서 화면 머리말에 쓸 요약만 뽑는다. 없으면 None."""
+    if not path.exists():
+        return None
+    text = path.read_text(encoding="utf-8")
+    meta = json.loads(text[text.index("(") + 1:text.rindex(")")])
+    tickers = meta.get("tickers") or {}
+    infos = tickers.values() if isinstance(tickers, dict) else []
+    return {
+        "asOf": meta.get("asOf"),
+        "tickers": len(tickers),
+        "delisted": sum(1 for v in infos if isinstance(v, dict) and v.get("delisted")),
+        "months": meta.get("months") or [],
+        "flowMonths": meta.get("flowMonths") or [],
+    }
+
+
 def main():
     daily_reports = json.loads((ROOT / "data" / "daily_reports.json").read_text(encoding="utf-8"))
     daily_detail = json.loads((ROOT / "data" / "daily_detail_with_reasons.json").read_text(encoding="utf-8"))
@@ -115,6 +141,16 @@ def main():
     if missing_flows:
         print(f"경고: 거래주체별 순매수가 없는 리포트 날짜 {len(missing_flows)}개 — python scripts/fetch_investor_flows.py 실행 필요: {missing_flows}")
 
+    # 분석 탭(백테스트): 조각 목록 요약 + 기법별 기본값 결과. 둘 다 없어도 빌드는 되고 화면이 안내 문구를 보여 준다
+    bt_meta = load_bt_meta(BT_META)
+    bt_defaults = json.loads(BT_DEFAULTS.read_text(encoding="utf-8")) if BT_DEFAULTS.exists() else None
+    if bt_meta is None:
+        print("안내: docs/bt/meta.js 가 없어 분석 탭 시세 요약을 넣지 못했습니다 — python scripts/build_bt_data.py 실행 필요")
+    if bt_defaults is None:
+        print("안내: data/bt_defaults.json 이 없어 분석 탭 비교표가 비어 있습니다 — node scripts/bt_run.js --defaults 실행 필요")
+    elif bt_meta and bt_defaults.get("asOf") != bt_meta["asOf"]:
+        print(f"경고: 분석 탭 기본값 결과({bt_defaults.get('asOf')})와 시세 조각({bt_meta['asOf']})의 기준일이 다릅니다 — node scripts/bt_run.js --defaults 다시 실행 필요")
+
     snapshot_js = (
         "{\n"
         "    generatedAt: " + json.dumps(max(d["date"] for d in daily_reports)) + ",\n"
@@ -125,7 +161,9 @@ def main():
         "    usPrices: " + json.dumps(us_prices, ensure_ascii=False) + ",\n"
         "    usKrMap: " + json.dumps(us_kr, ensure_ascii=False) + ",\n"
         "    investorFlows: " + json.dumps({"order": investor_flows["order"], "days": investor_flows["days"]}, ensure_ascii=False, separators=(",", ":")) + ",\n"
-        "    marketHistory: " + json.dumps(market_history, ensure_ascii=False, separators=(",", ":")) + "\n"
+        "    marketHistory: " + json.dumps(market_history, ensure_ascii=False, separators=(",", ":")) + ",\n"
+        "    btMeta: " + json.dumps(bt_meta, ensure_ascii=False, separators=(",", ":")) + ",\n"
+        "    btDefaults: " + json.dumps(bt_defaults, ensure_ascii=False, separators=(",", ":")) + "\n"
         "  }"
     )
 
@@ -133,11 +171,19 @@ def main():
     d3_js = (ROOT / "dashboard" / "vendor" / "d3.v7.9.0.min.js").read_text(encoding="utf-8")
 
     template = TEMPLATE.read_text(encoding="utf-8")
-    for marker in ("/*__SNAPSHOT__*/", "/*__SUPABASE_CONFIG__*/", "/*__SITE_PASSWORD__*/", "<!--__D3__-->"):
+    for marker in ("/*__SNAPSHOT__*/", "/*__SUPABASE_CONFIG__*/", "/*__SITE_PASSWORD__*/", "<!--__D3__-->", "/*__BT_ENGINE__*/", "/*__BT_STRATEGIES__*/"):
         if marker not in template:
             raise RuntimeError(f"dashboard/template.html에 {marker} 플레이스홀더가 없습니다")
+    # 백테스트 엔진 두 파일을 그대로 내장(엔진 → 기법 순서). Node 테스트(tests/bt)가 쓰는 파일과 같은 내용이라 결과가 어긋나지 않는다
+    for path in (BT_ENGINE, BT_STRATEGIES):
+        if not path.exists():
+            raise RuntimeError(f"{path.relative_to(ROOT)} 가 없습니다 — 분석 탭 백테스트 엔진 파일이 필요합니다")
+    bt_engine_js = BT_ENGINE.read_text(encoding="utf-8").replace("</script", "<\\/script")
+    bt_strategies_js = BT_STRATEGIES.read_text(encoding="utf-8").replace("</script", "<\\/script")
     output = (
         template
+        .replace("/*__BT_ENGINE__*/", bt_engine_js)
+        .replace("/*__BT_STRATEGIES__*/", bt_strategies_js)
         .replace("<!--__D3__-->", "<script>" + d3_js.replace("</script", "<\\/script") + "</script>")
         .replace("/*__SNAPSHOT__*/", snapshot_js)
         .replace("/*__SUPABASE_CONFIG__*/", json.dumps(supabase_config, ensure_ascii=False))
@@ -153,6 +199,8 @@ def main():
     print(f"  거래일 {len(daily_reports)}개, 누적 종목 {total_stocks}개, 테마 로그 {len(daily_detail)}일치")
     print(f"  시황 과거 지수 {len(market_history)}일치 ({market_history[0]['date'] if market_history else None} ~ {market_history[-1]['date'] if market_history else None})")
     print(f"  거래주체별 순매수 {len(investor_flows['days'])}일치 (최근 {max(investor_flows['days']) if investor_flows['days'] else None})")
+    print(f"  분석 탭: 시세 조각 {len(bt_meta['months']) if bt_meta else 0}개월(기준일 {bt_meta['asOf'] if bt_meta else None}, {bt_meta['tickers'] if bt_meta else 0}종목), "
+          f"기본값 결과 {len(bt_defaults.get('strategies', {})) if bt_defaults else 0}개 기법")
     print(f"  관심종목(해외) 매핑 {len(us_kr['rows'])}행 (기준일 {us_kr['asOf']}), 미국 시세 {len(us_prices['prices'])}종목(최근 {(us_prices['dates'] or [None])[-1]})")
 
 

@@ -41,10 +41,14 @@ echo "🧹 [3/4] Running lint & type check..."
 # {타입체크 명령어} || { echo "❌ [FAIL] 타입 오류가 있습니다."; exit 1; }
 echo "⚠️  [SKIP] AGENTS.md 3장의 실제 명령어로 교체하세요."
 
-# 4. 테스트 실행 — AGENTS.md 3장의 실제 명령어로 교체
+# 4. 테스트 실행 — AGENTS.md 3장의 백테스트 엔진 테스트(분석 탭 dashboard/bt/engine.js·strategies.js)
 echo "🧪 [4/4] Running test suite..."
-# {테스트 명령어} || { echo "❌ [FAIL] 테스트가 실패했습니다."; exit 1; }
-echo "⚠️  [SKIP] AGENTS.md 3장의 실제 명령어로 교체하세요."
+cd "$(git rev-parse --show-toplevel 2>/dev/null || dirname "$0"/..)"
+if command -v node >/dev/null 2>&1; then
+    node --test tests/bt || { echo "❌ [FAIL] 백테스트 엔진 테스트가 실패했습니다 (node --test tests/bt)."; exit 1; }
+else
+    echo "⚠️  [SKIP] node 가 없어 백테스트 엔진 테스트를 건너뜁니다."
+fi
 
-echo "✅ [DONE] 스캐폴드 실행 완료. 위 [SKIP] 항목을 실제 명령어로 채우기 전까지는 아무것도 검증하지 않습니다."
+echo "✅ [DONE] 검증 완료. 테스트(4단계)만 실제로 검사하며, [SKIP] 항목(1~3단계)은 아직 스캐폴드입니다."
 exit 0

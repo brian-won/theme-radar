@@ -589,6 +589,88 @@
   .kadd-btn:hover { background: var(--accent-soft); }
   .kref-toggle { border: none; background: none; padding: 2px 4px; color: var(--text-muted); font-family: inherit; font-size: 11.5px; font-weight: 700; cursor: pointer; border-radius: 6px; }
   .kref-toggle:hover, .kref-toggle[aria-expanded="true"] { color: var(--accent-strong); background: var(--accent-soft); }
+  /* ===== 분석 탭(백테스트) — 새 클래스는 모두 .bt- 접두어, 색은 기존 토큰만 사용 ===== */
+  .bt-layout { display: grid; grid-template-columns: minmax(300px, 380px) minmax(0, 1fr); gap: 16px; align-items: start; }
+  .bt-side, .bt-main, .bt-result { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+  .bt-result:empty { display: none; }
+  .bt-notice { padding: 12px 16px; font-size: 12.5px; line-height: 1.6; }
+  .bt-notice[hidden] { display: none; }
+  .bt-notice ul { margin: 0; padding-left: 18px; }
+  .bt-pick-select { display: none; }
+  .bt-picker { display: flex; flex-direction: column; gap: 10px; }
+  .bt-pgroup { display: flex; flex-direction: column; gap: 2px; }
+  .bt-pgroup-name { font-size: 11px; font-weight: 700; color: var(--text-muted); padding: 0 2px 2px; }
+  .bt-pick { display: flex; align-items: center; gap: 8px; width: 100%; text-align: left; font: inherit; font-size: 13px; padding: 6px 10px; border-radius: 8px; border: 1px solid transparent; background: none; color: var(--text-secondary); cursor: pointer; }
+  .bt-pick:hover { background: var(--surface-alt); }
+  .bt-pick:focus-visible, .bt-step:focus-visible, .bt-in:focus-visible, .bt-run:focus-visible, .bt-sort:focus-visible, .bt-crow:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .bt-pick[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent-strong); font-weight: 700; border-color: var(--accent); }
+  .bt-no { font-size: 11px; color: var(--text-muted); width: 18px; flex-shrink: 0; text-align: right; }
+  .bt-pname { flex: 1; min-width: 0; }
+  .bt-dim { opacity: 0.5; }
+  .bt-formbox > summary { cursor: pointer; font-size: 12.5px; color: var(--text-secondary); padding: 4px 0 8px; line-height: 1.5; }
+  .bt-formbox > summary b { color: var(--text-primary); }
+  .bt-sub { font-size: 12px; font-weight: 700; color: var(--text-muted); margin: 10px 0 2px; }
+  .bt-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 4px 10px; padding: 7px 0; border-top: 1px solid var(--border); }
+  .bt-label { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; font-size: 12.5px; color: var(--text-primary); min-width: 0; }
+  .bt-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+  .bt-dot[hidden] { display: none; }
+  .bt-ctl { display: flex; align-items: center; gap: 4px; margin-left: auto; max-width: 100%; }
+  .bt-ctl .psel select { max-width: 230px; }
+  .bt-in { font-family: inherit; font-size: 13px; padding: 6px 8px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface-alt); color: var(--text-primary); }
+  input.bt-in[type="number"] { width: 104px; text-align: right; font-family: "JetBrains Mono", ui-monospace, monospace; }
+  .bt-step { width: 28px; height: 30px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); color: var(--text-secondary); cursor: pointer; font-size: 15px; line-height: 1; padding: 0; flex-shrink: 0; }
+  .bt-step:disabled, .bt-in:disabled, .bt-row .inv-seg button:disabled { cursor: default; opacity: 0.6; }
+  .bt-unit { font-size: 11.5px; color: var(--text-muted); min-width: 14px; }
+  .bt-help { flex-basis: 100%; margin: 0; font-size: 11px; color: var(--text-muted); line-height: 1.5; }
+  .bt-chg { color: var(--text-muted); font-weight: 400; }
+  .bt-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .bt-actions .bt-run { margin: 0; flex: 1 1 110px; padding: 10px 14px; }
+  .bt-run:disabled, .bt-actions .period-reset:disabled { opacity: 0.5; cursor: default; }
+  .bt-status { font-size: 12.5px; color: var(--text-secondary); line-height: 1.5; display: flex; flex-direction: column; gap: 6px; }
+  .bt-status[data-kind="err"] { color: var(--up); }
+  .bt-status[data-kind="ok"] { color: var(--accent-strong); }
+  .bt-status:empty { display: none; }
+  .bt-status .period-reset { align-self: flex-start; }
+  .bt-bar { height: 6px; border-radius: 999px; background: var(--surface-alt); overflow: hidden; }
+  .bt-bar i { display: block; height: 100%; background: var(--accent); border-radius: 999px; }
+  .bt-skel { display: flex; flex-direction: column; gap: 10px; }
+  .bt-warn { padding: 12px 16px; font-size: 12px; line-height: 1.6; }
+  .bt-warn ul { margin: 0; padding-left: 18px; }
+  .bt-metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+  .bt-metric { padding: 12px 14px; gap: 2px; }
+  .bt-m-label { font-size: 11.5px; color: var(--text-muted); font-weight: 600; }
+  .bt-m-val { font-size: 21px; font-weight: 700; color: var(--text-primary); line-height: 1.3; }
+  .bt-m-val.up { color: var(--up); } .bt-m-val.down { color: var(--down); }
+  .bt-m-sub { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
+  .bt-legend { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 11.5px; color: var(--text-secondary); }
+  .bt-legend:empty { display: none; }
+  .bt-legend span { display: inline-flex; align-items: center; gap: 5px; }
+  .bt-legend i { width: 14px; height: 3px; border-radius: 2px; display: inline-block; }
+  .bt-chart .hit { touch-action: pan-y; }
+  .bt-chart .bt-line { fill: none; stroke-linejoin: round; stroke-linecap: round; }
+  .bt-chart .bt-dd { fill: var(--down-soft); stroke: var(--down); stroke-width: 1; }
+  .bt-empty { font-size: 12.5px; color: var(--text-muted); margin: 0; }
+  table.bt-month th, table.bt-month td { text-align: right; padding: 5px 7px; white-space: nowrap; }
+  table.bt-month th:first-child, table.bt-month td:first-child { text-align: left; }
+  table.bt-month td.bt-year { font-weight: 700; border-left: 1px solid var(--border); }
+  .bt-sort { cursor: pointer; user-select: none; }
+  .bt-sort[aria-sort] { color: var(--accent-strong); }
+  table.bt-trades td, table.bt-cmp td, table.bt-cmp th { white-space: nowrap; }
+  .bt-tk { font-size: 10.5px; color: var(--text-muted); margin-left: 4px; }
+  .bt-crow { cursor: pointer; }
+  .bt-crow:hover { background: var(--surface-alt); }
+  table.bt-cmp td.bt-vars { white-space: normal; min-width: 150px; max-width: 280px; font-size: 11.5px; color: var(--text-secondary); }
+  .bt-del { border: none; background: none; color: var(--text-muted); cursor: pointer; font-size: 14px; padding: 2px 6px; border-radius: 6px; }
+  .bt-del:hover { background: var(--up-soft); color: var(--up); }
+  @media (max-width: 900px) {
+    .bt-layout { grid-template-columns: minmax(0, 1fr); }
+    .bt-pick-select { display: flex; }
+    .bt-pick-select select { flex: 1; min-width: 0; max-width: 100%; }
+    .bt-picker { display: none; }
+    .bt-actions { position: sticky; bottom: 0; z-index: 5; background: var(--surface); padding: 10px 0; border-top: 1px solid var(--border); }
+    .bt-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .bt-m-val { font-size: 18px; }
+  }
 </style>
 
 </head>
@@ -617,7 +699,7 @@
       <button type="button" class="tab-btn" data-tab="watch" role="tab" title="관심종목(국내)"><svg class="tab-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9z"/></svg><span class="tab-label">관심종목(국내)</span></button>
       <button type="button" class="tab-btn" data-tab="watchUs" role="tab" title="관심종목(해외)"><svg class="tab-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18a14 14 0 0 1 0-18z"/></svg><span class="tab-label">관심종목(해외)</span></button>
       <button type="button" class="tab-btn" data-tab="stats" role="tab" title="통계"><svg class="tab-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg><span class="tab-label">통계</span></button>
-      <button type="button" class="tab-btn" data-tab="analysis" role="tab" title="분석"><svg class="tab-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1 2V16h5.2v-.2c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/></svg><span class="tab-label">분석</span> <span class="tab-soon">준비중</span></button>
+      <button type="button" class="tab-btn" data-tab="analysis" role="tab" title="분석"><svg class="tab-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1 2V16h5.2v-.2c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/></svg><span class="tab-label">분석</span></button>
     </nav>
   </aside>
 
@@ -757,9 +839,44 @@
     </details>
   </section>
 
-  <!-- ---- 분석 (준비중) ---- -->
+  <!-- ---- 분석: 매매기법 백테스트 (엔진은 dashboard/bt/engine.js·strategies.js 를 빌드 때 내장, 시세 조각은 실행할 때 bt/*.js 를 받아 옴) ---- -->
   <section class="tab-panel" data-tab-panel="analysis" hidden>
-    <div class="placeholder-note">"분석" 탭은 아직 설계 전입니다 — 통계가 숫자 표라면, 분석은 그 숫자로 무엇을 알 수 있는지(예: 주차별 테마 강도 변화, 지속 테마 vs 신규 테마, 지수 등락과 주도테마의 상관)를 보여주는 해석형 화면으로 다음에 정의할 예정입니다.</div>
+    <div class="section-head">
+      <h2>분석 · 매매기법 백테스트</h2>
+      <span class="note" id="btMetaNote"></span>
+    </div>
+    <div class="placeholder-note bt-notice" id="btNotice" hidden></div>
+    <div class="bt-layout">
+      <div class="bt-side">
+        <div class="st-card">
+          <div class="st-card-head"><div><h3>기법 선택</h3><p class="st-note">20개 기법 · 흐린 항목은 자료가 준비되면 열립니다</p></div></div>
+          <label class="psel bt-pick-select">기법 <select id="btPickSelect" aria-label="기법 선택"></select></label>
+          <div id="btPicker" class="bt-picker"></div>
+        </div>
+        <div class="st-card" id="btFormCard">
+          <div class="st-card-head"><div><h3 id="btFormTitle">변수</h3><p class="st-note" id="btFormDesc"></p></div></div>
+          <details class="bt-formbox" id="btFormBox">
+            <summary><b>변수</b> · <span id="btFormSummary">기본값 그대로</span></summary>
+            <div id="btForm"></div>
+          </details>
+          <div class="bt-actions" id="btRun">
+            <button type="button" class="lock-btn bt-run" id="btRunBtn">실행</button>
+            <button type="button" class="period-reset" id="btResetBtn">기본값으로</button>
+            <button type="button" class="period-reset" id="btKeepBtn" disabled>비교에 담기</button>
+          </div>
+          <div class="bt-status" id="btStatus" role="status" aria-live="polite"></div>
+        </div>
+      </div>
+      <div class="bt-main">
+        <div id="btResult" class="bt-result"></div>
+        <div class="st-card">
+          <div class="st-card-head"><div><h3>기법 간 비교</h3><p class="st-note" id="btCompareNote"></p></div></div>
+          <div class="bt-legend" id="btOverlayLegend"></div>
+          <div id="btOverlay" class="inv-chart bt-chart"></div>
+          <div class="table-scroll" id="btCompare"></div>
+        </div>
+      </div>
+    </div>
   </section>
 
   <footer id="footerNote">
@@ -771,6 +888,11 @@
 <div id="vizTip" class="viz-tip" hidden></div>
 
 <!--__D3__-->
+<!-- 백테스트 엔진: 빌드 때 dashboard/bt/engine.js → strategies.js 순서로 내장(전역 BT) -->
+<script>
+/*__BT_ENGINE__*/
+/*__BT_STRATEGIES__*/
+</script>
 <script>
 (function () {
   // ---- 정적 스냅샷 (최신화: build_dashboard.py가 매 빌드마다 자동 갱신) ----
@@ -2531,6 +2653,805 @@
   }
 
   // =========================================================
+  // 분석 탭 — 매매기법 백테스트
+  // 엔진(전역 BT)은 dashboard/bt/engine.js + strategies.js 를 빌드 때 그대로 내장한 것. 여기는 화면만 담당한다.
+  // 탭을 열 때는 폼과 기본값 비교표만 그리고, 시세 조각(bt/*.js)은 '실행'을 누를 때 <script src>로 받는다(file:// 에서도 동작).
+  // 저장: themeRadar.btParams(기법별 마지막 변수), themeRadar.btRuns(비교에 담은 실행, 최대 30개)
+  // =========================================================
+  var BT_PARAMS_KEY = 'themeRadar.btParams', BT_RUNS_KEY = 'themeRadar.btRuns', BT_MAX_RUNS = 30, BT_MAX_OVERLAY = 6, BT_PAGE = 50;
+  // 조각 폴더 후보: 배포본(docs/index.html)과 복사본이 있는 로컬은 'bt/', 복사본이 없는 로컬(dashboard/index.html)은 '../docs/bt/'
+  var BT_BASES = ['bt/', '../docs/bt/'];
+  var BT_WHY = { stop: '손절', take: '익절', trail: '추적 손절', time: '보유일 만료', rule: '기법 규칙', delist: '상장폐지', end: '미청산' };
+  var BT_ROTATION_UNUSED = ['weightPct', 'maxPositions', 'maxNewPerDay']; // 회전형(sizing: 'equal')이 쓰지 않는 공통 변수
+  var BT_UNUSED = { volBreakout: { entryFill: '장중 돌파가 체결' } };      // 기법이 쓰지 않는 공통 변수(엔진 API 문서 6장)
+  var BT_COLORS = ['--accent', '--idx-kosdaq', '--p-for', '--p-ind', '--idx-kospi', '--up'];
+  var BT_LIST = [], BT_BY = {}, BT_COMMON = [];
+  var BTS = {
+    key: null, cur: null, saved: { sel: null, by: {} }, runs: [], overlay: {}, openGroups: {},
+    store: null, base: null, loaded: {}, data: null, flowReady: false,
+    busy: false, result: null, resultMs: 0, sort: { k: 'outD', dir: -1 }, shown: BT_PAGE, bound: false
+  };
+
+  function btReady() { return typeof BT !== 'undefined' && BT && typeof BT.listStrategies === 'function'; }
+  function btEl(id) { return document.getElementById(id); }
+  function btGet(k, fb) { try { var v = JSON.parse(localStorage.getItem(k) || 'null'); return v == null ? fb : v; } catch (e) { return fb; } }
+  function btPut(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } }
+  function btOwn(o, k) { return Object.prototype.hasOwnProperty.call(o, k); }
+  function btExtras() { return { theme: Object.keys(FRAME_DETAIL).length ? FRAME_DETAIL : null }; }
+  function btVisible() { var p = document.querySelector('.tab-panel[data-tab-panel="analysis"]'); return !!p && !p.hidden; }
+  function btNarrow() { return !!(window.matchMedia && window.matchMedia('(max-width: 900px)').matches); }
+  // 화면이 먼저 한 번 그려지도록 양보(숨은 탭에서는 requestAnimationFrame이 멈추므로 시간 제한을 같이 둔다)
+  function btYield() {
+    return new Promise(function (ok) {
+      var done = false, go = function () { if (!done) { done = true; ok(); } };
+      if (window.requestAnimationFrame) window.requestAnimationFrame(function () { setTimeout(go, 0); });
+      setTimeout(go, 120);
+    });
+  }
+
+  // ---- 숫자 표기 ----
+  function btSign(v, d, unit) { return (v > 0 ? '+' : '') + Number(v).toFixed(d == null ? 1 : d) + (unit == null ? '%' : unit); }
+  function btPct(v, d) { return v == null || v !== v ? '—' : btSign(v * 100, d); }
+  function btCls(v) { return v == null || v !== v || v === 0 ? '' : (v > 0 ? 'up' : 'down'); }
+  function btPctTd(v, d) { return v == null || v !== v ? '<td class="num dim">—</td>' : '<td class="num ' + btCls(v) + '">' + btPct(v, d) + '</td>'; }
+  function btPrice(v) { return fmt(v, v < 1000 && Math.round(v) !== v ? 2 : 0); }
+
+  // ---- 변수 스키마 ----
+  function btSchema(key) { return { own: (BT_BY[key] && BT_BY[key].params) || [], common: BT_COMMON }; }
+  function btItem(key, scope, k) { return btSchema(key)[scope].filter(function (it) { return it.key === k; })[0]; }
+  function btOptions(it) { return it.type === 'bool' ? [{ v: false, label: '끔' }, { v: true, label: '켬' }] : (it.options || []); }
+  function btUnit(it) { return it.type === 'pct' ? '%' : (it.unit || ''); }
+  function btDecimals(x) { var s = String(x), i = s.indexOf('.'); return i < 0 ? 0 : s.length - i - 1; }
+  // 값 하나를 스키마에 맞춘다: 범위(min/max)를 벗어나면 끝값으로, step 단위에 맞지 않으면 가까운 값으로. 못 읽으면 fb
+  function btCoerce(it, v, fb) {
+    if (it.type === 'bool') return v === true || v === 'true';
+    if (it.type === 'select') {
+      var hit = (it.options || []).filter(function (o) { return o.v === v || String(o.v) === String(v); })[0];
+      return hit ? hit.v : fb;
+    }
+    if (it.type === 'date') return typeof v === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : null;
+    var n = typeof v === 'number' ? v : parseFloat(v);
+    if (!isFinite(n)) return fb;
+    var isInt = it.type === 'int', step = it.step || (isInt ? 1 : 0), min = it.min, max = it.max;
+    if (min != null && n < min) n = min;
+    if (max != null && n > max) n = max;
+    if (step) {
+      var base = min != null ? min : 0;
+      n = base + Math.round((n - base) / step) * step;
+      if (max != null && n > max + 1e-9) n -= step;
+      n = +n.toFixed(Math.max(btDecimals(step), btDecimals(base)));
+    }
+    return isInt ? Math.round(n) : n;
+  }
+  // 저장돼 있던 값(바꾼 것만)을 스키마로 걸러서 실제 적용 값 전체로 만든다
+  function btResolve(key, diff) {
+    var sch = btSchema(key), clean = { common: {}, own: {} };
+    diff = diff || {};
+    ['common', 'own'].forEach(function (scope) {
+      var d = diff[scope] || {};
+      sch[scope].forEach(function (it) {
+        if (!btOwn(d, it.key)) return;
+        var v = btCoerce(it, d[it.key], undefined);
+        if (v !== undefined) clean[scope][it.key] = v;
+      });
+    });
+    return BT.resolveParams(key, clean);
+  }
+  // 기본값과 다른 항목만
+  function btDiff(key, full) {
+    var def = BT.resolveParams(key), out = { common: {}, own: {} };
+    ['common', 'own'].forEach(function (scope) {
+      Object.keys((full && full[scope]) || {}).forEach(function (k) {
+        if (btOwn(def[scope], k) && full[scope][k] !== def[scope][k]) out[scope][k] = full[scope][k];
+      });
+    });
+    return out;
+  }
+  function btValText(it, v) {
+    if (it.type === 'bool') return v ? '켬' : '끔';
+    if (it.type === 'select') { var o = btOptions(it).filter(function (x) { return x.v === v; })[0]; return o ? o.label : String(v); }
+    if (it.type === 'date') return v || '자동';
+    return (typeof v === 'number' ? fmt(v, btDecimals(v)) : String(v)) + btUnit(it);
+  }
+  function btDiffText(key, diff, max) {
+    var parts = [];
+    ['own', 'common'].forEach(function (scope) {
+      Object.keys((diff && diff[scope]) || {}).forEach(function (k) {
+        var it = btItem(key, scope, k);
+        if (it) parts.push(it.label + ' ' + btValText(it, diff[scope][k]));
+      });
+    });
+    if (!parts.length) return '기본값 그대로';
+    if (max && parts.length > max) return parts.slice(0, max).join(' · ') + ' 외 ' + (parts.length - max) + '개';
+    return parts.join(' · ');
+  }
+
+  // ---- 실행할 수 없는 이유(없으면 '') ----
+  function btReason(key) {
+    var s = BT_BY[key], m = SNAPSHOT.btMeta, extras = btExtras();
+    if (!s) return '알 수 없는 기법';
+    if (s.locked) return s.lockReason || '잠금';
+    if (s.needs === 'theme') return BT.unavailableReason(null, key, extras);
+    if (s.needs === 'flow') {
+      var storeMeta = BTS.store && BTS.store.meta;
+      if (BTS.flowReady) return BT.unavailableReason(BTS.data, key, extras);
+      // 수급 조각은 19번을 실행할 때만 받는다 → 받기 전에는 조각 목록으로만 판단
+      var months = storeMeta ? storeMeta.flowMonths : (m ? m.flowMonths : null);
+      return months && !months.length ? BT.unavailableReason(null, key, extras) : '';
+    }
+    return BTS.data ? BT.unavailableReason(BTS.data, key, extras) : '';
+  }
+
+  // ---- 기법 선택 ----
+  function btRenderPicker() {
+    var groups = [], byGroup = {};
+    BT_LIST.forEach(function (s) {
+      if (!byGroup[s.group]) { byGroup[s.group] = []; groups.push(s.group); }
+      byGroup[s.group].push(s);
+    });
+    btEl('btPicker').innerHTML = groups.map(function (g) {
+      return '<div class="bt-pgroup"><div class="bt-pgroup-name">' + esc(g) + '</div>' + byGroup[g].map(function (s) {
+        var why = btReason(s.key);
+        return '<button type="button" class="bt-pick' + (why ? ' bt-dim' : '') + '" data-key="' + esc(s.key) + '" aria-pressed="' + (s.key === BTS.key) + '" title="' + esc(s.desc || '') + '">' +
+          '<span class="num bt-no">' + s.no + '</span><span class="bt-pname">' + esc(s.label) + '</span>' +
+          (why ? '<span class="tab-soon">' + esc(why) + '</span>' : '') + '</button>';
+      }).join('') + '</div>';
+    }).join('');
+    btEl('btPickSelect').innerHTML = groups.map(function (g) {
+      return '<optgroup label="' + esc(g) + '">' + byGroup[g].map(function (s) {
+        var why = btReason(s.key);
+        return '<option value="' + esc(s.key) + '"' + (s.key === BTS.key ? ' selected' : '') + '>' + s.no + '. ' + esc(s.label) + (why ? ' (' + esc(why) + ')' : '') + '</option>';
+      }).join('') + '</optgroup>';
+    }).join('');
+  }
+
+  // ---- 변수 폼(스키마에서 자동 생성) ----
+  function btRowHtml(scope, it, s) {
+    var disabled = !!s.locked, dim = false, badge = '', note = it.help || '';
+    if (scope === 'common') {
+      if (btOwn(s.fixed || {}, it.key)) { disabled = true; badge = '고정'; }
+      else if (s.sizing === 'equal' && BT_ROTATION_UNUSED.indexOf(it.key) !== -1) { disabled = true; dim = true; badge = '회전형은 쓰지 않음'; }
+      else if (BT_UNUSED[s.key] && BT_UNUSED[s.key][it.key]) { disabled = true; dim = true; badge = BT_UNUSED[s.key][it.key]; }
+    }
+    var dis = disabled ? ' disabled' : '', ctl, opts = btOptions(it), unit = btUnit(it);
+    if (it.type === 'bool' || it.type === 'select') {
+      var total = opts.reduce(function (t, o) { return t + String(o.label).length; }, 0);
+      if (opts.length <= 4 && total <= 16) {
+        ctl = '<div class="inv-seg" role="group" aria-label="' + esc(it.label) + '">' + opts.map(function (o, i) {
+          return '<button type="button" data-i="' + i + '" aria-pressed="false"' + dis + '>' + esc(o.label) + '</button>';
+        }).join('') + '</div>';
+      } else {
+        ctl = '<span class="psel"><select class="bt-in" aria-label="' + esc(it.label) + '"' + dis + '>' + opts.map(function (o) {
+          return '<option>' + esc(o.label) + '</option>';
+        }).join('') + '</select></span>';
+      }
+    } else if (it.type === 'date') {
+      var m = SNAPSHOT.btMeta, dates = BTS.data ? BTS.data.dates : null;
+      var lo = dates ? dates[0] : (m && m.months && m.months.length ? m.months[0] + '-01' : ''), hi = dates ? dates[dates.length - 1] : (m && m.asOf) || '';
+      ctl = '<input type="date" class="bt-in" aria-label="' + esc(it.label) + '"' + (lo ? ' min="' + esc(lo) + '"' : '') + (hi ? ' max="' + esc(hi) + '"' : '') + dis + '>';
+      note = '비워 두면 자동: ' + it.def;
+    } else {
+      ctl = '<button type="button" class="bt-step" data-step="-1" aria-label="' + esc(it.label) + ' 줄이기"' + dis + '>−</button>' +
+        '<input type="number" class="bt-in" inputmode="decimal" aria-label="' + esc(it.label) + '"' +
+        (it.min != null ? ' min="' + it.min + '"' : '') + (it.max != null ? ' max="' + it.max + '"' : '') + ' step="' + (it.step || (it.type === 'int' ? 1 : 'any')) + '"' + dis + '>' +
+        '<button type="button" class="bt-step" data-step="1" aria-label="' + esc(it.label) + ' 늘리기"' + dis + '>+</button>' +
+        '<span class="bt-unit">' + esc(unit) + '</span>';
+      var range = (it.min != null && it.max != null) ? fmt(it.min, btDecimals(it.min)) + ' ~ ' + fmt(it.max, btDecimals(it.max)) + unit : '';
+      note = [note, range ? '범위 ' + range : ''].filter(Boolean).join(' · ');
+    }
+    return '<div class="bt-row' + (dim ? ' bt-dim' : '') + '" data-scope="' + scope + '" data-key="' + esc(it.key) + '">' +
+      '<div class="bt-label"><span class="bt-dot" title="기본값과 다름" hidden></span><span>' + esc(it.label) + '</span>' +
+      (badge ? '<span class="tab-soon">' + esc(badge) + '</span>' : '') + '</div>' +
+      '<div class="bt-ctl">' + ctl + '</div>' + (note ? '<p class="bt-help">' + esc(note) + '</p>' : '') + '</div>';
+  }
+  function btRenderForm() {
+    var s = BT_BY[BTS.key], why = btReason(BTS.key);
+    btEl('btFormTitle').textContent = s.no + '. ' + s.label;
+    btEl('btFormDesc').textContent = (s.desc || '') + (why ? ' — ' + why : '');
+    // 주요 조건(기간·손절·익절 등)은 접지 않고 맨 위에 항상 펼쳐 둔다(2026-11-17 사용자 요청). 나머지 공통 변수만 묶음별로 접는다.
+    var MAIN = ['startDate', 'endDate', 'stopPct', 'takePct', 'trailPct', 'maxHoldDays'], mainItems = [];
+    BT.commonSchema.forEach(function (g) { g.items.forEach(function (it) { if (MAIN.indexOf(it.key) !== -1) mainItems.push(it); }); });
+    mainItems.sort(function (a, b) { return MAIN.indexOf(a.key) - MAIN.indexOf(b.key); });
+    var html = '<div class="bt-sub">주요 조건 (기간 · 손절 · 익절)</div>' +
+      mainItems.map(function (it) { return btRowHtml('common', it, s); }).join('') +
+      '<div class="bt-sub">기법 변수</div>' +
+      (s.params.length ? s.params.map(function (it) { return btRowHtml('own', it, s); }).join('') : '<p class="bt-empty">이 기법만의 변수는 없습니다.</p>') +
+      '<div class="bt-sub">그 밖의 공통 변수</div>' +
+      BT.commonSchema.map(function (g, gi) {
+        var rest = g.items.filter(function (it) { return MAIN.indexOf(it.key) === -1; });
+        if (!rest.length) return '';
+        return '<details class="table-view bt-group" data-group="' + gi + '"' + (BTS.openGroups[gi] ? ' open' : '') + '><summary>' + esc(g.group) + ' <span class="bt-chg"></span></summary>' +
+          rest.map(function (it) { return btRowHtml('common', it, s); }).join('') + '</details>';
+      }).join('');
+    btEl('btForm').innerHTML = html;
+    btSyncForm();
+  }
+  // 폼의 값·강조 점·요약 문구를 현재 상태(BTS.cur)에 맞춘다(입력 중인 칸을 다시 만들지 않기 위해 값만 바꾼다)
+  function btSyncForm() {
+    var key = BTS.key, def = BT.resolveParams(key), form = btEl('btForm');
+    Array.prototype.forEach.call(form.querySelectorAll('.bt-row'), function (row) {
+      var scope = row.dataset.scope, it = btItem(key, scope, row.dataset.key);
+      if (!it) return;
+      var v = BTS.cur[scope][it.key], opts = btOptions(it);
+      row.querySelector('.bt-dot').hidden = v === def[scope][it.key];
+      var inp = row.querySelector('.bt-in');
+      if (inp) {
+        if (inp.tagName === 'SELECT') inp.selectedIndex = Math.max(0, opts.map(function (o) { return o.v; }).indexOf(v));
+        else inp.value = v == null ? '' : v;
+      }
+      Array.prototype.forEach.call(row.querySelectorAll('.inv-seg button'), function (b) {
+        b.setAttribute('aria-pressed', String(opts[+b.dataset.i].v === v));
+      });
+    });
+    Array.prototype.forEach.call(form.querySelectorAll('.bt-group'), function (g) {
+      var n = g.querySelectorAll('.bt-dot:not([hidden])').length;
+      g.querySelector('.bt-chg').textContent = n ? '· 바꾼 항목 ' + n + '개' : '';
+    });
+    btEl('btFormSummary').textContent = btDiffText(key, btDiff(key, BTS.cur), 4);
+    btSyncActions();
+  }
+  function btSyncActions() {
+    var why = btReason(BTS.key), run = btEl('btRunBtn');
+    run.disabled = BTS.busy || !!why;
+    run.textContent = BTS.busy ? '계산 중…' : '실행';
+    run.title = why || '';
+    btEl('btResetBtn').disabled = BTS.busy;
+    btEl('btKeepBtn').disabled = BTS.busy || !BTS.result;
+  }
+  function btSaveParams() {
+    var d = btDiff(BTS.key, BTS.cur);
+    if (Object.keys(d.common).length || Object.keys(d.own).length) BTS.saved.by[BTS.key] = d; else delete BTS.saved.by[BTS.key];
+    BTS.saved.sel = BTS.key;
+    btPut(BT_PARAMS_KEY, BTS.saved);
+  }
+  function btSetValue(scope, it, raw) {
+    var prev = BTS.cur[scope][it.key];
+    BTS.cur[scope][it.key] = btCoerce(it, raw, prev);
+    btSaveParams();
+    btSyncForm();
+    btRenderCompare();
+    if (BTS.result && !BTS.busy) btStatus('변수가 바뀌었습니다 — 실행을 누르면 다시 계산합니다.', '');
+  }
+  function btSelect(key, diff) {
+    if (!BT_BY[key]) return;
+    BTS.key = key;
+    if (diff) BTS.saved.by[key] = diff;
+    BTS.cur = btResolve(key, BTS.saved.by[key]);
+    btSaveParams();
+    btRenderPicker();
+    btRenderForm();
+    btRenderCompare();
+  }
+
+  // ---- 진행·오류 표시 ----
+  function btStatus(text, kind, extraHtml) {
+    var el = btEl('btStatus');
+    el.dataset.kind = kind || '';
+    el.innerHTML = (text ? '<span>' + esc(text) + '</span>' : '') + (extraHtml || '');
+  }
+  function btProgress(done, total) {
+    btStatus('시세 받는 중 ' + done + '/' + total, 'busy', '<div class="bt-bar"><i style="width:' + (total ? Math.round(done / total * 100) : 0) + '%"></i></div>');
+  }
+  function btRenderMeta() {
+    var m = SNAPSHOT.btMeta, d = BTS.data, parts;
+    if (d) parts = ['자료 기준일 ' + d.asOf, fmt(d.N) + '종목(상장폐지 ' + fmt(d.delisted || 0) + ' 포함)', d.dates[0] + ' ~ ' + d.dates[d.D - 1] + ' · ' + fmt(d.D) + '거래일'];
+    else if (m && m.months && m.months.length) parts = ['자료 기준일 ' + (m.asOf || '—'), fmt(m.tickers || 0) + '종목', m.months[0] + ' ~ ' + m.months[m.months.length - 1] + ' (' + m.months.length + '개월)'];
+    else parts = ['시세 조각 정보 없음'];
+    btEl('btMetaNote').textContent = parts.join(' · ') + ' · 과거 성과가 앞으로의 수익을 보장하지 않습니다';
+    var notes = [], defs = SNAPSHOT.btDefaults;
+    if (!m) notes.push('시세 조각 요약(btMeta)이 아직 없습니다. python scripts/build_bt_data.py 로 조각을 만든 뒤 python scripts/build_dashboard.py 를 다시 실행하세요. 조각이 이미 있다면 실행은 그대로 됩니다.');
+    if (!defs) notes.push('기법별 기본값 결과(btDefaults)가 아직 없어 비교표가 비어 있습니다. node scripts/bt_run.js --defaults 후 다시 빌드하면 채워집니다.');
+    var asOf = d ? d.asOf : (m && m.asOf);
+    if (defs && asOf && defs.asOf && defs.asOf !== asOf) notes.push('비교표의 기본값 결과는 ' + defs.asOf + ' 기준이고 시세 조각은 ' + asOf + ' 기준입니다. node scripts/bt_run.js --defaults 후 다시 빌드하면 맞춰집니다.');
+    if (d && m && m.asOf && m.asOf !== d.asOf) notes.push('방금 받은 시세 조각(' + d.asOf + ')이 빌드 때 요약(' + m.asOf + ')과 다릅니다. 로컬 복사본이 오래됐을 수 있습니다.');
+    var box = btEl('btNotice');
+    box.hidden = !notes.length;
+    box.innerHTML = notes.length ? '<ul>' + notes.map(function (n) { return '<li>' + esc(n) + '</li>'; }).join('') + '</ul>' : '';
+  }
+
+  // ---- 시세 조각 지연 로드 ----
+  function btLoadScript(src) {
+    return new Promise(function (ok, fail) {
+      var s = document.createElement('script');
+      s.src = src; s.async = true;
+      s.onload = function () { s.remove(); ok(); };
+      s.onerror = function () { s.remove(); fail(new Error(src + ' 읽기 실패')); };
+      document.head.appendChild(s);
+    });
+  }
+  function btChunkFile(prefix, ym) { return prefix + '_' + ym.replace('-', '') + '.js'; }
+  function btRetryError(msg) { var e = new Error(msg); e.btRetry = true; return e; }
+  function btLoadMeta() {
+    if (!BTS.store) { BTS.store = BT.createStore(); BT.installHooks(BTS.store, window); }
+    if (BTS.store.meta && BTS.base) return Promise.resolve();
+    var i = 0;
+    function tryBase() {
+      if (i >= BT_BASES.length) return Promise.reject(btRetryError('시세 조각 목록(bt/meta.js)을 읽지 못했습니다. 조각이 아직 없거나 연결이 끊겼습니다.'));
+      var base = BT_BASES[i++];
+      return btLoadScript(base + 'meta.js').then(function () {
+        if (!BTS.store.meta) throw new Error('meta 없음');
+        BTS.base = base;
+      }).catch(tryBase);
+    }
+    return tryBase();
+  }
+  // 필요한 조각을 모두 받은 뒤에만 실행용 자료를 만든다(하나라도 빠지면 오류 — 받은 달까지만으로 돌리지 않는다)
+  function btEnsureData(needFlow) {
+    return btLoadMeta().then(function () {
+      var meta = BTS.store.meta, months = meta.months || [], flowMonths = needFlow ? (meta.flowMonths || []) : [];
+      if (!months.length) throw btRetryError('시세 조각 목록에 달이 하나도 없습니다.');
+      var files = ['index.js'].concat(months.map(function (ym) { return btChunkFile('px', ym); }), flowMonths.map(function (ym) { return btChunkFile('flow', ym); }));
+      var todo = files.filter(function (f) { return !BTS.loaded[f]; });
+      if (!todo.length && BTS.data) return BTS.data;
+      var total = files.length, done = total - todo.length, next = 0, failed = null;
+      btProgress(done, total);
+      function worker() {
+        if (failed || next >= todo.length) return Promise.resolve();
+        var f = todo[next++];
+        return btLoadScript(BTS.base + f).then(function () {
+          BTS.loaded[f] = true; done++;
+          if (!failed) btProgress(done, total);
+          return worker();
+        }, function () { failed = failed || f; });
+      }
+      return Promise.all([worker(), worker(), worker(), worker()]).then(function () {
+        if (failed) throw btRetryError('시세 조각을 받지 못했습니다(' + failed + '). ' + done + '/' + total + '개까지 받았습니다 — 일부만으로는 계산하지 않습니다.');
+        // 파일은 읽혔는데 내용이 비정상인 경우(달이 빠짐)도 걸러 낸다
+        var missing = months.filter(function (ym) { return !BTS.store.px[ym]; }).map(function (ym) { return btChunkFile('px', ym); })
+          .concat(flowMonths.filter(function (ym) { return !BTS.store.flow[ym]; }).map(function (ym) { return btChunkFile('flow', ym); }));
+        if (missing.length) {
+          missing.forEach(function (f) { delete BTS.loaded[f]; });
+          throw btRetryError('시세 조각 ' + missing.length + '개의 내용을 읽지 못했습니다(' + missing[0] + ' 등).');
+        }
+        btStatus('자료 정리 중…', 'busy');
+        return btYield();
+      }).then(function () {
+        BTS.data = BT.finalize(BTS.store);
+        if (needFlow) BTS.flowReady = true;
+        return BTS.data;
+      });
+    });
+  }
+
+  // ---- 실행 ----
+  function btRunNow() {
+    if (BTS.busy || !btReady()) return;
+    var key = BTS.key, s = BT_BY[key], why = btReason(key);
+    if (why) { btStatus(why, 'err'); return; }
+    var params = btDiff(key, BTS.cur);
+    BTS.busy = true;
+    btSyncActions();
+    btStatus('시세 확인 중…', 'busy');
+    if (!BTS.result) btEl('btResult').innerHTML = '<div class="st-card bt-skel" aria-hidden="true"><div class="skeleton" style="width:40%"></div><div class="skeleton"></div><div class="skeleton" style="width:70%"></div></div>';
+    btEnsureData(s.needs === 'flow').then(function (data) {
+      btRenderMeta();
+      var w = BT.unavailableReason(data, key, btExtras());
+      if (w) throw new Error(w);
+      btStatus('계산 중…', 'busy');
+      return btYield().then(function () {
+        var t0 = Date.now();
+        var res = BT.run(data, key, params, btExtras());
+        BTS.result = res;
+        BTS.resultMs = Date.now() - t0;
+        BTS.sort = { k: 'outD', dir: -1 };
+        BTS.shown = BT_PAGE;
+        btRenderResult();
+        btStatus('계산 완료 · 거래 ' + fmt(res.trades.length) + '건 · ' + fmt(BTS.resultMs) + 'ms', 'ok');
+      });
+    }).catch(function (e) {
+      if (!BTS.result) btEl('btResult').innerHTML = '';
+      btStatus((e && e.message) || '알 수 없는 오류', 'err', e && e.btRetry ? '<button type="button" class="period-reset" data-bt-retry="1">다시 시도</button>' : '');
+    }).then(function () {
+      BTS.busy = false;
+      btRenderPicker();
+      btRenderForm();
+    });
+  }
+
+  // ---- 결과 ----
+  function btMetricCard(label, val, cls, sub) {
+    return '<div class="st-card bt-metric"><div class="bt-m-label">' + esc(label) + '</div><div class="bt-m-val num ' + (cls || '') + '">' + val + '</div><div class="bt-m-sub">' + sub + '</div></div>';
+  }
+  function btRenderResult() {
+    var res = BTS.result, box = btEl('btResult');
+    if (!res) { box.innerHTML = ''; return; }
+    var m = res.metrics, cm = res.params.common, eq = res.equity, last = eq.length ? eq[eq.length - 1].eq : cm.initCash;
+    var benchName = cm.bench === 'KOSDAQ' ? '코스닥' : '코스피', dr = res.dataRange;
+    var diffText = btDiffText(res.strategy, btDiff(res.strategy, res.params));
+    var cost = res.stats && res.stats.roundTripCostPct != null ? ' · 왕복 비용 약 ' + Number(res.stats.roundTripCostPct).toFixed(2) + '%' : '';
+    var html = '<div class="st-card"><div class="st-card-head"><div><h3>' + esc(res.label) + ' 결과</h3>' +
+      '<p class="st-note">' + esc(dr.start + ' ~ ' + dr.end) + ' · ' + fmt(dr.days) + '거래일 · 대상 ' + fmt(dr.tickers) + '종목' + cost + '</p>' +
+      '<p class="st-note">' + esc(diffText) + '</p></div></div></div>';
+    if (res.warnings && res.warnings.length) {
+      html += '<div class="placeholder-note bt-warn"><ul>' + res.warnings.map(function (w) { return '<li>' + esc(w) + '</li>'; }).join('') + '</ul></div>';
+    }
+    html += '<div class="bt-metrics">' +
+      btMetricCard('총수익률', btPct(m.totalRet), btCls(m.totalRet), fmt(cm.initCash) + '원 → ' + fmt(Math.round(last)) + '원') +
+      btMetricCard('연환산 수익률(CAGR)', btPct(m.cagr), btCls(m.cagr), fmt(m.days) + '거래일 기준') +
+      btMetricCard('최대 낙폭(MDD)', btPct(m.mdd), btCls(m.mdd), m.mddFrom ? esc(m.mddFrom + ' → ' + m.mddTo) : '낙폭 없음') +
+      btMetricCard('승률', m.trades ? (m.winRate * 100).toFixed(1) + '%' : '—', '', '거래당 기대 수익 ' + btPct(m.expectancy, 2)) +
+      btMetricCard('손익비', m.payoff == null ? '—' : Number(m.payoff).toFixed(2), '', '평균 이익 ÷ 평균 손실') +
+      btMetricCard('평균 보유일', Number(m.avgHold).toFixed(1) + '일', '', '투자 비중 평균 ' + (m.exposure * 100).toFixed(0) + '%') +
+      btMetricCard('거래 수', fmt(m.trades) + '건', '', m.openTrades ? '미청산 ' + fmt(m.openTrades) + '건 포함' : '모두 청산됨') +
+      btMetricCard('샤프 지수', Number(m.sharpe).toFixed(2), '', '무위험 수익률 연 ' + cm.rfPct + '%') +
+      btMetricCard('지수 대비 초과수익(연)', btPct(m.excessCagr), btCls(m.excessCagr), m.benchRet == null ? '지수 자료 없음' : benchName + ' 총 ' + btPct(m.benchRet) + ' · 연 ' + btPct(m.benchCagr)) +
+      '</div>';
+    if (res.split) {
+      html += '<div class="st-card"><div class="st-card-head"><div><h3>앞·뒤 구간 나눠 보기</h3><p class="st-note">두 구간의 성과가 크게 다르면 특정 시기에만 통한 기법일 수 있습니다</p></div></div>' +
+        '<div class="table-scroll"><table class="plain"><thead><tr><th>구간</th><th>기간</th><th>총수익률</th><th>CAGR</th><th>MDD</th><th>승률</th><th>거래</th><th>샤프</th></tr></thead><tbody>' +
+        [['앞', res.split.first], ['뒤', res.split.second]].map(function (p) {
+          var x = p[1], k = x.metrics;
+          return '<tr><td>' + p[0] + ' 구간</td><td class="num">' + esc(x.start + ' ~ ' + x.end) + '</td>' + btPctTd(k.totalRet) + btPctTd(k.cagr) + btPctTd(k.mdd) +
+            '<td class="num">' + (k.trades ? (k.winRate * 100).toFixed(1) + '%' : '—') + '</td><td class="num">' + fmt(k.trades) + '</td><td class="num">' + Number(k.sharpe).toFixed(2) + '</td></tr>';
+        }).join('') + '</tbody></table></div></div>';
+    }
+    html += '<div class="st-card"><div class="st-card-head"><div><h3>자산곡선</h3><p class="st-note">시작 자금 대비 누적 수익률(%) · 아래는 고점 대비 낙폭 · 차트 위에 손가락·마우스를 올리면 그날 값</p></div>' +
+      '<div class="bt-legend"><span><i style="background:var(--accent)"></i>전략</span>' +
+      (m.benchRet == null ? '' : '<span><i style="background:var(' + (cm.bench === 'KOSDAQ' ? '--idx-kosdaq' : '--idx-kospi') + ')"></i>' + benchName + ' 지수</span>') +
+      '<span><i style="background:var(--down)"></i>낙폭</span></div></div><div id="btEquity" class="inv-chart bt-chart"></div></div>';
+    html += '<div class="st-card"><div class="st-card-head"><div><h3>월별 수익률</h3><p class="st-note">단위 % · 칸에 마우스를 올리면 같은 달 지수 수익률</p></div></div><div class="table-scroll">' + btMonthlyHtml(res) + '</div></div>';
+    html += '<div class="st-card"><div class="st-card-head"><div><h3>거래 내역</h3><p class="st-note">열 제목을 누르면 정렬 · 가격은 슬리피지 반영 체결가, 수익률·손익은 비용 반영 후 · 미청산은 마지막 종가로 평가만 한 값</p></div></div><div id="btTrades"></div></div>';
+    box.innerHTML = html;
+    btDrawEquity();
+    btRenderTrades();
+    btSyncActions();
+  }
+  function btMonthlyHtml(res) {
+    if (!res.monthly || !res.monthly.length) return '<p class="bt-empty">월별 자료가 없습니다.</p>';
+    var years = {}, order = [];
+    res.monthly.forEach(function (x) {
+      var y = x.ym.slice(0, 4);
+      if (!years[y]) { years[y] = {}; order.push(y); }
+      years[y][parseInt(x.ym.slice(5), 10)] = x;
+    });
+    function cell(v, title, cls) {
+      if (v == null) return '<td class="num dim' + (cls || '') + '">·</td>';
+      var pct = Math.min(45, 6 + Math.abs(v) * 100 * 2.5);
+      return '<td class="num ' + btCls(v) + (cls || '') + '" style="background:color-mix(in srgb, var(' + (v >= 0 ? '--up' : '--down') + ') ' + pct.toFixed(0) + '%, transparent)"' +
+        (title ? ' title="' + esc(title) + '"' : '') + '>' + btSign(v * 100, 1, '') + '</td>';
+    }
+    var head = '<tr><th>연도</th>';
+    for (var mth = 1; mth <= 12; mth++) head += '<th>' + mth + '월</th>';
+    head += '<th>연간</th></tr>';
+    return '<table class="plain bt-month"><thead>' + head + '</thead><tbody>' + order.map(function (y) {
+      var row = '<tr><td class="num">' + y + '</td>', acc = 1, any = false;
+      for (var k = 1; k <= 12; k++) {
+        var x = years[y][k];
+        if (x) { acc *= 1 + x.ret; any = true; }
+        row += x ? cell(x.ret, x.bench == null ? '' : y + '-' + (k < 10 ? '0' : '') + k + ' 지수 ' + btPct(x.bench)) : cell(null);
+      }
+      return row + cell(any ? acc - 1 : null, '', ' bt-year') + '</tr>';
+    }).join('') + '</tbody></table>';
+  }
+  function btRenderTrades() {
+    var res = BTS.result, el = btEl('btTrades');
+    if (!res || !el) return;
+    if (!res.trades.length) { el.innerHTML = '<p class="bt-empty">이 조건에서는 거래가 한 건도 없었습니다.</p>'; return; }
+    var byWhy = {}, whyOrder = [];
+    res.trades.forEach(function (t) {
+      var b = byWhy[t.why];
+      if (!b) { b = byWhy[t.why] = { n: 0, ret: 0, pnl: 0, win: 0 }; whyOrder.push(t.why); }
+      b.n++; b.ret += t.ret; b.pnl += t.pnl; if (t.ret > 0) b.win++;
+    });
+    whyOrder.sort(function (a, b) { return byWhy[b].n - byWhy[a].n; });
+    var summary = '<div class="table-scroll"><table class="plain"><thead><tr><th>청산 사유</th><th>건수</th><th>평균 수익률</th><th>이익 거래 비율</th><th>손익 합계(원)</th></tr></thead><tbody>' +
+      whyOrder.map(function (w) {
+        var b = byWhy[w];
+        return '<tr><td>' + esc(BT_WHY[w] || w) + '</td><td class="num">' + fmt(b.n) + '</td>' + btPctTd(b.ret / b.n, 2) +
+          '<td class="num">' + (b.win / b.n * 100).toFixed(1) + '%</td><td class="num ' + btCls(b.pnl) + '">' + (b.pnl > 0 ? '+' : '') + fmt(Math.round(b.pnl)) + '</td></tr>';
+      }).join('') + '</tbody></table></div>';
+    var cols = [['name', '종목'], ['inD', '매수일'], ['inPx', '매수가'], ['outD', '매도일'], ['outPx', '매도가'], ['ret', '수익률'], ['pnl', '손익(원)'], ['hold', '보유일'], ['why', '청산 사유']];
+    var st = BTS.sort, list = res.trades.map(function (t, i) { return { t: t, i: i }; });
+    list.sort(function (a, b) {
+      var x = a.t[st.k], y = b.t[st.k];
+      if (x === y) return (a.i - b.i) * st.dir;
+      return (x < y ? -1 : 1) * st.dir;
+    });
+    var shown = Math.min(BTS.shown, list.length);
+    var head = cols.map(function (c) {
+      var on = st.k === c[0];
+      return '<th class="bt-sort" tabindex="0" role="button" data-sort="' + c[0] + '"' + (on ? ' aria-sort="' + (st.dir > 0 ? 'ascending' : 'descending') + '"' : '') + '>' + c[1] + (on ? (st.dir > 0 ? ' ▲' : ' ▼') : '') + '</th>';
+    }).join('');
+    var body = list.slice(0, shown).map(function (r) {
+      var t = r.t;
+      return '<tr><td>' + esc(t.name || t.tk) + '<span class="num bt-tk">' + esc(t.tk) + '</span></td>' +
+        '<td class="num">' + esc(t.inD) + '</td><td class="num">' + btPrice(t.inPx) + '</td>' +
+        '<td class="num">' + esc(t.outD) + '</td><td class="num">' + btPrice(t.outPx) + '</td>' +
+        btPctTd(t.ret, 2) + '<td class="num ' + btCls(t.pnl) + '">' + (t.pnl > 0 ? '+' : '') + fmt(Math.round(t.pnl)) + '</td>' +
+        '<td class="num">' + fmt(t.hold) + '</td><td>' + (t.why === 'end' ? '<span class="tab-soon">미청산</span>' : esc(BT_WHY[t.why] || t.why)) + '</td></tr>';
+    }).join('');
+    el.innerHTML = summary + '<div class="table-scroll"><table class="plain bt-trades"><thead><tr>' + head + '</tr></thead><tbody>' + body + '</tbody></table></div>' +
+      (shown < list.length ? '<button type="button" class="more-btn" data-bt-more="1">' + BT_PAGE + '건 더 보기 (' + fmt(shown) + ' / ' + fmt(list.length) + ')</button>' : '<p class="bt-empty">전체 ' + fmt(list.length) + '건을 모두 표시했습니다.</p>');
+  }
+
+  // ---- 선 차트(자산곡선·비교 겹쳐 보기 공용). 색은 CSS 변수를 style로 직접 써서 밝은/어두운 화면 전환 때 다시 그릴 필요가 없다 ----
+  // cfg: { label, series: [{ name, color: '--토큰', dash, width, pts: [{ d, v(%) }] }], dd: [{ d, v(%) }] | null }
+  function btLineChart(el, cfg) {
+    if (!el) return;
+    if (typeof d3 === 'undefined') { el.innerHTML = '<p class="bt-empty">차트 라이브러리를 불러오지 못했습니다.</p>'; return; }
+    var seen = {}, all = [];
+    cfg.series.forEach(function (s) { s.map = {}; s.pts.forEach(function (p) { seen[p.d] = 1; s.map[p.d] = p.v; all.push(p.v); }); });
+    var dates = Object.keys(seen).sort(), n = dates.length;
+    if (n < 2) { el.innerHTML = '<p class="bt-empty">그릴 자료가 부족합니다.</p>'; return; }
+    var pos = {};
+    dates.forEach(function (d, i) { pos[d] = i; });
+    var W = Math.max(el.clientWidth || 0, 300), mg = { l: 50, r: 12, t: 10, b: 22 };
+    var H1 = W < 520 ? 190 : 250, H2 = cfg.dd ? 62 : 0, gap = cfg.dd ? 18 : 0, H = mg.t + H1 + gap + H2 + mg.b;
+    var x = d3.scaleLinear().domain([0, n - 1]).range([mg.l, W - mg.r]);
+    var y = d3.scaleLinear().domain([Math.min(0, d3.min(all)), Math.max(0, d3.max(all))]).nice(5).range([mg.t + H1, mg.t]);
+    if (y.domain()[0] === y.domain()[1]) y.domain([-1, 1]);
+    el.innerHTML = '';
+    var svg = d3.select(el).append('svg').attr('viewBox', '0 0 ' + W + ' ' + H).attr('role', 'img').attr('aria-label', cfg.label || '차트');
+    y.ticks(5).forEach(function (t) {
+      svg.append('line').attr('class', t === 0 ? 'zero' : 'grid').attr('x1', mg.l).attr('x2', W - mg.r).attr('y1', y(t)).attr('y2', y(t));
+      svg.append('text').attr('class', 'ax').attr('x', mg.l - 6).attr('y', y(t) + 3).attr('text-anchor', 'end').text(btSign(t, 0));
+    });
+    var firsts = [];
+    dates.forEach(function (d, i) { if (i === 0 || d.slice(0, 7) !== dates[i - 1].slice(0, 7)) firsts.push(i); });
+    var every = Math.max(1, Math.ceil(firsts.length / Math.max(2, Math.floor((W - mg.l - mg.r) / 62))));
+    firsts.forEach(function (i, k) {
+      if (k % every) return;
+      svg.append('text').attr('class', 'ax').attr('x', x(i)).attr('y', H - 6).attr('text-anchor', i === 0 ? 'start' : 'middle').text(dates[i].slice(2, 7).replace('-', '.'));
+    });
+    cfg.series.forEach(function (s) {
+      var line = d3.line().x(function (p) { return x(pos[p.d]); }).y(function (p) { return y(p.v); });
+      svg.append('path').attr('class', 'bt-line').attr('d', line(s.pts)).attr('style', 'stroke:var(' + s.color + ');stroke-width:' + (s.width || 1.6) + (s.dash ? ';stroke-dasharray:' + s.dash : ''));
+    });
+    var y2 = null, ddMap = null;
+    if (cfg.dd) {
+      var top2 = mg.t + H1 + gap, lo = Math.min(-1, d3.min(cfg.dd, function (p) { return p.v; }));
+      ddMap = {};
+      cfg.dd.forEach(function (p) { ddMap[p.d] = p.v; });
+      y2 = d3.scaleLinear().domain([lo, 0]).range([top2 + H2, top2]);
+      svg.append('path').attr('class', 'bt-dd').attr('d', d3.area().x(function (p) { return x(pos[p.d]); }).y0(y2(0)).y1(function (p) { return y2(p.v); })(cfg.dd));
+      svg.append('text').attr('class', 'ax').attr('x', mg.l - 6).attr('y', y2(0) + 3).attr('text-anchor', 'end').text('0%');
+      svg.append('text').attr('class', 'ax').attr('x', mg.l - 6).attr('y', y2(lo) + 3).attr('text-anchor', 'end').text(btSign(lo, 0));
+    }
+    var vline = svg.append('line').attr('class', 'vline').attr('y1', mg.t).attr('y2', mg.t + H1 + gap + H2).attr('visibility', 'hidden');
+    var dots = cfg.series.map(function (s) { return svg.append('circle').attr('class', 'pt').attr('r', 3.5).attr('style', 'fill:var(' + s.color + ')').attr('visibility', 'hidden'); });
+    function leave() { vline.attr('visibility', 'hidden'); dots.forEach(function (c) { c.attr('visibility', 'hidden'); }); hideTip(); }
+    svg.append('rect').attr('class', 'hit').attr('x', mg.l).attr('y', mg.t).attr('width', W - mg.l - mg.r).attr('height', H1 + gap + H2)
+      .on('pointermove pointerdown', function (ev) {
+        var box = svg.node().getBoundingClientRect();
+        if (!box.width) return;
+        var i = Math.max(0, Math.min(n - 1, Math.round(x.invert((ev.clientX - box.left) * W / box.width)))), d = dates[i];
+        vline.attr('x1', x(i)).attr('x2', x(i)).attr('visibility', 'visible');
+        var rows = '';
+        cfg.series.forEach(function (s, k) {
+          var v = s.map[d];
+          if (v == null) { dots[k].attr('visibility', 'hidden'); return; }
+          dots[k].attr('cx', x(i)).attr('cy', y(v)).attr('visibility', 'visible');
+          rows += '<br>' + esc(s.name) + ' <span class="m">' + btSign(v, 1) + '</span>';
+        });
+        if (ddMap && ddMap[d] != null) rows += '<br>낙폭 <span class="m">' + btSign(ddMap[d], 1) + '</span>';
+        showTip(ev, '<b>' + d + '</b>' + rows);
+      })
+      .on('pointerleave pointercancel', leave);
+  }
+  function btDrawEquity() {
+    var res = BTS.result, el = btEl('btEquity');
+    if (!res || !el) return;
+    var init = res.params.common.initCash, peak = init, strat = [], bench = [], dd = [];
+    res.equity.forEach(function (p) {
+      strat.push({ d: p.d, v: (p.eq / init - 1) * 100 });
+      if (p.bench != null) bench.push({ d: p.d, v: (p.bench / init - 1) * 100 });
+      if (p.eq > peak) peak = p.eq;
+      dd.push({ d: p.d, v: (p.eq / peak - 1) * 100 });
+    });
+    var isKq = res.params.common.bench === 'KOSDAQ', series = [];
+    if (bench.length) series.push({ name: isKq ? '코스닥' : '코스피', color: isKq ? '--idx-kosdaq' : '--idx-kospi', width: 1.3, pts: bench });
+    series.push({ name: '전략', color: '--accent', width: 2, pts: strat });
+    btLineChart(el, { label: res.label + ' 자산곡선', series: series, dd: dd });
+  }
+
+  // ---- 기법 간 비교 ----
+  function btCompareRows() {
+    var rows = BTS.runs.map(function (r) {
+      return { id: 'r:' + r.id, kind: 'run', strategy: r.strategy, label: r.label, diff: r.diff, metrics: r.metrics, range: r.range, init: r.init, equityWeekly: r.equityWeekly || [] };
+    });
+    var defs = SNAPSHOT.btDefaults;
+    if (defs && defs.strategies) {
+      (defs.order || Object.keys(defs.strategies)).forEach(function (k) {
+        var s = defs.strategies[k];
+        if (!s) return;
+        rows.push({ id: 'd:' + k, kind: 'def', strategy: k, label: s.label || k, locked: !!s.locked, lockReason: s.lockReason, diff: { common: {}, own: {} }, metrics: s.metrics,
+          range: s.dataRange, init: s.params && s.params.common ? s.params.common.initCash : null, equityWeekly: s.equityWeekly || [] });
+      });
+    }
+    return rows;
+  }
+  function btRenderCompare() {
+    var rows = btCompareRows(), box = btEl('btCompare'), defs = SNAPSHOT.btDefaults;
+    btEl('btCompareNote').textContent = (defs ? '기본값 결과는 ' + (defs.asOf || '—') + ' 자료 기준' : '기본값 결과 없음') + ' · 담은 실행 ' + BTS.runs.length + '/' + BT_MAX_RUNS +
+      ' · 행을 누르면 그 변수로 폼을 채움 · 왼쪽 칸을 체크하면 자산곡선을 겹쳐 봄(최대 ' + BT_MAX_OVERLAY + '개)';
+    if (!rows.length) {
+      box.innerHTML = '<p class="bt-empty">아직 비교할 결과가 없습니다. 기법을 실행한 뒤 "비교에 담기"를 누르면 여기에 쌓입니다.</p>';
+      btDrawOverlay(rows);
+      return;
+    }
+    var curDiff = BTS.cur ? JSON.stringify(btDiff(BTS.key, BTS.cur)) : '';
+    var empty = JSON.stringify({ common: {}, own: {} });
+    box.innerHTML = '<table class="plain bt-cmp"><thead><tr><th>겹침</th><th>구분</th><th>기법</th><th>바꾼 변수</th><th>기간</th><th>총수익률</th><th>CAGR</th><th>MDD</th><th>승률</th><th>손익비</th><th>거래</th><th>샤프</th><th>초과(연)</th><th></th></tr></thead><tbody>' +
+      rows.map(function (r) {
+        var s = BT_BY[r.strategy], no = s ? s.no + '. ' : '';
+        var sel = r.strategy === BTS.key && JSON.stringify(r.diff || {}) === curDiff && (r.kind === 'run' || curDiff === empty);
+        var cls = 'bt-crow' + (sel ? ' ranked' : '') + (r.locked ? ' bt-dim' : '');
+        var head = '<tr class="' + cls + '" data-row="' + esc(r.id) + '" tabindex="0">';
+        var kind = r.kind === 'run' ? '담은 실행' : '기본값';
+        if (r.locked || !r.metrics) {
+          return head + '<td></td><td>' + kind + '</td><td>' + esc(no + r.label) + '</td><td class="dim" colspan="10">' + esc(r.lockReason || '결과 없음') + '</td><td></td></tr>';
+        }
+        var m = r.metrics;
+        return head + '<td><input type="checkbox" data-overlay="' + esc(r.id) + '" aria-label="자산곡선 겹쳐 보기"' + (BTS.overlay[r.id] ? ' checked' : '') + '></td>' +
+          '<td>' + kind + '</td><td>' + esc(no + r.label) + '</td>' +
+          '<td class="bt-vars">' + esc(s ? btDiffText(r.strategy, r.diff, 4) : '') + '</td>' +
+          '<td class="num">' + esc(r.range ? r.range.start.slice(2) + '~' + r.range.end.slice(2) : '') + '</td>' +
+          btPctTd(m.totalRet) + btPctTd(m.cagr) + btPctTd(m.mdd) +
+          '<td class="num">' + (m.trades ? (m.winRate * 100).toFixed(1) + '%' : '—') + '</td>' +
+          '<td class="num">' + (m.payoff == null ? '—' : Number(m.payoff).toFixed(2)) + '</td>' +
+          '<td class="num">' + fmt(m.trades) + '</td><td class="num">' + Number(m.sharpe).toFixed(2) + '</td>' + btPctTd(m.excessCagr) +
+          '<td>' + (r.kind === 'run' ? '<button type="button" class="bt-del" data-del="' + esc(r.id) + '" aria-label="담은 실행 지우기" title="지우기">×</button>' : '') + '</td></tr>';
+      }).join('') + '</tbody></table>';
+    btDrawOverlay(rows);
+  }
+  function btDrawOverlay(rows) {
+    var el = btEl('btOverlay'), legend = btEl('btOverlayLegend');
+    rows = rows || btCompareRows();
+    var picked = rows.filter(function (r) { return BTS.overlay[r.id] && r.equityWeekly.length > 1 && r.init; }).slice(0, BT_MAX_OVERLAY);
+    if (!picked.length) { el.innerHTML = ''; legend.innerHTML = ''; return; }
+    var series = picked.map(function (r, i) {
+      var s = BT_BY[r.strategy];
+      return { name: (s ? s.no + '. ' : '') + r.label + (r.kind === 'run' ? ' (담음)' : ''), color: BT_COLORS[i % BT_COLORS.length], width: 1.7,
+        pts: r.equityWeekly.map(function (p) { return { d: p.d, v: (p.eq / r.init - 1) * 100 }; }) };
+    });
+    legend.innerHTML = series.map(function (s) { return '<span><i style="background:var(' + s.color + ')"></i>' + esc(s.name) + '</span>'; }).join('');
+    btLineChart(el, { label: '기법별 자산곡선 비교(주 단위)', series: series, dd: null });
+  }
+  function btKeepRun() {
+    var res = BTS.result;
+    if (!res) return;
+    var sum = BT.summarize(res), id = Date.now().toString(36) + Math.floor(Math.random() * 1296).toString(36);
+    BTS.runs.unshift({ id: id, at: new Date().toISOString(), strategy: res.strategy, label: res.label, diff: btDiff(res.strategy, res.params),
+      metrics: sum.metrics, range: { start: res.dataRange.start, end: res.dataRange.end }, init: res.params.common.initCash, equityWeekly: sum.equityWeekly });
+    var dropped = BTS.runs.splice(BT_MAX_RUNS);
+    dropped.forEach(function (r) { delete BTS.overlay['r:' + r.id]; });
+    if (Object.keys(BTS.overlay).filter(function (k) { return BTS.overlay[k]; }).length < BT_MAX_OVERLAY) BTS.overlay['r:' + id] = true;
+    var ok = btPut(BT_RUNS_KEY, BTS.runs);
+    btRenderCompare();
+    btStatus(ok ? '비교표에 담았습니다(' + BTS.runs.length + '/' + BT_MAX_RUNS + ')' + (dropped.length ? ' — 가장 오래된 ' + dropped.length + '개는 지웠습니다.' : '.') : '비교표에 담았지만 이 브라우저에 저장하지는 못했습니다(새로고침하면 사라집니다).', ok ? 'ok' : 'err');
+  }
+  function btLoadSaved() {
+    var p = btGet(BT_PARAMS_KEY, null);
+    BTS.saved = { sel: p && typeof p.sel === 'string' ? p.sel : null, by: (p && p.by && typeof p.by === 'object') ? p.by : {} };
+    var runs = btGet(BT_RUNS_KEY, []);
+    BTS.runs = (Array.isArray(runs) ? runs : []).filter(function (r) { return r && r.id && r.strategy && r.metrics && r.diff; }).slice(0, BT_MAX_RUNS);
+  }
+
+  function btBind() {
+    btEl('btPicker').addEventListener('click', function (e) { var b = e.target.closest('.bt-pick'); if (b) btSelect(b.dataset.key); });
+    btEl('btPickSelect').addEventListener('change', function (e) { btSelect(e.target.value); });
+    var form = btEl('btForm');
+    form.addEventListener('click', function (e) {
+      var b = e.target.closest('button');
+      if (!b || b.disabled) return;
+      var row = b.closest('.bt-row');
+      if (!row) return;
+      var scope = row.dataset.scope, it = btItem(BTS.key, scope, row.dataset.key);
+      if (!it) return;
+      if (b.classList.contains('bt-step')) {
+        var cur = BTS.cur[scope][it.key];
+        btSetValue(scope, it, (typeof cur === 'number' ? cur : it.def) + (+b.dataset.step) * (it.step || 1));
+      } else if (b.dataset.i != null) btSetValue(scope, it, btOptions(it)[+b.dataset.i].v);
+    });
+    form.addEventListener('change', function (e) {
+      var inp = e.target.closest('.bt-in'), row = inp && inp.closest('.bt-row');
+      if (!row) return;
+      var scope = row.dataset.scope, it = btItem(BTS.key, scope, row.dataset.key);
+      if (!it) return;
+      btSetValue(scope, it, inp.tagName === 'SELECT' ? btOptions(it)[inp.selectedIndex].v : inp.value);
+    });
+    form.addEventListener('toggle', function (e) {
+      var g = e.target;
+      if (g && g.classList && g.classList.contains('bt-group')) BTS.openGroups[g.dataset.group] = g.open;
+    }, true);
+    btEl('btRunBtn').addEventListener('click', btRunNow);
+    btEl('btResetBtn').addEventListener('click', function () {
+      if (BTS.busy) return;
+      delete BTS.saved.by[BTS.key];
+      BTS.cur = BT.resolveParams(BTS.key);
+      btSaveParams();
+      btRenderForm();
+      btRenderCompare();
+      btStatus('기본값으로 되돌렸습니다.', '');
+    });
+    btEl('btKeepBtn').addEventListener('click', btKeepRun);
+    btEl('btStatus').addEventListener('click', function (e) { if (e.target.closest('[data-bt-retry]')) btRunNow(); });
+    var result = btEl('btResult');
+    function sortBy(th) {
+      var k = th.dataset.sort;
+      BTS.sort = BTS.sort.k === k ? { k: k, dir: -BTS.sort.dir } : { k: k, dir: (k === 'name' || k === 'why') ? 1 : -1 };
+      BTS.shown = BT_PAGE;
+      btRenderTrades();
+    }
+    result.addEventListener('click', function (e) {
+      var th = e.target.closest('.bt-sort');
+      if (th) { sortBy(th); return; }
+      if (e.target.closest('[data-bt-more]')) { BTS.shown += BT_PAGE; btRenderTrades(); }
+    });
+    result.addEventListener('keydown', function (e) {
+      var th = e.target.closest && e.target.closest('.bt-sort');
+      if (th && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); sortBy(th); }
+    });
+    var cmp = btEl('btCompare');
+    function pickRow(tr) {
+      var id = tr.dataset.row, row = btCompareRows().filter(function (r) { return r.id === id; })[0];
+      if (!row || !BT_BY[row.strategy]) return;
+      btSelect(row.strategy, row.diff || { common: {}, own: {} });
+      btStatus((row.kind === 'run' ? '담아 둔 실행' : '기본값') + '의 변수를 폼에 채웠습니다 — 실행을 누르면 계산합니다.', '');
+      if (btNarrow()) { btEl('btFormBox').open = true; btEl('btFormCard').scrollIntoView({ block: 'start' }); }
+    }
+    cmp.addEventListener('click', function (e) {
+      var chk = e.target.closest('[data-overlay]');
+      if (chk) {
+        var on = Object.keys(BTS.overlay).filter(function (k) { return BTS.overlay[k]; }).length;
+        if (chk.checked && on >= BT_MAX_OVERLAY) { chk.checked = false; btEl('btCompareNote').textContent = '겹쳐 보기는 최대 ' + BT_MAX_OVERLAY + '개까지입니다. 다른 체크를 먼저 푸세요.'; return; }
+        if (chk.checked) BTS.overlay[chk.dataset.overlay] = true; else delete BTS.overlay[chk.dataset.overlay];
+        btDrawOverlay();
+        return;
+      }
+      var del = e.target.closest('[data-del]');
+      if (del) {
+        var rid = del.dataset.del;
+        BTS.runs = BTS.runs.filter(function (r) { return 'r:' + r.id !== rid; });
+        delete BTS.overlay[rid];
+        btPut(BT_RUNS_KEY, BTS.runs);
+        btRenderCompare();
+        return;
+      }
+      var tr = e.target.closest('tr[data-row]');
+      if (tr) pickRow(tr);
+    });
+    cmp.addEventListener('keydown', function (e) {
+      if (e.key !== 'Enter' || !e.target.matches || !e.target.matches('tr[data-row]')) return;
+      pickRow(e.target);
+    });
+    // 숨겨진 상태에서 그린 차트는 폭이 0이라 최소 폭으로 그려짐 → 탭을 열 때·화면 크기가 바뀔 때 실제 폭으로 다시 그림
+    var redraw = function () { if (btVisible()) { btDrawEquity(); btDrawOverlay(); } };
+    var timer = null;
+    window.addEventListener('resize', function () { clearTimeout(timer); timer = setTimeout(redraw, 150); });
+    var tabBtn = document.querySelector('.tab-btn[data-tab="analysis"]');
+    if (tabBtn) tabBtn.addEventListener('click', function () { setTimeout(redraw, 0); });
+  }
+
+  function initAnalysis() {
+    if (!btEl('btForm')) return;
+    if (!btReady()) {
+      var box = btEl('btNotice');
+      box.hidden = false;
+      box.textContent = '백테스트 엔진이 이 파일에 들어 있지 않습니다. python scripts/build_dashboard.py 로 다시 빌드하세요.';
+      btEl('btMetaNote').textContent = '';
+      ['btRunBtn', 'btResetBtn', 'btKeepBtn'].forEach(function (id) { btEl(id).disabled = true; });
+      return;
+    }
+    BT_LIST = BT.listStrategies();
+    BT_BY = {};
+    BT_LIST.forEach(function (s) { BT_BY[s.key] = s; });
+    BT_COMMON = [];
+    BT.commonSchema.forEach(function (g) { g.items.forEach(function (it) { BT_COMMON.push(it); }); });
+    btLoadSaved();
+    // 처음에는 기본값 결과 중 총수익률 상위 3개를 겹쳐 보여 준다(담아 둔 실행이 있으면 그중 최근 3개)
+    var first = BTS.runs.length ? BTS.runs.slice(0, 3).map(function (r) { return 'r:' + r.id; })
+      : btCompareRows().filter(function (r) { return r.metrics && !r.locked; }).sort(function (a, b) { return b.metrics.totalRet - a.metrics.totalRet; }).slice(0, 3).map(function (r) { return r.id; });
+    first.forEach(function (id) { BTS.overlay[id] = true; });
+    btEl('btFormBox').open = true; // 폰에서도 조건 입력칸을 처음부터 펼쳐 둔다(2026-11-17 사용자 요청)
+    if (!BTS.bound) { BTS.bound = true; btBind(); }
+    var start = BTS.saved.sel && BT_BY[BTS.saved.sel] ? BTS.saved.sel : (BT_LIST.filter(function (s) { return !s.locked; })[0] || BT_LIST[0]).key;
+    btRenderMeta();
+    btSelect(start);
+    if (btVisible()) btDrawOverlay();
+  }
+
+  // =========================================================
   // 초기 렌더
   // =========================================================
   function render(data) {
@@ -2544,6 +3465,8 @@
     initWatchUs();
     renderStatsTab();
     initSearch();
+    // 분석 탭이 실패해도 다른 탭은 그대로 쓰이도록 따로 감싼다
+    try { initAnalysis(); } catch (e) { if (window.console) console.error('분석 탭 초기화 실패', e); }
   }
 
   // =========================================================
