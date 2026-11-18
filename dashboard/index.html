@@ -600,7 +600,17 @@
   .bt-picker { display: flex; flex-direction: column; gap: 10px; }
   .bt-pgroup { display: flex; flex-direction: column; gap: 2px; }
   .bt-pgroup-name { font-size: 11px; font-weight: 700; color: var(--text-muted); padding: 0 2px 2px; }
-  .bt-pick { display: flex; align-items: center; gap: 8px; width: 100%; text-align: left; font: inherit; font-size: 13px; padding: 6px 10px; border-radius: 8px; border: 1px solid transparent; background: none; color: var(--text-secondary); cursor: pointer; }
+  .bt-pick { display: flex; align-items: flex-start; gap: 8px; width: 100%; text-align: left; font: inherit; font-size: 13px; padding: 8px 10px; border-radius: 8px; border: 1px solid transparent; background: none; color: var(--text-secondary); cursor: pointer; }
+  .bt-pick .bt-no { padding-top: 2px; }
+  .bt-pbody { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+  .bt-ptop { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .bt-pdesc { font-size: 11.5px; font-weight: 400; line-height: 1.5; color: var(--text-muted); }
+  .bt-pvars, .bt-fvars { display: flex; flex-direction: column; gap: 1px; font-size: 11px; font-weight: 400; line-height: 1.5; color: var(--text-muted); }
+  .bt-fvars { margin-top: 6px; }
+  .bt-vline b { font-weight: 700; color: var(--text-secondary); }
+  .bt-pick[aria-pressed="true"] .bt-pdesc, .bt-pick[aria-pressed="true"] .bt-pvars { color: var(--text-secondary); }
+  .bt-pick[aria-pressed="true"] .bt-vline b { color: var(--accent-strong); }
+  .bt-why[hidden] { display: none; }
   .bt-pick:hover { background: var(--surface-alt); }
   .bt-pick:focus-visible, .bt-step:focus-visible, .bt-in:focus-visible, .bt-run:focus-visible, .bt-sort:focus-visible, .bt-crow:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
   .bt-pick[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent-strong); font-weight: 700; border-color: var(--accent); }
@@ -97161,7 +97171,37 @@
   var BT_BASES = ['bt/', '../docs/bt/'];
   var BT_WHY = { stop: '손절', take: '익절', trail: '추적 손절', time: '보유일 만료', rule: '기법 규칙', delist: '상장폐지', end: '미청산' };
   var BT_ROTATION_UNUSED = ['weightPct', 'maxPositions', 'maxNewPerDay']; // 회전형(sizing: 'equal')이 쓰지 않는 공통 변수
-  var BT_UNUSED = { volBreakout: { entryFill: '장중 돌파가 체결' } };      // 기법이 쓰지 않는 공통 변수(엔진 API 문서 6장)
+  // 기법이 쓰지 않는 공통 변수 → 이유(엔진 engine.js 체결 단계 기준, 2026-11-18 확인)
+  //   entryFill: 종가 단계 신호 진입에만 쓰임(장중 돌파·회전형은 쓰지 않음)
+  //   exitFill : 기법 청산이 '공통 매도 체결대로'(exit → 1)일 때만 쓰임
+  var BT_UNUSED = {
+    volBreakout: { entryFill: '장중 돌파가에 체결', exitFill: '청산 시점 변수로 정함' },
+    closeBet: { exitFill: '청산 방식 변수로 정함' },
+    bbRebound: { exitFill: '밴드 지정가·손절로 매도' },
+    rsRotation: { entryFill: '재조정 다음 날 시가에 체결', exitFill: '재조정 다음 날 시가에 매도' },
+    dualMomentum: { entryFill: '재조정 다음 날 시가에 체결', exitFill: '재조정 다음 날 시가에 매도' }
+  };
+  // 다른 변수 값에 따라 켜지는 변수: { 변수: { on: 기준 변수, scope: 기준 변수 묶음(기본 같은 묶음), is: [켜지는 값] | not: [꺼지는 값], why } }
+  var BT_ASSET_INDEX_OFF = { on: 'assets', scope: 'own', is: ['stocks'], why: '지수 모드는 쓰지 않음' };
+  var BT_DEPENDS = {
+    _common: {
+      taxPct: { on: 'taxMode', is: ['fixed'], why: "매도 거래세 '직접 입력'일 때만" },
+      mktIndex: { on: 'mktFilter', not: ['off'], why: '지수 조건을 켤 때만' },
+      mktMaN: { on: 'mktFilter', not: ['off'], why: '지수 조건을 켤 때만' }
+    },
+    closeBet: { own: { tpPct: { on: 'exitMode', is: ['nextTarget'], why: '목표가 방식일 때만' } } },
+    vwapPullback: { own: { tpPct: { on: 'tpMode', is: ['pct'], why: '고정 % 익절일 때만' } } },
+    crashSurvivor: { own: { holdDays: { on: 'exitMode', not: ['stockMa'], why: '5일선 이탈 방식은 쓰지 않음' } } },
+    flowFollow: { own: {
+      sellDays: { on: 'exitMode', not: ['ma'], why: '순매도 전환을 쓸 때만' },
+      exitMa: { on: 'exitMode', not: ['flip'], why: '이평선 이탈을 쓸 때만' }
+    } },
+    dualMomentum: {
+      own: { topK: { on: 'assets', is: ['stocks'], why: '종목 모드에서만' } },
+      common: { market: BT_ASSET_INDEX_OFF, minCapEok: BT_ASSET_INDEX_OFF, minAvgValEok: BT_ASSET_INDEX_OFF, minPrice: BT_ASSET_INDEX_OFF,
+        themeOnly: BT_ASSET_INDEX_OFF, liqCapPct: BT_ASSET_INDEX_OFF, taxMode: BT_ASSET_INDEX_OFF, taxPct: BT_ASSET_INDEX_OFF }
+    }
+  };
   var BT_COLORS = ['--accent', '--idx-kosdaq', '--p-for', '--p-ind', '--idx-kospi', '--up'];
   var BT_LIST = [], BT_BY = {}, BT_COMMON = [];
   var BTS = {
@@ -97290,9 +97330,11 @@
     btEl('btPicker').innerHTML = groups.map(function (g) {
       return '<div class="bt-pgroup"><div class="bt-pgroup-name">' + esc(g) + '</div>' + byGroup[g].map(function (s) {
         var why = btReason(s.key);
-        return '<button type="button" class="bt-pick' + (why ? ' bt-dim' : '') + '" data-key="' + esc(s.key) + '" aria-pressed="' + (s.key === BTS.key) + '" title="' + esc(s.desc || '') + '">' +
-          '<span class="num bt-no">' + s.no + '</span><span class="bt-pname">' + esc(s.label) + '</span>' +
-          (why ? '<span class="tab-soon">' + esc(why) + '</span>' : '') + '</button>';
+        // 기법 이름 옆(아래)에 설명과 작동 변수를 늘 보여 준다(2026-11-18 사용자 요청)
+        return '<button type="button" class="bt-pick' + (why ? ' bt-dim' : '') + '" data-key="' + esc(s.key) + '" aria-pressed="' + (s.key === BTS.key) + '">' +
+          '<span class="num bt-no">' + s.no + '</span><span class="bt-pbody"><span class="bt-ptop"><span class="bt-pname">' + esc(s.label) + '</span>' +
+          (why ? '<span class="tab-soon">' + esc(why) + '</span>' : '') + '</span>' +
+          (s.desc ? '<span class="bt-pdesc">' + esc(s.desc) + '</span>' : '') + btVarInfoHtml(s, 'bt-pvars') + '</span></button>';
       }).join('') + '</div>';
     }).join('');
     btEl('btPickSelect').innerHTML = groups.map(function (g) {
@@ -97303,14 +97345,60 @@
     }).join('');
   }
 
-  // ---- 변수 폼(스키마에서 자동 생성) ----
-  function btRowHtml(scope, it, s) {
-    var disabled = !!s.locked, dim = false, badge = '', note = it.help || '';
-    if (scope === 'common') {
-      if (btOwn(s.fixed || {}, it.key)) { disabled = true; badge = '고정'; }
-      else if (s.sizing === 'equal' && BT_ROTATION_UNUSED.indexOf(it.key) !== -1) { disabled = true; dim = true; badge = '회전형은 쓰지 않음'; }
-      else if (BT_UNUSED[s.key] && BT_UNUSED[s.key][it.key]) { disabled = true; dim = true; badge = BT_UNUSED[s.key][it.key]; }
+  // ---- 기법이 쓰는 변수 / 쓰지 않는 변수 ----
+  // 기법과 상관없이 늘 쓰지 않는 공통 변수의 이유('' = 씀)
+  function btStaticUnused(s, scope, it) {
+    if (scope !== 'common') return '';
+    if (s.sizing === 'equal' && BT_ROTATION_UNUSED.indexOf(it.key) !== -1) return '회전형은 쓰지 않음';
+    return (BT_UNUSED[s.key] && BT_UNUSED[s.key][it.key]) || '';
+  }
+  // 지금 값(cur) 기준으로 이 칸을 바꿀 수 없는 이유. fixed = 기법이 값을 고정, dim = 이 기법에서 결과에 영향 없음
+  function btInactive(s, scope, it, cur) {
+    if (s.locked) return { why: '', dim: false, off: true };
+    if (scope === 'common' && btOwn(s.fixed || {}, it.key)) return { why: '고정', dim: false, off: true };
+    var why = btStaticUnused(s, scope, it);
+    if (!why) {
+      var dep = (BT_DEPENDS[s.key] && BT_DEPENDS[s.key][scope] && BT_DEPENDS[s.key][scope][it.key]) ||
+        (scope === 'common' ? BT_DEPENDS._common[it.key] : null);
+      if (dep && cur) {
+        var v = (cur[dep.scope || scope] || {})[dep.on];
+        var on = dep.is ? dep.is.indexOf(v) !== -1 : dep.not.indexOf(v) === -1;
+        if (!on) why = dep.why;
+      }
     }
+    return { why: why, dim: !!why, off: !!why };
+  }
+  function btShortLabel(label) { return String(label).replace(/\s*\(.*$/, ''); }
+  // 기법 설명에 붙일 변수 요약: 기법 변수 / 기본값을 바꾼 공통 변수 / 쓰지 않는 공통 변수
+  function btVarInfo(s) {
+    var base = BT.commonDefaults(), info = { own: [], preset: [], unused: [], fixed: [] }, cd = s.commonDefaults || {};
+    info.own = (s.params || []).map(function (it) { return btShortLabel(it.label); });
+    // 시장 필터(지수 조건 + 지수 이평선)는 한 문구로: '지수 5일선 위일 때만 매수'
+    var mf = cd.mktFilter && cd.mktFilter !== 'off' ? cd.mktFilter : null;
+    if (mf) info.preset.push('지수 ' + (cd.mktMaN || base.mktMaN) + '일선 ' + (mf === 'above' ? '위' : '아래') + '일 때만 매수');
+    BT_COMMON.forEach(function (it) {
+      if (btOwn(s.fixed || {}, it.key)) { info.fixed.push(btShortLabel(it.label) + ' ' + btValText(it, s.fixed[it.key])); return; }
+      if (btStaticUnused(s, 'common', it)) { info.unused.push(btShortLabel(it.label)); return; }
+      if (mf && (it.key === 'mktFilter' || it.key === 'mktMaN')) return;
+      if (btOwn(cd, it.key) && cd[it.key] !== base[it.key]) info.preset.push(btShortLabel(it.label) + ' ' + btValText(it, cd[it.key]));
+    });
+    return info;
+  }
+  function btVarInfoHtml(s, cls) {
+    var v = btVarInfo(s), rows = [];
+    rows.push(['기법 변수', v.own.length ? v.own.join(' · ') : '없음 (공통 변수만 씀)']);
+    if (v.preset.length) rows.push(['공통 기본값', v.preset.join(' · ')]);
+    if (v.fixed.length) rows.push(['고정', v.fixed.join(' · ')]);
+    if (v.unused.length) rows.push(['안 쓰는 공통 변수', v.unused.join(' · ')]);
+    return '<span class="' + cls + '">' + rows.map(function (r) {
+      return '<span class="bt-vline"><b>' + esc(r[0]) + '</b> ' + esc(r[1]) + '</span>';
+    }).join('') + '</span>';
+  }
+
+  // ---- 변수 폼(스키마에서 자동 생성) ----
+  // 켜고 끄기(btInactive)는 값이 바뀔 때마다 btSyncForm에서 다시 적용한다
+  function btRowHtml(scope, it, s) {
+    var st = btInactive(s, scope, it, BTS.cur), disabled = st.off, dim = st.dim, badge = st.why, note = it.help || '';
     var dis = disabled ? ' disabled' : '', ctl, opts = btOptions(it), unit = btUnit(it);
     if (it.type === 'bool' || it.type === 'select') {
       var total = opts.reduce(function (t, o) { return t + String(o.label).length; }, 0);
@@ -97339,13 +97427,14 @@
     }
     return '<div class="bt-row' + (dim ? ' bt-dim' : '') + '" data-scope="' + scope + '" data-key="' + esc(it.key) + '">' +
       '<div class="bt-label"><span class="bt-dot" title="기본값과 다름" hidden></span><span>' + esc(it.label) + '</span>' +
-      (badge ? '<span class="tab-soon">' + esc(badge) + '</span>' : '') + '</div>' +
+      '<span class="tab-soon bt-why"' + (badge ? '' : ' hidden') + '>' + esc(badge) + '</span></div>' +
       '<div class="bt-ctl">' + ctl + '</div>' + (note ? '<p class="bt-help">' + esc(note) + '</p>' : '') + '</div>';
   }
   function btRenderForm() {
     var s = BT_BY[BTS.key], why = btReason(BTS.key);
     btEl('btFormTitle').textContent = s.no + '. ' + s.label;
-    btEl('btFormDesc').textContent = (s.desc || '') + (why ? ' — ' + why : '');
+    // 폰(기법 목록 대신 드롭다운)에서도 보이도록 폼 머리에도 설명·작동 변수를 적는다
+    btEl('btFormDesc').innerHTML = esc((s.desc || '') + (why ? ' — ' + why : '')) + btVarInfoHtml(s, 'bt-fvars');
     // 주요 조건(기간·손절·익절 등)은 접지 않고 맨 위에 항상 펼쳐 둔다(2026-11-17 사용자 요청). 나머지 공통 변수만 묶음별로 접는다.
     var MAIN = ['startDate', 'endDate', 'stopPct', 'takePct', 'trailPct', 'maxHoldDays'], mainItems = [];
     BT.commonSchema.forEach(function (g) { g.items.forEach(function (it) { if (MAIN.indexOf(it.key) !== -1) mainItems.push(it); }); });
@@ -97366,11 +97455,16 @@
   }
   // 폼의 값·강조 점·요약 문구를 현재 상태(BTS.cur)에 맞춘다(입력 중인 칸을 다시 만들지 않기 위해 값만 바꾼다)
   function btSyncForm() {
-    var key = BTS.key, def = BT.resolveParams(key), form = btEl('btForm');
+    var key = BTS.key, s = BT_BY[key], def = BT.resolveParams(key), form = btEl('btForm');
     Array.prototype.forEach.call(form.querySelectorAll('.bt-row'), function (row) {
       var scope = row.dataset.scope, it = btItem(key, scope, row.dataset.key);
       if (!it) return;
       var v = BTS.cur[scope][it.key], opts = btOptions(it);
+      // 이 기법·지금 값에서 바꿀 수 있는 칸만 켠다
+      var st = btInactive(s, scope, it, BTS.cur), badge = row.querySelector('.bt-why');
+      row.classList.toggle('bt-dim', st.dim);
+      Array.prototype.forEach.call(row.querySelectorAll('button, input, select'), function (el) { el.disabled = st.off; });
+      if (badge) { badge.textContent = st.why; badge.hidden = !st.why; }
       row.querySelector('.bt-dot').hidden = v === def[scope][it.key];
       var inp = row.querySelector('.bt-in');
       if (inp) {
