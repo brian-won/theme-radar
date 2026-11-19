@@ -701,6 +701,10 @@
   .calc-check input { width: 16px; height: 16px; accent-color: var(--accent); margin: 0; }
   .calc-check span { font-size: 11.5px; color: var(--text-muted); font-weight: 400; }
   .calc-hint { margin: 0; font-size: 11.5px; color: var(--text-muted); }
+  .calc-fee label { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; }
+  .calc-box-sm { width: 96px; padding: 0 8px; }
+  .calc-box-sm input { font-size: 13.5px; padding: 5px 0; }
+  .calc-box-sm input:disabled { color: var(--text-muted); }
   .calc-out { display: flex; flex-direction: column; gap: 14px; }
   .calc-empty { font-size: 13px; color: var(--text-secondary); padding: 6px 0 4px; }
   .calc-err { font-size: 13px; color: var(--up); background: var(--up-soft); border-radius: 8px; padding: 8px 12px; }
@@ -986,7 +990,8 @@
           <label class="calc-field"><span>매도 비중</span><span class="calc-box"><input type="text" inputmode="decimal" id="calcW3" autocomplete="off" placeholder="자동"><em>%</em></span></label></div>
       </div>
       <label class="calc-check"><input type="checkbox" id="calcTick" checked> 호가 단위 맞춤 <span>목표가·손절가를 주문 가능한 호가로 올림(코스피·코스닥 공통 호가단위)</span></label>
-      <p class="calc-hint">손절가율은 부호 없이 넣어도 하락(−)으로 계산합니다. 손익 금액은 수수료·세금을 빼지 않은 값입니다.</p>
+      <div class="calc-check calc-fee"><label><input type="checkbox" id="calcFeeOn" checked> 수수료·세금 반영</label><span class="calc-box calc-box-sm"><input type="text" inputmode="decimal" id="calcFee" autocomplete="off" value="0.23" placeholder="0.23" aria-label="수수료·세금 비율"><em>%</em></span><span>매도금액 × 비율을 비용으로 빼서 손익·손익비·손익분기가에 반영</span></div>
+      <p class="calc-hint">손절가율은 부호 없이 넣어도 하락(−)으로 계산합니다. 목표가·손절가·% 칸은 가격 기준이고, 손익 금액만 비용을 뺀 값입니다.</p>
       <div id="calcOut" class="calc-out" aria-live="polite"></div>
     </div>
   </section>
@@ -3699,10 +3704,15 @@
     var buy = v.buy > 0 ? v.buy : null, cur = v.cur > 0 ? v.cur : null;
     var qty = v.qty > 0 ? Math.floor(v.qty) : null;
     var tick = !!v.tick;
-    var o = { cur: cur, buy: buy, qty: qty, tick: tick, chg: null, stop: null, stopPct: null, curToStop: null,
-      targets: [], wsum: 0, err: null, remain: null, avgPct: null, avgPrice: null, rr: null,
-      cost: null, value: null, pnl: null, stopPnl: null, tgtPnl: null };
+    // 수수료+세금: 매도금액 × fee 를 비용으로 뺀다(끄면 0)
+    var fee = v.fee > 0 && v.fee < 100 ? v.fee / 100 : 0;
+    var net = function (price, q) { return (price * (1 - fee) - buy) * q; };
+    var o = { cur: cur, buy: buy, qty: qty, tick: tick, fee: fee ? v.fee : 0, chg: null, chgNet: null, stop: null, stopPct: null, curToStop: null,
+      targets: [], wsum: 0, err: null, remain: null, avgPct: null, avgPrice: null, avgNetPct: null, rr: null, breakEven: null,
+      cost: null, value: null, pnl: null, feeNow: null, stopPnl: null, tgtPnl: null };
     if (buy && cur) o.chg = (cur - buy) / buy * 100;
+    if (buy && cur && fee) o.chgNet = (cur * (1 - fee) - buy) / buy * 100;
+    if (buy && fee) { o.breakEven = buy / (1 - fee); if (tick) o.breakEven = calcTickUp(o.breakEven); }
     if (buy && v.stop != null) {
       o.stop = buy * (1 - Math.abs(v.stop) / 100);
       if (tick) o.stop = calcTickUp(o.stop);
@@ -3728,12 +3738,15 @@
       o.targets.forEach(function (t) { sp += t.pct * t.w; });
       o.avgPct = sp / o.wsum;
       o.avgPrice = buy * (1 + o.avgPct / 100);
-      if (o.stopPct) o.rr = o.avgPct / Math.abs(o.stopPct);
+      if (fee) {
+        o.avgNetPct = (o.avgPrice * (1 - fee) - buy) / buy * 100;
+        if (o.stop != null) { var lossPs = buy - o.stop * (1 - fee); if (lossPs > 0) o.rr = (o.avgPrice * (1 - fee) - buy) / lossPs; }
+      } else if (o.stopPct) o.rr = o.avgPct / Math.abs(o.stopPct);
     }
     if (buy && qty) {
       o.cost = buy * qty;
-      if (cur) { o.value = cur * qty; o.pnl = o.value - o.cost; }
-      if (o.stop != null) o.stopPnl = (o.stop - buy) * qty;
+      if (cur) { o.value = cur * qty; o.pnl = net(cur, qty); o.feeNow = cur * qty * fee; }
+      if (o.stop != null) o.stopPnl = net(o.stop, qty);
       if (ok) {
         // 비중대로 내림해서 나누고, 비중 합계가 100%면 남는 주식은 마지막 차수에 몰아 준다
         var left = qty, full = Math.abs(o.wsum - 100) < 1e-9;
@@ -3744,7 +3757,7 @@
           q = Math.min(q, left);
           left -= q;
           t.q = q;
-          t.pnl = (t.price - buy) * q;
+          t.pnl = net(t.price, q);
           o.tgtPnl += t.pnl;
         });
         o.remain = left;
@@ -3780,6 +3793,7 @@
     var v = {};
     Object.keys(CALC_IDS).forEach(function (k) { v[k] = calcParse(document.getElementById(CALC_IDS[k]).value); });
     v.tick = document.getElementById('calcTick').checked;
+    v.fee = document.getElementById('calcFeeOn').checked ? calcParse(document.getElementById('calcFee').value) : null;
     return v;
   }
   function calcRender() {
@@ -3798,6 +3812,8 @@
     if (o.cur != null) rows.push({ k: '현재가', sub: '등락률', p: o.cur, b: calcPct(o.chg), c: '<span class="calc-zero">기준</span>', amt: calcWon(o.pnl, true), q: o.qty, col: 'var(--accent)', me: true });
     rows.push({ k: '매수가', p: o.buy, b: '<span class="calc-zero">기준</span>', c: calcPct(o.cur ? (o.buy - o.cur) / o.cur * 100 : null),
       amt: hasQty ? '<span class="calc-zero">' + Math.round(o.cost).toLocaleString('ko-KR') + '</span>' : '', q: o.qty, col: 'var(--text-secondary)' });
+    if (o.breakEven != null) rows.push({ k: '손익분기가', sub: '비용 ' + o.fee + '% 반영', p: o.breakEven, b: calcPct((o.breakEven - o.buy) / o.buy * 100),
+      c: calcPct(o.cur ? (o.breakEven - o.cur) / o.cur * 100 : null), amt: '<span class="calc-zero">—</span>', q: null, col: 'var(--gold)' });
     if (o.stop != null) rows.push({ k: '손절가', p: o.stop, b: calcPct(o.stopPct), c: calcPct(o.curToStop), amt: calcWon(o.stopPnl, true), q: o.qty, col: 'var(--down)' });
     rows.sort(function (a, b) { return b.p - a.p; }); // 위에서 아래로 가격 높은 순(가격 사다리)
     var body = rows.map(function (r) {
@@ -3810,10 +3826,13 @@
     }).join('');
     var kv = [];
     if (o.chg != null) kv.push(['등락률 (매수가 대비)', calcPct(o.chg)]);
+    if (o.chgNet != null) kv.push(['실수익률 (비용 ' + o.fee + '% 반영)', calcPct(o.chgNet)]);
     if (hasQty) kv.push(['매수금액', Math.round(o.cost).toLocaleString('ko-KR') + '원']);
     if (hasQty && o.value != null) kv.push(['평가금액', Math.round(o.value).toLocaleString('ko-KR') + '원']);
-    if (hasQty && o.pnl != null) kv.push(['평가손익', calcWon(o.pnl)]);
+    if (hasQty && o.pnl != null) kv.push([o.fee ? '평가손익 (지금 팔면, 비용 차감)' : '평가손익', calcWon(o.pnl)]);
+    if (hasQty && o.feeNow) kv.push(['매도 비용 (현재가 기준)', Math.round(o.feeNow).toLocaleString('ko-KR') + '원']);
     if (o.avgPrice != null && !single) kv.push(['평균 매도가 (목표 전부 체결)', calcPrice(o.avgPrice) + ' ' + calcPct(o.avgPct)]);
+    if (o.avgNetPct != null) kv.push([single ? '목표가 실수익률 (비용 반영)' : '평균 실수익률 (비용 반영)', calcPct(o.avgNetPct)]);
     if (o.tgtPnl != null) kv.push([single ? '목표가 도달 시 손익' : '목표 전부 체결 시 손익', calcWon(o.tgtPnl)]);
     if (hasQty && o.stopPnl != null) kv.push(['손절 시 손익', calcWon(o.stopPnl)]);
     if (o.rr != null) kv.push([single ? '손익비' : '손익비 (평균 목표 기준)', '1 : ' + (Math.round(o.rr * 100) / 100).toFixed(2)]);
@@ -3842,6 +3861,8 @@
     var s = {};
     Object.keys(CALC_IDS).forEach(function (k) { s[k] = document.getElementById(CALC_IDS[k]).value; });
     s.tick = document.getElementById('calcTick').checked;
+    s.feeOn = document.getElementById('calcFeeOn').checked;
+    s.fee = document.getElementById('calcFee').value;
     try { localStorage.setItem(CALC_KEY, JSON.stringify(s)); } catch (e) {}
   }
   function initCalc() {
@@ -3852,6 +3873,12 @@
     var tickEl = document.getElementById('calcTick');
     tickEl.checked = saved.tick !== false; // 기본은 호가 단위 맞춤 켜짐
     tickEl.addEventListener('change', function () { calcSave(); calcRender(); });
+    var feeOn = document.getElementById('calcFeeOn'), feeEl = document.getElementById('calcFee');
+    feeOn.checked = saved.feeOn !== false; // 기본은 수수료·세금 반영 켜짐(0.23%)
+    if (saved.fee != null && saved.fee !== '') feeEl.value = saved.fee;
+    feeEl.disabled = !feeOn.checked;
+    feeOn.addEventListener('change', function () { feeEl.disabled = !feeOn.checked; calcSave(); calcRender(); });
+    feeEl.addEventListener('input', function () { calcSave(); calcRender(); });
     Object.keys(CALC_IDS).forEach(function (k) {
       var el = document.getElementById(CALC_IDS[k]);
       if (saved[k] != null) el.value = saved[k];
