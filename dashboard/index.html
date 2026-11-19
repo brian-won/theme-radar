@@ -681,6 +681,75 @@
     .bt-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .bt-m-val { font-size: 18px; }
   }
+
+  /* ---- 기타 탭: 시세 계산기 ---- */
+  .calc-card { max-width: 860px; }
+  .calc-inputs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+  .calc-field { display: flex; flex-direction: column; gap: 5px; font-size: 12px; font-weight: 600; color: var(--text-muted); min-width: 0; }
+  .calc-box { display: flex; align-items: center; border: 1px solid var(--border); border-radius: 8px; background: var(--surface-alt); padding: 0 10px; }
+  .calc-box:focus-within { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .calc-box input { flex: 1; min-width: 0; border: none; background: transparent; color: var(--text-primary); font-family: "JetBrains Mono", ui-monospace, monospace; font-variant-numeric: tabular-nums; font-size: 15px; padding: 9px 0; text-align: right; outline: none; }
+  .calc-box input::placeholder { color: var(--text-muted); font-family: inherit; font-size: 12.5px; }
+  .calc-box em { font-style: normal; font-size: 12px; color: var(--text-muted); margin-left: 6px; }
+  .calc-sub { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; margin-top: 4px; font-size: 13px; }
+  .calc-sub span { font-size: 11.5px; color: var(--text-muted); }
+  .calc-stages { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+  .calc-stage { display: grid; grid-template-columns: auto minmax(0, 1fr) minmax(0, 1fr); align-items: end; gap: 8px; padding: 10px; border: 1px solid var(--border); border-radius: 10px; }
+  .calc-stage > b { font-size: 13px; padding-bottom: 10px; color: var(--up); }
+  .calc-stage .calc-box input { font-size: 14px; }
+  .calc-check { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; font-size: 13px; font-weight: 600; cursor: pointer; }
+  .calc-check input { width: 16px; height: 16px; accent-color: var(--accent); margin: 0; }
+  .calc-check span { font-size: 11.5px; color: var(--text-muted); font-weight: 400; }
+  .calc-hint { margin: 0; font-size: 11.5px; color: var(--text-muted); }
+  .calc-out { display: flex; flex-direction: column; gap: 14px; }
+  .calc-empty { font-size: 13px; color: var(--text-secondary); padding: 6px 0 4px; }
+  .calc-err { font-size: 13px; color: var(--up); background: var(--up-soft); border-radius: 8px; padding: 8px 12px; }
+  table.calc-t { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  table.calc-t th, table.calc-t td { padding: 9px 8px; border-bottom: 1px solid var(--border); text-align: right; white-space: nowrap; }
+  table.calc-t th { font-size: 11.5px; color: var(--text-muted); font-weight: 600; }
+  table.calc-t th:first-child, table.calc-t td:first-child { text-align: left; }
+  table.calc-t td:first-child { font-weight: 700; }
+  table.calc-t tr.calc-me td { background: var(--accent-soft); }
+  .calc-small { display: block; font-size: 11px; font-weight: 500; color: var(--text-muted); margin-top: 2px; }
+  td:first-child .calc-small { margin-left: 15px; }
+  .calc-small.calc-mob { display: none; }
+  .calc-tag { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 7px; vertical-align: 1px; }
+  .calc-up { color: var(--up); } .calc-down { color: var(--down); } .calc-zero { color: var(--text-muted); }
+  .calc-sum { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 8px; }
+  .calc-kv { background: var(--surface-alt); border-radius: 8px; padding: 8px 12px; font-size: 11.5px; color: var(--text-muted); font-weight: 600; }
+  .calc-kv b { display: block; margin-top: 2px; font-size: 14.5px; color: var(--text-primary); font-family: "JetBrains Mono", ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+  .calc-flags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .calc-flag { font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 999px; }
+  .calc-flag.up { color: var(--up); background: var(--up-soft); }
+  .calc-flag.down { color: var(--down); background: var(--down-soft); }
+  .calc-flag.mute { color: var(--text-secondary); background: var(--surface-alt); }
+  .calc-bar { position: relative; height: 64px; margin: 4px 14px 0; }
+  .calc-track { position: absolute; left: 0; right: 0; top: 28px; height: 8px; border-radius: 4px; background: var(--surface-alt); }
+  .calc-seg { position: absolute; top: 28px; height: 8px; }
+  .calc-seg.loss { background: var(--down-soft); border: 1px solid var(--down); border-radius: 4px 0 0 4px; }
+  .calc-seg.gain { background: var(--up-soft); border: 1px solid var(--up); border-radius: 0 4px 4px 0; }
+  .calc-mk { position: absolute; top: 22px; width: 2px; height: 20px; margin-left: -1px; background: var(--text-secondary); }
+  .calc-mk.cur { top: 25px; width: 14px; height: 14px; margin-left: -7px; border-radius: 50%; background: var(--accent); border: 2px solid var(--surface); box-shadow: 0 0 0 1px var(--accent); }
+  .calc-lb { position: absolute; transform: translateX(-50%); font-size: 11px; color: var(--text-secondary); white-space: nowrap; font-weight: 600; }
+  .calc-lb.top { top: 0; }
+  .calc-lb.bot { top: 46px; }
+  @media (max-width: 900px) {
+    .calc-inputs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .calc-stages { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+    .calc-stage { padding: 8px 10px; }
+    .calc-sum { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    table.calc-t { font-size: 12.5px; }
+    table.calc-t th, table.calc-t td { padding: 8px 4px; }
+  }
+  @media (max-width: 600px) {
+    table.calc-t .calc-cc { display: none; }
+    .calc-small.calc-mob { display: block; }
+    table.calc-t { font-size: 11.5px; }
+    table.calc-t th, table.calc-t td { padding: 7px 3px; }
+    table.calc-t .calc-tag { display: none; }
+    td:first-child .calc-small { margin-left: 0; }
+    .calc-small { font-size: 10.5px; }
+  }
 </style>
 
 </head>
@@ -710,6 +779,7 @@
       <button type="button" class="tab-btn" data-tab="watchUs" role="tab" title="관심종목(해외)"><svg class="tab-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18a14 14 0 0 1 0-18z"/></svg><span class="tab-label">관심종목(해외)</span></button>
       <button type="button" class="tab-btn" data-tab="stats" role="tab" title="통계"><svg class="tab-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg><span class="tab-label">통계</span></button>
       <button type="button" class="tab-btn" data-tab="analysis" role="tab" title="분석"><svg class="tab-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1 2V16h5.2v-.2c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/></svg><span class="tab-label">분석</span></button>
+      <button type="button" class="tab-btn" data-tab="etc" role="tab" title="기타"><svg class="tab-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></svg><span class="tab-label">기타</span></button>
     </nav>
   </aside>
 
@@ -886,6 +956,38 @@
           <div class="table-scroll" id="btCompare"></div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- ---- 기타: 시세 계산기 (입력은 이 브라우저에만 저장, localStorage themeRadar.calc) ---- -->
+  <section class="tab-panel" data-tab-panel="etc" hidden>
+    <div class="section-head">
+      <h2>기타</h2>
+    </div>
+    <div class="st-card calc-card">
+      <div class="st-card-head"><div><h3>시세 계산기</h3><p class="st-note">값을 넣으면 바로 계산합니다 · 목표가·손절가는 매수가 기준</p></div>
+        <button type="button" class="period-reset" id="calcClear">지우기</button></div>
+      <div class="calc-inputs">
+        <label class="calc-field"><span>현재가</span><span class="calc-box"><input type="text" inputmode="decimal" id="calcCur" autocomplete="off" placeholder="0"><em>원</em></span></label>
+        <label class="calc-field"><span>매수가</span><span class="calc-box"><input type="text" inputmode="decimal" id="calcBuy" autocomplete="off" placeholder="0"><em>원</em></span></label>
+        <label class="calc-field"><span>보유 수량</span><span class="calc-box"><input type="text" inputmode="numeric" id="calcQty" autocomplete="off" placeholder="선택"><em>주</em></span></label>
+        <label class="calc-field"><span>손절가율</span><span class="calc-box"><input type="text" inputmode="decimal" id="calcStopPct" autocomplete="off" placeholder="5"><em>%</em></span></label>
+      </div>
+      <div class="calc-sub"><b>분할 목표가</b><span>1차만 넣으면 전량 매도로 계산 · 2·3차는 비우면 쓰지 않음 · 매도 비중을 비우면 남은 비중을 똑같이 나눔</span></div>
+      <div class="calc-stages">
+        <div class="calc-stage"><b>1차</b>
+          <label class="calc-field"><span>목표가율</span><span class="calc-box"><input type="text" inputmode="decimal" id="calcTgtPct" autocomplete="off" placeholder="10"><em>%</em></span></label>
+          <label class="calc-field"><span>매도 비중</span><span class="calc-box"><input type="text" inputmode="decimal" id="calcW1" autocomplete="off" placeholder="자동"><em>%</em></span></label></div>
+        <div class="calc-stage"><b>2차</b>
+          <label class="calc-field"><span>목표가율</span><span class="calc-box"><input type="text" inputmode="decimal" id="calcTgtPct2" autocomplete="off" placeholder="선택"><em>%</em></span></label>
+          <label class="calc-field"><span>매도 비중</span><span class="calc-box"><input type="text" inputmode="decimal" id="calcW2" autocomplete="off" placeholder="자동"><em>%</em></span></label></div>
+        <div class="calc-stage"><b>3차</b>
+          <label class="calc-field"><span>목표가율</span><span class="calc-box"><input type="text" inputmode="decimal" id="calcTgtPct3" autocomplete="off" placeholder="선택"><em>%</em></span></label>
+          <label class="calc-field"><span>매도 비중</span><span class="calc-box"><input type="text" inputmode="decimal" id="calcW3" autocomplete="off" placeholder="자동"><em>%</em></span></label></div>
+      </div>
+      <label class="calc-check"><input type="checkbox" id="calcTick" checked> 호가 단위 맞춤 <span>목표가·손절가를 주문 가능한 호가로 올림(코스피·코스닥 공통 호가단위)</span></label>
+      <p class="calc-hint">손절가율은 부호 없이 넣어도 하락(−)으로 계산합니다. 손익 금액은 수수료·세금을 빼지 않은 값입니다.</p>
+      <div id="calcOut" class="calc-out" aria-live="polite"></div>
     </div>
   </section>
 
@@ -95971,7 +96073,7 @@
   // =========================================================
   // 탭 전환
   // =========================================================
-  var TAB_KEYS = ['market', 'report', 'watch', 'watchUs', 'stats', 'analysis'];
+  var TAB_KEYS = ['market', 'report', 'watch', 'watchUs', 'stats', 'analysis', 'etc'];
   function activateTab(key) {
     TAB_KEYS.forEach(function (k) {
       var btn = document.querySelector('.tab-btn[data-tab="' + k + '"]');
@@ -98487,6 +98589,236 @@
   }
 
   // =========================================================
+  // 기타 탭: 시세 계산기 — 목표가·손절가는 매수가 기준, 등락률은 매수가 대비 현재가
+  // 분할 목표가(최대 3차)·보유 수량 손익·호가 단위 맞춤(올림)
+  // =========================================================
+  var CALC_KEY = 'themeRadar.calc';
+  var CALC_IDS = { cur: 'calcCur', buy: 'calcBuy', qty: 'calcQty', stop: 'calcStopPct', tgt: 'calcTgtPct', w1: 'calcW1', tgt2: 'calcTgtPct2', w2: 'calcW2', tgt3: 'calcTgtPct3', w3: 'calcW3' };
+  var CALC_COMMA = { cur: true, buy: true, qty: true }; // 천 단위 쉼표를 붙이는 칸
+  function calcParse(s) {
+    var t = String(s == null ? '' : s).replace(/[,\s원주%]/g, '');
+    if (t === '' || t === '-' || t === '.') return null;
+    var n = Number(t);
+    return isFinite(n) ? n : null;
+  }
+  // 코스피·코스닥 공통 호가단위(2023-01-25 개편)
+  function calcTick(p) {
+    if (p < 2000) return 1;
+    if (p < 5000) return 5;
+    if (p < 20000) return 10;
+    if (p < 50000) return 50;
+    if (p < 200000) return 100;
+    if (p < 500000) return 500;
+    return 1000;
+  }
+  // 올림 — 목표가는 목표가율 이상, 손절가는 손실이 손절가율을 넘지 않게 맞춘다
+  function calcTickUp(p) {
+    if (!(p > 0)) return p;
+    var t = calcTick(p);
+    return Math.ceil(p / t - 1e-9) * t;
+  }
+  function calcPrice(n) {
+    if (n == null || !isFinite(n)) return '—';
+    var r = Math.round(n * 100) / 100;
+    return r.toLocaleString('ko-KR', { maximumFractionDigits: Number.isInteger(r) ? 0 : 2 });
+  }
+  function calcPct(p) {
+    if (p == null || !isFinite(p)) return '<span class="calc-zero">—</span>';
+    var r = Math.round(p * 100) / 100;
+    var cls = r > 0 ? 'calc-up' : (r < 0 ? 'calc-down' : 'calc-zero');
+    return '<span class="' + cls + '">' + (r > 0 ? '+' : '') + r.toFixed(2) + '%</span>';
+  }
+  function calcWon(n, noUnit) {
+    if (n == null || !isFinite(n)) return '<span class="calc-zero">—</span>';
+    var r = Math.round(n);
+    var cls = r > 0 ? 'calc-up' : (r < 0 ? 'calc-down' : 'calc-zero');
+    return '<span class="' + cls + '">' + (r > 0 ? '+' : '') + r.toLocaleString('ko-KR') + (noUnit ? '' : '원') + '</span>';
+  }
+  function calcFmtW(w) { return (Math.round(w * 10) / 10) + '%'; }
+  // 계산만 하는 순수 함수(검산용) — 값이 없으면 해당 결과는 null
+  function calcCompute(v) {
+    var buy = v.buy > 0 ? v.buy : null, cur = v.cur > 0 ? v.cur : null;
+    var qty = v.qty > 0 ? Math.floor(v.qty) : null;
+    var tick = !!v.tick;
+    var o = { cur: cur, buy: buy, qty: qty, tick: tick, chg: null, stop: null, stopPct: null, curToStop: null,
+      targets: [], wsum: 0, err: null, remain: null, avgPct: null, avgPrice: null, rr: null,
+      cost: null, value: null, pnl: null, stopPnl: null, tgtPnl: null };
+    if (buy && cur) o.chg = (cur - buy) / buy * 100;
+    if (buy && v.stop != null) {
+      o.stop = buy * (1 - Math.abs(v.stop) / 100);
+      if (tick) o.stop = calcTickUp(o.stop);
+      o.stopPct = (o.stop - buy) / buy * 100;
+      if (cur) o.curToStop = (o.stop - cur) / cur * 100;
+    }
+    var raw = [{ n: 1, p: v.tgt, w: v.w1 }, { n: 2, p: v.tgt2, w: v.w2 }, { n: 3, p: v.tgt3, w: v.w3 }].filter(function (t) { return t.p != null; });
+    if (raw.length) {
+      var given = 0, blanks = 0;
+      raw.forEach(function (t) { if (t.w != null) given += Math.max(0, t.w); else blanks++; });
+      if (given > 100 + 1e-9) o.err = '매도 비중 합계가 ' + calcFmtW(given) + '로 100%를 넘습니다.';
+      var share = blanks ? Math.max(0, 100 - given) / blanks : 0;
+      raw.forEach(function (t) { t.wt = t.w != null ? Math.max(0, t.w) : share; o.wsum += t.wt; });
+      if (buy) raw.forEach(function (t) {
+        var price = buy * (1 + t.p / 100);
+        if (tick) price = calcTickUp(price);
+        o.targets.push({ n: t.n, w: t.wt, price: price, pct: (price - buy) / buy * 100, curPct: cur ? (price - cur) / cur * 100 : null, q: null, pnl: null });
+      });
+    }
+    var ok = o.targets.length && !o.err && o.wsum > 0;
+    if (ok) {
+      var sp = 0;
+      o.targets.forEach(function (t) { sp += t.pct * t.w; });
+      o.avgPct = sp / o.wsum;
+      o.avgPrice = buy * (1 + o.avgPct / 100);
+      if (o.stopPct) o.rr = o.avgPct / Math.abs(o.stopPct);
+    }
+    if (buy && qty) {
+      o.cost = buy * qty;
+      if (cur) { o.value = cur * qty; o.pnl = o.value - o.cost; }
+      if (o.stop != null) o.stopPnl = (o.stop - buy) * qty;
+      if (ok) {
+        // 비중대로 내림해서 나누고, 비중 합계가 100%면 남는 주식은 마지막 차수에 몰아 준다
+        var left = qty, full = Math.abs(o.wsum - 100) < 1e-9;
+        o.tgtPnl = 0;
+        o.targets.forEach(function (t, i) {
+          var q = Math.floor(qty * t.w / 100 + 1e-9);
+          if (full && i === o.targets.length - 1) q = left;
+          q = Math.min(q, left);
+          left -= q;
+          t.q = q;
+          t.pnl = (t.price - buy) * q;
+          o.tgtPnl += t.pnl;
+        });
+        o.remain = left;
+      }
+    }
+    return o;
+  }
+  function calcBarHtml(o) {
+    var single = o.targets.length === 1;
+    var pts = [];
+    if (o.stop != null) pts.push({ k: 'stop', v: o.stop, lb: '손절' });
+    if (o.buy != null) pts.push({ k: 'buy', v: o.buy, lb: '매수' });
+    o.targets.forEach(function (t) { pts.push({ k: 'tgt', v: t.price, lb: single ? '목표' : t.n + '차' }); });
+    if (o.cur != null) pts.push({ k: 'cur', v: o.cur, lb: '현재' });
+    if (pts.length < 2) return '';
+    var vals = pts.map(function (p) { return p.v; });
+    var lo = Math.min.apply(null, vals), hi = Math.max.apply(null, vals);
+    if (hi - lo <= 0) return '';
+    var pad = (hi - lo) * 0.04;
+    lo -= pad; hi += pad;
+    var x = function (v) { return ((v - lo) / (hi - lo) * 100).toFixed(2) + '%'; };
+    var seg = function (cls, a, b) { var l = Math.min(a, b), r = Math.max(a, b); return '<div class="calc-seg ' + cls + '" style="left:' + x(l) + ';width:calc(' + x(r) + ' - ' + x(l) + ')"></div>'; };
+    var h = '<div class="calc-track"></div>';
+    if (o.buy != null && o.stop != null) h += seg('loss', o.stop, o.buy);
+    if (o.buy != null && o.targets.length) h += seg('gain', o.buy, Math.max.apply(null, o.targets.map(function (t) { return t.price; })));
+    pts.forEach(function (p) {
+      h += '<div class="calc-mk' + (p.k === 'cur' ? ' cur' : '') + '" style="left:' + x(p.v) + '"></div>' +
+        '<div class="calc-lb ' + (p.k === 'cur' || p.k === 'buy' ? 'bot' : 'top') + '" style="left:' + x(p.v) + '">' + p.lb + '</div>';
+    });
+    return '<div class="calc-bar" aria-hidden="true">' + h + '</div>';
+  }
+  function calcReadInputs() {
+    var v = {};
+    Object.keys(CALC_IDS).forEach(function (k) { v[k] = calcParse(document.getElementById(CALC_IDS[k]).value); });
+    v.tick = document.getElementById('calcTick').checked;
+    return v;
+  }
+  function calcRender() {
+    var out = document.getElementById('calcOut');
+    var o = calcCompute(calcReadInputs());
+    if (o.buy == null) {
+      out.innerHTML = '<div class="calc-empty">매수가를 넣으면 목표가·손절가가 계산됩니다.</div>';
+      return;
+    }
+    var hasQty = o.qty != null;
+    var single = o.targets.length === 1;
+    var rows = o.targets.map(function (t) {
+      return { k: single ? '목표가' : t.n + '차 목표가', sub: single ? '' : '매도 비중 ' + calcFmtW(t.w), p: t.price, b: calcPct(t.pct), c: calcPct(t.curPct),
+        amt: hasQty && t.q != null ? calcWon(t.pnl, true) : '<span class="calc-zero">—</span>', q: t.q, col: 'var(--up)' };
+    });
+    if (o.cur != null) rows.push({ k: '현재가', sub: '등락률', p: o.cur, b: calcPct(o.chg), c: '<span class="calc-zero">기준</span>', amt: calcWon(o.pnl, true), q: o.qty, col: 'var(--accent)', me: true });
+    rows.push({ k: '매수가', p: o.buy, b: '<span class="calc-zero">기준</span>', c: calcPct(o.cur ? (o.buy - o.cur) / o.cur * 100 : null),
+      amt: hasQty ? '<span class="calc-zero">' + Math.round(o.cost).toLocaleString('ko-KR') + '</span>' : '', q: o.qty, col: 'var(--text-secondary)' });
+    if (o.stop != null) rows.push({ k: '손절가', p: o.stop, b: calcPct(o.stopPct), c: calcPct(o.curToStop), amt: calcWon(o.stopPnl, true), q: o.qty, col: 'var(--down)' });
+    rows.sort(function (a, b) { return b.p - a.p; }); // 위에서 아래로 가격 높은 순(가격 사다리)
+    var body = rows.map(function (r) {
+      return '<tr' + (r.me ? ' class="calc-me"' : '') + '><td><span class="calc-tag" style="background:' + r.col + '"></span>' + r.k +
+          (r.sub ? '<span class="calc-small">' + r.sub + '</span>' : '') + '</td>' +
+        '<td class="num">' + calcPrice(r.p) + (o.tick ? '<span class="calc-small">호가 ' + calcTick(r.p).toLocaleString('ko-KR') + '원</span>' : '') + '</td>' +
+        '<td class="num">' + r.b + (r.me ? '' : '<span class="calc-small calc-mob">' + r.c + '</span>') + '</td>' +
+        '<td class="num calc-cc">' + r.c + '</td>' +
+        (hasQty ? '<td class="num">' + r.amt + (r.q != null ? '<span class="calc-small">' + r.q.toLocaleString('ko-KR') + '주</span>' : '') + '</td>' : '') + '</tr>';
+    }).join('');
+    var kv = [];
+    if (o.chg != null) kv.push(['등락률 (매수가 대비)', calcPct(o.chg)]);
+    if (hasQty) kv.push(['매수금액', Math.round(o.cost).toLocaleString('ko-KR') + '원']);
+    if (hasQty && o.value != null) kv.push(['평가금액', Math.round(o.value).toLocaleString('ko-KR') + '원']);
+    if (hasQty && o.pnl != null) kv.push(['평가손익', calcWon(o.pnl)]);
+    if (o.avgPrice != null && !single) kv.push(['평균 매도가 (목표 전부 체결)', calcPrice(o.avgPrice) + ' ' + calcPct(o.avgPct)]);
+    if (o.tgtPnl != null) kv.push([single ? '목표가 도달 시 손익' : '목표 전부 체결 시 손익', calcWon(o.tgtPnl)]);
+    if (hasQty && o.stopPnl != null) kv.push(['손절 시 손익', calcWon(o.stopPnl)]);
+    if (o.rr != null) kv.push([single ? '손익비' : '손익비 (평균 목표 기준)', '1 : ' + (Math.round(o.rr * 100) / 100).toFixed(2)]);
+    var flags = [];
+    if (o.cur != null) {
+      var reached = o.targets.filter(function (t) { return o.cur >= t.price; }).length;
+      if (reached) flags.push('<span class="calc-flag up">' + (single ? '목표가 도달' : (reached === o.targets.length ? '모든 목표가 도달' : reached + '차 목표가까지 도달')) + '</span>');
+      if (o.stop != null && o.cur <= o.stop) flags.push('<span class="calc-flag down">손절가 이탈</span>');
+    }
+    if (o.remain) flags.push('<span class="calc-flag mute">비중 합계 ' + calcFmtW(o.wsum) + ' · ' + o.remain.toLocaleString('ko-KR') + '주는 계속 보유</span>');
+    out.innerHTML = (o.err ? '<div class="calc-err">' + o.err + '</div>' : '') +
+      calcBarHtml(o) +
+      '<div class="table-scroll"><table class="calc-t"><thead><tr><th>구분</th><th>가격(원)</th><th>매수가 대비<span class="calc-small calc-mob">현재가 대비</span></th><th class="calc-cc">현재가 대비</th>' +
+        (hasQty ? '<th>손익(원)</th>' : '') + '</tr></thead><tbody>' + body + '</tbody></table></div>' +
+      (flags.length ? '<div class="calc-flags">' + flags.join('') + '</div>' : '') +
+      (kv.length ? '<div class="calc-sum">' + kv.map(function (p) { return '<div class="calc-kv">' + p[0] + '<b>' + p[1] + '</b></div>'; }).join('') + '</div>' : '');
+  }
+  function calcFormatInput(el) {
+    var n = calcParse(el.value);
+    if (n == null) return;
+    var raw = String(el.value).replace(/[,\s원주%]/g, '');
+    var dot = raw.indexOf('.');
+    el.value = (n < 0 ? '-' : '') + Math.trunc(Math.abs(n)).toLocaleString('ko-KR') + (dot !== -1 ? raw.slice(dot) : '');
+  }
+  function calcSave() {
+    var s = {};
+    Object.keys(CALC_IDS).forEach(function (k) { s[k] = document.getElementById(CALC_IDS[k]).value; });
+    s.tick = document.getElementById('calcTick').checked;
+    try { localStorage.setItem(CALC_KEY, JSON.stringify(s)); } catch (e) {}
+  }
+  function initCalc() {
+    var cur = document.getElementById(CALC_IDS.cur);
+    if (!cur) return;
+    var saved = {};
+    try { saved = JSON.parse(localStorage.getItem(CALC_KEY) || '{}') || {}; } catch (e) { saved = {}; }
+    var tickEl = document.getElementById('calcTick');
+    tickEl.checked = saved.tick !== false; // 기본은 호가 단위 맞춤 켜짐
+    tickEl.addEventListener('change', function () { calcSave(); calcRender(); });
+    Object.keys(CALC_IDS).forEach(function (k) {
+      var el = document.getElementById(CALC_IDS[k]);
+      if (saved[k] != null) el.value = saved[k];
+      if (CALC_COMMA[k]) calcFormatInput(el);
+      el.addEventListener('input', function () {
+        if (CALC_COMMA[k]) {
+          // 천 단위 쉼표를 붙이되 커서가 튀지 않게 끝에서부터의 위치를 유지
+          var fromEnd = el.value.length - (el.selectionEnd == null ? el.value.length : el.selectionEnd);
+          calcFormatInput(el);
+          var pos = Math.max(0, el.value.length - fromEnd);
+          try { el.setSelectionRange(pos, pos); } catch (e) {}
+        }
+        calcSave();
+        calcRender();
+      });
+    });
+    document.getElementById('calcClear').addEventListener('click', function () {
+      Object.keys(CALC_IDS).forEach(function (k) { document.getElementById(CALC_IDS[k]).value = ''; });
+      calcSave();
+      calcRender();
+      cur.focus();
+    });
+    calcRender();
+  }
+
+  // =========================================================
   // 초기 렌더
   // =========================================================
   function render(data) {
@@ -98502,6 +98834,7 @@
     initSearch();
     // 분석 탭이 실패해도 다른 탭은 그대로 쓰이도록 따로 감싼다
     try { initAnalysis(); } catch (e) { if (window.console) console.error('분석 탭 초기화 실패', e); }
+    try { initCalc(); } catch (e) { if (window.console) console.error('시세 계산기 초기화 실패', e); }
   }
 
   // =========================================================
