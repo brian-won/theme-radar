@@ -66,28 +66,10 @@
   }
 
   * { box-sizing: border-box; }
-  body.locked > .wrap { display: none; }
-  .lock-screen {
-    position: fixed; inset: 0; z-index: 100; background: var(--bg);
-    display: flex; align-items: center; justify-content: center; padding: 20px;
-  }
-  .lock-screen[hidden] { display: none; }
-  .lock-box {
-    width: 100%; max-width: 320px; background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
-    box-shadow: var(--shadow); padding: 28px 24px; display: flex; flex-direction: column; gap: 10px; text-align: center;
-  }
-  .lock-title { font-size: 20px; font-weight: 900; font-family: "Noto Sans KR", sans-serif; }
-  .lock-sub { margin: 0; font-size: 13px; color: var(--text-muted); }
-  .lock-input {
-    margin-top: 6px; padding: 11px 14px; border-radius: 10px; border: 1px solid var(--border);
-    background: var(--surface-alt); color: var(--text-primary); font-family: inherit; font-size: 15px; text-align: center;
-  }
-  .lock-input:focus { outline: none; border-color: var(--accent); }
   .lock-btn {
     margin-top: 4px; padding: 11px; border-radius: 10px; border: none; background: var(--accent); color: #fff;
     font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer;
   }
-  .lock-error { margin: 2px 0 0; font-size: 12px; color: var(--up); }
   body {
     margin: 0;
     background: var(--bg);
@@ -758,15 +740,6 @@
 
 </head>
 <body>
-<div class="lock-screen" id="lockScreen" hidden>
-  <form class="lock-box" id="lockForm">
-    <div class="lock-title">Won's 투자</div>
-    <p class="lock-sub">비밀번호를 입력하세요</p>
-    <input type="password" id="lockInput" class="lock-input" autocomplete="current-password" placeholder="비밀번호">
-    <button type="submit" class="lock-btn">입장</button>
-    <p class="lock-error" id="lockError" hidden>비밀번호가 틀렸습니다.</p>
-  </form>
-</div>
 <div class="wrap app">
 
   <aside class="side">
@@ -1017,8 +990,6 @@
 
   // Supabase anon key는 공개 배포용 키라 노출돼도 안전함(RLS로 접근 범위 제한) — data/supabase_config.json에서 빌드 시 주입
   var SUPABASE_CONFIG = /*__SUPABASE_CONFIG__*/;
-  // 비밀번호는 SHA-256 해시만 저장됨(평문 없음) — scripts/set_dashboard_password.py로 설정
-  var SITE_PASSWORD = /*__SITE_PASSWORD__*/;
 
   var TOP_N = 15;
   var fmt = function (n, d) { return Number(n).toLocaleString('ko-KR', {minimumFractionDigits: d || 0, maximumFractionDigits: d || 0}); };
@@ -3923,48 +3894,7 @@
     try { initCalc(); } catch (e) { if (window.console) console.error('시세 계산기 초기화 실패', e); }
   }
 
-  // =========================================================
-  // 비밀번호 게이트 (클라이언트 측 검증 — 우연한 접근을 막는 용도, 완전한 보안 아님)
-  // 세션당 1회 입력(sessionStorage) · SHA-256 해시 비교라 평문 비밀번호는 코드에 없음
-  // =========================================================
-  function sha256Hex(str) {
-    return crypto.subtle.digest('SHA-256', new TextEncoder().encode(str)).then(function (buf) {
-      return Array.prototype.map.call(new Uint8Array(buf), function (b) { return b.toString(16).padStart(2, '0'); }).join('');
-    });
-  }
-
-  function boot() {
-    var lockEl = document.getElementById('lockScreen');
-    var already = false;
-    try { already = sessionStorage.getItem('themeRadar.unlocked') === '1'; } catch (e) {}
-    if (already || !SITE_PASSWORD || !SITE_PASSWORD.sha256 || !window.crypto || !window.crypto.subtle) {
-      render(SNAPSHOT);
-      return;
-    }
-    document.body.classList.add('locked');
-    lockEl.hidden = false;
-    var form = document.getElementById('lockForm');
-    var input = document.getElementById('lockInput');
-    var err = document.getElementById('lockError');
-    input.focus();
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      sha256Hex(input.value).then(function (hex) {
-        if (hex === SITE_PASSWORD.sha256) {
-          try { sessionStorage.setItem('themeRadar.unlocked', '1'); } catch (e2) {}
-          lockEl.hidden = true;
-          document.body.classList.remove('locked');
-          render(SNAPSHOT);
-        } else {
-          err.hidden = false;
-          input.value = '';
-          input.focus();
-        }
-      });
-    });
-  }
-
-  boot();
+  render(SNAPSHOT);
 })();
 </script>
 

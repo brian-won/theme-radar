@@ -15,7 +15,6 @@
   data/investor_flows.json         # (선택) 시황 탭 '거래주체별 순매수' — scripts/fetch_investor_flows.py로 생성
   data/market_history.json         # (선택) 시황 탭 과거 지수(스크리닝 없는 날) — scripts/backfill_market_history.py로 생성
   data/supabase_config.json        # 관심종목 수정 동기화용 Supabase 프로젝트 URL + anon key (공개해도 되는 값)
-  data/site_password.json          # 대시보드 접근 비밀번호의 SHA-256 해시(평문 아님) — scripts/set_dashboard_password.py로 설정
   skills/us-kr-sector-mapping/references/us_kr_sector_mapping.md  # (선택) 관심종목(해외) 탭 — 미국 섹터 종목 ↔ 한국 연관 종목 매핑표(파일을 고치고 다시 빌드하면 반영)
   dashboard/bt/engine.js, strategies.js  # 분석 탭 백테스트 엔진 — 파일 내용을 그대로 내장(브라우저 전역 BT)
   docs/bt/meta.js                  # (선택) 분석 탭 시세 조각 목록 — scripts/build_bt_data.py로 생성. 기준일·종목 수·달 목록만 SNAPSHOT.btMeta로 내장
@@ -121,11 +120,6 @@ def main():
         raise RuntimeError("data/supabase_config.json이 없습니다 — Supabase 프로젝트 URL/anon key를 먼저 저장하세요")
     supabase_config = json.loads(supabase_path.read_text(encoding="utf-8"))
 
-    pw_path = ROOT / "data" / "site_password.json"
-    if not pw_path.exists():
-        raise RuntimeError("data/site_password.json이 없습니다 — python scripts/set_dashboard_password.py 를 먼저 실행하세요")
-    site_password = json.loads(pw_path.read_text(encoding="utf-8"))
-
     taxonomy = json.loads((ROOT / "data" / "theme_taxonomy.json").read_text(encoding="utf-8"))
     unmapped = sorted({g["theme"] for day in daily_detail.values() for g in day["groups"]} - set(taxonomy["mapping"]))
     if unmapped:
@@ -171,7 +165,7 @@ def main():
     d3_js = (ROOT / "dashboard" / "vendor" / "d3.v7.9.0.min.js").read_text(encoding="utf-8")
 
     template = TEMPLATE.read_text(encoding="utf-8")
-    for marker in ("/*__SNAPSHOT__*/", "/*__SUPABASE_CONFIG__*/", "/*__SITE_PASSWORD__*/", "<!--__D3__-->", "/*__BT_ENGINE__*/", "/*__BT_STRATEGIES__*/"):
+    for marker in ("/*__SNAPSHOT__*/", "/*__SUPABASE_CONFIG__*/", "<!--__D3__-->", "/*__BT_ENGINE__*/", "/*__BT_STRATEGIES__*/"):
         if marker not in template:
             raise RuntimeError(f"dashboard/template.html에 {marker} 플레이스홀더가 없습니다")
     # 백테스트 엔진 두 파일을 그대로 내장(엔진 → 기법 순서). Node 테스트(tests/bt)가 쓰는 파일과 같은 내용이라 결과가 어긋나지 않는다
@@ -187,7 +181,6 @@ def main():
         .replace("<!--__D3__-->", "<script>" + d3_js.replace("</script", "<\\/script") + "</script>")
         .replace("/*__SNAPSHOT__*/", snapshot_js)
         .replace("/*__SUPABASE_CONFIG__*/", json.dumps(supabase_config, ensure_ascii=False))
-        .replace("/*__SITE_PASSWORD__*/", json.dumps(site_password, ensure_ascii=False))
     )
 
     OUTPUT.write_text(output, encoding="utf-8")

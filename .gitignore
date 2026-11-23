@@ -14,7 +14,6 @@ data/*
 !data/recent_prices.json
 !data/us_recent_prices.json
 !data/supabase_config.json
-!data/site_password.json
 !data/theme_taxonomy.json
 !data/investor_flows.json
 !data/market_history.json
