@@ -408,7 +408,7 @@
   .inv-seg button[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent-strong); font-weight: 700; }
   .inv-seg button:focus-visible, .inv-period select:focus-visible, table.inv-t tr.inv-pick:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
   .inv-tbox { max-height: 360px; overflow: auto; border: 1px solid var(--border); border-radius: 10px; }
-  table.inv-t { width: 100%; min-width: 980px; border-collapse: collapse; font-size: 12px; }
+  table.inv-t { width: 100%; min-width: 1100px; border-collapse: collapse; font-size: 12px; }
   table.inv-t thead { position: sticky; top: 0; z-index: 2; }
   table.inv-t th, table.inv-t td { padding: 6px; text-align: right; border-bottom: 1px solid var(--border); white-space: nowrap; font-variant-numeric: tabular-nums; }
   table.inv-t th { background: var(--surface-alt); color: var(--text-secondary); font-weight: 700; font-size: 11.5px; text-align: center; }
@@ -424,6 +424,8 @@
   table.inv-t tr.inv-pick:hover td { filter: brightness(.97); }
   table.inv-t tr.inv-pick.on td:first-child { background: var(--accent); color: #fff; font-weight: 700; }
   .inv-up { color: var(--up); } .inv-down { color: var(--down); }
+  /* 2026-11-23: 코스피·코스닥 묶음 맨 왼쪽 지수 등락률 칸(시황 표와 같은 값, 기간 합계 줄은 기간 누적 등락률) */
+  table.inv-t td.ix { font-weight: 600; }
   .inv-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; }
   .inv-panel { background: var(--surface-alt); border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
   .inv-panel .pname { font-size: 12.5px; font-weight: 700; }
@@ -1425,10 +1427,23 @@
     var fromSel = document.getElementById('invFrom'), toSel = document.getElementById('invTo');
     var presetG = document.getElementById('invPreset'), mktG = document.getElementById('invMkt');
     var table = document.getElementById('invTable'), host = document.getElementById('invChart'), tip = document.getElementById('invTip');
+    // 일자 옆에 함께 보여 줄 코스피·코스닥 등락률(%) — 시황 표와 같은 marketRows() 값. 없는 날은 '—'
+    var IDX = {}; marketRows().forEach(function (r) { IDX[r.date] = [r.kospiChange, r.kosdaqChange]; });
 
     function fmt(v) { if (v == null) return '—'; v = Math.round(v * 10) / 10; return (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v).toLocaleString('ko-KR', { maximumFractionDigits: 1 }); }
     function cls(v) { return v > 0 ? 'inv-up' : v < 0 ? 'inv-down' : ''; }
     function md(d) { return (+d.slice(5, 7)) + '/' + (+d.slice(8)); }
+    function pct(v) { return v == null || isNaN(v) ? '—' : (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v).toFixed(2) + '%'; }
+    function ixCell(x) { return '<td class="' + ('g ix ' + cls(x)).trim() + '">' + pct(x) + '</td>'; }
+    var IXN = 2; // 앞의 두 시장(코스피·코스닥)만 묶음 맨 왼쪽에 지수 등락률 칸을 붙인다
+    function ixPeriod(ds) {
+      // 기간 누적 등락률 = 날짜별 등락률을 복리로 곱한 값(값이 빠진 날은 건너뜀)
+      return [0, 1].map(function (i) {
+        var acc = 1, n = 0;
+        ds.forEach(function (d) { var v = IDX[d] && IDX[d][i]; if (v != null && !isNaN(v)) { acc *= 1 + v / 100; n++; } });
+        return n ? (acc - 1) * 100 : null;
+      });
+    }
     function svgEl(tag, attrs, parent) {
       var e = document.createElementNS(SVGNS, tag);
       for (var k in attrs) e.setAttribute(k, attrs[k]);
@@ -1461,7 +1476,7 @@
     }
 
     function drawTable(ds) {
-      // 시장마다 3칸(개인·외국인·기관). 색 진하기는 시장별 최댓값 기준(선물 계약 수와 억원이 섞이지 않게)
+      // 시장마다 3칸(개인·외국인·기관) + 코스피·코스닥은 맨 왼쪽에 그 지수 등락률 1칸(2026-11-23). 색 진하기는 시장별 최댓값 기준(선물 계약 수와 억원이 섞이지 않게)
       var max = MK.map(function () { return 1; }), sum = MK.map(function () { return [0, 0, 0]; }), has = MK.map(function () { return false; });
       var rows = ds.slice().reverse().map(function (d) {
         return { d: d, v: MK.map(function (m, mi) {
@@ -1471,20 +1486,20 @@
           return arr.slice(0, 3).map(function (v, i) { sum[mi][i] += v; max[mi] = Math.max(max[mi], Math.abs(v)); return v; });
         }) };
       });
-      function cells(vs, withHeat) {
+      function cells(vs, withHeat, ix) {
         return vs.map(function (grp, mi) {
-          return grp.map(function (v, i) {
-            var c = ((i === 0 ? 'g' : '') + (withHeat ? '' : ' ' + cls(v))).trim();
+          return (mi < IXN ? ixCell(ix[mi]) : '') + grp.map(function (v, i) {
+            var c = ((i === 0 && mi >= IXN ? 'g' : '') + (withHeat ? '' : ' ' + cls(v))).trim();
             return '<td' + (c ? ' class="' + c + '"' : '') + (withHeat && v != null ? heat(v, max[mi]) : '') + '>' + fmt(v) + '</td>';
           }).join('');
         }).join('');
       }
       table.innerHTML =
-        '<thead><tr><th rowspan="2">일자</th>' + MK.map(function (m) { return '<th colspan="3" class="g">' + m.n + '<span class="u">(' + m.u + ')</span></th>'; }).join('') + '</tr>' +
-        '<tr>' + MK.map(function () { return '<th class="sub g">개인</th><th class="sub">외국인</th><th class="sub">기관</th>'; }).join('') + '</tr></thead>' +
-        '<tbody><tr class="inv-sum"><td>기간 합계</td>' + cells(sum.map(function (g, mi) { return has[mi] ? g : [null, null, null]; }), false) + '</tr>' +
+        '<thead><tr><th rowspan="2">일자</th>' + MK.map(function (m, mi) { return '<th colspan="' + (mi < IXN ? 4 : 3) + '" class="g">' + m.n + '<span class="u">(' + m.u + ')</span></th>'; }).join('') + '</tr>' +
+        '<tr>' + MK.map(function (m, mi) { return (mi < IXN ? '<th class="sub g">등락률</th><th class="sub">개인</th>' : '<th class="sub g">개인</th>') + '<th class="sub">외국인</th><th class="sub">기관</th>'; }).join('') + '</tr></thead>' +
+        '<tbody><tr class="inv-sum"><td>기간 합계</td>' + cells(sum.map(function (g, mi) { return has[mi] ? g : [null, null, null]; }), false, ixPeriod(ds)) + '</tr>' +
         rows.map(function (r) {
-          return '<tr class="inv-pick' + (r.d === st.sel ? ' on' : '') + '" tabindex="0" data-d="' + r.d + '"><td>' + md(r.d) + '</td>' + cells(r.v, true) + '</tr>';
+          return '<tr class="inv-pick' + (r.d === st.sel ? ' on' : '') + '" tabindex="0" data-d="' + r.d + '"><td>' + md(r.d) + '</td>' + cells(r.v, true, IDX[r.d] || [null, null]) + '</tr>';
         }).join('') + '</tbody>';
       table.style.setProperty('--inv-thead-h', (table.tHead.offsetHeight || 58) + 'px');
     }
