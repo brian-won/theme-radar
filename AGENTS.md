@@ -17,7 +17,8 @@
 ## 3. Commands
 ```bash
 python scripts/market_screen.py [YYYYMMDD]   # 시황+종목 스크리닝 원본 JSON 출력 (테마/재료는 후속 LLM 단계에서 채움)
-python scripts/fetch_recent_prices.py        # 관심종목 탭용 최근 5거래일 시세(KIS KRX+NXT 통합)·코스피/코스닥 구분 → data/recent_prices.json (**사용자가 요청할 때만 실행** — 일일 스크리닝 때 자동 실행 금지, 2026-11-13 사용자 지시, 약 5분)
+python scripts/fetch_recent_prices.py --today   # 그날 큰 틀 1~4위 그룹의 그날 종목만 5일 시세를 recent_prices.json에 합침(**일일 스크리닝 때 매번 실행**, 빌드 전, 약 30초, 2026-11-23 사용자 지시)
+python scripts/fetch_recent_prices.py        # 관심종목 탭 전 종목 최근 5거래일 시세(KIS KRX+NXT 통합)·코스피/코스닥 구분 → data/recent_prices.json (**사용자가 요청할 때만 실행**, 2026-11-13 사용자 지시, 약 5분)
 python scripts/fetch_us_prices.py            # 관심종목(해외) 탭용 미국 종목 최근 5거래일 시세(KIS 해외주식) → data/us_recent_prices.json (빌드 전 실행, 약 2분)
 python scripts/fetch_investor_flows.py [YYYYMMDD]   # 시황 탭 거래주체별 순매수(코스피·코스닥=KRX, 코스피200 선물·콜·풋=KIS) → data/investor_flows.json (빠진 리포트 날짜+해당일 갱신, 빌드 전 실행)
 python scripts/backfill_market_history.py 20260102 20260903   # 시황 탭 과거 지수만(스크리닝 없는 날) → data/market_history.json (리포트·통계 탭 영향 없음, --check로 daily_reports 값과 대조, --fill-reports로 daily_reports에 빠진 120일선 등 채움)
@@ -47,7 +48,7 @@ docs/product-spec.md       # 기능 명세, 완료 정의(Definition of Done)
 docs/security.md           # 인증/권한, 민감정보 처리, 데이터 보호
 skills/                    # 재사용 가능한 작업 절차 (SKILL.md 표준)
   ├── skill-creator/         # 새 스킬 생성/수정 방법
-  ├── daily-market-report/   # 일일 시황 스크리닝→Notion 기록→대시보드 갱신 전체 절차 (상승 이유 출처·인포스탁 소급 검증·추정 종목 규칙 포함 — 스크리닝 전 반드시 읽을 것)
+  ├── daily-market-report/   # 일일 시황 스크리닝→Notion 기록→대시보드 갱신 전체 절차 (상승 이유 출처·인포스탁 소급 검증·추정 종목 규칙 포함 — 스크리닝 전 반드시 읽을 것. 상승 이유는 2026-11-24부터 시황 문구 없이 재료만 2~3문장 한 문단)
   └── us-kr-sector-mapping/  # 미국 섹터 종목 ↔ 한국 연관 종목 매핑 조회·수정 → 대시보드 관심종목(해외) 탭 반영
 ```
 

@@ -8,7 +8,11 @@
            + 관심종목(해외) 탭의 국내 연관 종목(매핑표 한국 종목 + 화면에서 추가해 Supabase에 동기화된 종목)
 - 대상 일자: data/daily_reports.json의 최근 5개 거래일
 
-사용법: python scripts/fetch_recent_prices.py
+사용법: python scripts/fetch_recent_prices.py           # 전체 종목(약 5분) — 사용자가 요청할 때만
+        python scripts/fetch_recent_prices.py --today   # 최근 리포트 날짜의 큰 틀 1~4위 그룹에 든 그날 종목만(수십 초) — 일일 스크리닝 때 실행
+          · --today는 기존 data/recent_prices.json에 합친다: 대상 종목의 일자별 값만 추가·갱신하고, 다른 종목과 공통 'dates'는 그대로 둔다
+            (관심종목 탭은 카드마다 그 카드 종목들이 가진 최근 5일로 열 제목을 잡으므로, 갱신 안 된 카드는 예전 날짜로 계속 보인다)
+          · 큰 틀 순위 = theme_taxonomy.json mapping으로 묶은 큰 틀별 거래대금 합계(종목 중복 제외) 내림차순 — 대시보드 buildFrameDetail과 같은 기준
         (환경변수 KRX_ID/KRX_PW, KIS_APP_KEY/KIS_APP_SECRET 필요. 모의투자 API 제한(초당 2건)으로 종목당 약 1초 소요)
 출력:   data/recent_prices.json
 """
@@ -25,6 +29,7 @@ from build_dashboard import US_KR_MAPPING, parse_us_kr_mapping  # noqa: E402
 
 ROOT = Path(__file__).parent.parent
 N_DAYS = 5
+TODAY_TOP = 4  # --today: 큰 틀 1~4위(2026-11-23 사용자 지시)
 # 매핑표·화면 표기 → pykrx 종목명 (영문 공식명 등 표기가 다른 종목만)
 NAME_ALIAS = {"네이버": "NAVER", "LS일렉트릭": "LS ELECTRIC", "포스코홀딩스": "POSCO홀딩스",
               "LIG D&A": "LIG디펜스앤에어로스페이스", "엔씨소프트": "NC"}
@@ -50,14 +55,31 @@ def us_tab_added_names() -> set:
         return set()
 
 
+def today_top_names(detail: dict, date: str, top: int) -> list:
+    """그날 큰 틀(인포스탁 테마) 거래대금 1~top위에 든 종목명. 큰 틀 합계는 종목 중복을 빼고 계산."""
+    mapping = json.loads((ROOT / "data" / "theme_taxonomy.json").read_text(encoding="utf-8"))["mapping"]
+    frames = {}
+    for g in detail[date]["groups"]:
+        f = frames.setdefault(mapping.get(g["theme"], g["theme"]), {})
+        for s in g["stocks"]:
+            f[s["name"]] = s["value"]
+    ranked = sorted(frames, key=lambda k: -sum(frames[k].values()))[:top]
+    print(f"{date} 큰 틀 1~{top}위: {ranked}", file=sys.stderr)
+    return sorted({n for k in ranked for n in frames[k]})
+
+
 def main():
     sys.stderr.reconfigure(encoding="utf-8")
+    today_only = "--today" in sys.argv[1:]
     reports = json.loads((ROOT / "data" / "daily_reports.json").read_text(encoding="utf-8"))
     detail = json.loads((ROOT / "data" / "daily_detail_with_reasons.json").read_text(encoding="utf-8"))
     dates = sorted(r["date"] for r in reports)[-N_DAYS:]
-    names = {s["name"] for day in detail.values() for g in day["groups"] for s in g["stocks"]}
-    names |= {k for r in parse_us_kr_mapping(US_KR_MAPPING)["rows"] for k in r["kr"]}
-    names = sorted(names | us_tab_added_names())
+    if today_only:
+        names = today_top_names(detail, dates[-1], TODAY_TOP)
+    else:
+        names = {s["name"] for day in detail.values() for g in day["groups"] for s in g["stocks"]}
+        names |= {k for r in parse_us_kr_mapping(US_KR_MAPPING)["rows"] for k in r["kr"]}
+        names = sorted(names | us_tab_added_names())
     latest = dates[-1].replace("-", "")
 
     # pykrx는 import/로그인 시점부터 stdout에 print를 하므로 stderr로 돌린다
@@ -93,8 +115,20 @@ def main():
         if i % 20 == 0:
             print(f"  진행 {i}/{len(names)}", file=sys.stderr)
 
-    out = {"dates": dates, "source": "KIS(KRX+NXT 통합)", "prices": prices}
-    (ROOT / "data" / "recent_prices.json").write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
+    out_path = ROOT / "data" / "recent_prices.json"
+    if today_only and out_path.exists():
+        # 기존 파일에 합친다: 대상 종목은 예전 일자 값을 남긴 채 새 일자 값을 덮어쓰고, 공통 dates·다른 종목은 그대로
+        out = json.loads(out_path.read_text(encoding="utf-8"))
+        for name, p in prices.items():
+            old = out["prices"].get(name)
+            if old:
+                old["days"].update(p["days"])
+                old["ticker"], old["market"] = p["ticker"], p["market"] or old.get("market", "")
+            else:
+                out["prices"][name] = p
+    else:
+        out = {"dates": dates, "source": "KIS(KRX+NXT 통합)", "prices": prices}
+    out_path.write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"저장 완료: 종목 {len(prices)}개 / 일자 {dates}", file=sys.stderr)
     if unresolved:
         print(f"티커 미매칭 {len(unresolved)}개: {unresolved}", file=sys.stderr)

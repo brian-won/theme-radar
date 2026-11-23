@@ -2010,6 +2010,12 @@
     var body = document.getElementById('watchBody');
     var t = themes.filter(function (x) { return x.theme === WATCH_SEL; })[0];
     if (!t) { body.innerHTML = '<div class="placeholder-note">표시할 테마가 없습니다.</div>'; renderWatchFoot(); return; }
+    // 열 제목(5일)은 카드마다 그 카드 종목들이 가진 시세 날짜 중 최근 5일(2026-11-23). 일일 스크리닝 때는 큰 틀 1~4위의 그날 종목만
+    // 새로 받아(fetch_recent_prices.py --today) 합치므로, 갱신된 카드는 새 날짜로, 나머지 카드는 예전 날짜로 보인다
+    var dset = {};
+    t.list.forEach(function (s) { var p = rp.prices && rp.prices[s.name]; if (p && p.days) Object.keys(p.days).forEach(function (d) { dset[d] = 1; }); });
+    var cardDates = Object.keys(dset).sort().slice(-5);
+    if (cardDates.length) pdates = cardDates;
 
     function stockRow(s) {
       var p = rp.prices && rp.prices[s.name];
@@ -2057,6 +2063,7 @@
     var edited = Object.keys(WATCH_EDITS.removed).length + Object.keys(WATCH_EDITS.added).length + Object.keys(WATCH_EDITS.leader).length;
     document.getElementById('watchFoot').innerHTML =
       '종목명 옆 작은 날짜는 그 테마로 마지막에 리포트에 등장한 날입니다. 등락률은 KIS 통합 기준으로 전일 KRX 종가 대비, 거래대금은 KRX+NXT 합산입니다. ' +
+      '5일 시세는 매일 그날 1~4위 테마에 든 종목만 새로 받아서, 예전 종목은 빈칸(—)이거나 예전 날짜 값일 수 있습니다. ' +
       '⋮ 메뉴의 수정(테마 삭제·추가, 대장주 지정)은 이 브라우저에 저장됩니다.' +
       (edited ? ' <button type="button" class="linkbtn" id="watchReset">수정 초기화</button>' : '');
   }
