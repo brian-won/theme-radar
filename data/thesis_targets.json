@@ -1,5 +1,5 @@
 {
- "_note": "투자 논리 점검 대상: 그날 큰 틀 1~3위 테마마다, 그날 그 테마 종목 중 최근 25거래일 등장 일수 1~3위(최대 9종목). scripts/thesis_targets.py가 생성. 규칙은 skills/theme-thesis/SKILL.md",
+ "_note": "종목 분석 대상: 그날 큰 틀 1~3위 테마마다, 그날 그 테마 종목 중 최근 25거래일 등장 일수 1~3위(최대 9종목). scripts/thesis_targets.py가 생성. 규칙은 skills/theme-thesis/SKILL.md",
  "window": 25,
  "tickers": {
   "CJ ENM": {

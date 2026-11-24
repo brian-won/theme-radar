@@ -19,6 +19,7 @@
   dashboard/bt/engine.js, strategies.js  # 분석 탭 백테스트 엔진 — 파일 내용을 그대로 내장(브라우저 전역 BT)
   docs/bt/meta.js                  # (선택) 분석 탭 시세 조각 목록 — scripts/build_bt_data.py로 생성. 기준일·종목 수·달 목록만 SNAPSHOT.btMeta로 내장
   data/bt_defaults.json            # (선택) 분석 탭 비교표의 기법별 기본값 결과 — node scripts/bt_run.js --defaults 로 생성 → SNAPSHOT.btDefaults
+  data/theses/*.md, data/thesis_targets.json  # (선택) 분석 › 종목 분석 — theme-thesis 스킬 문서(마크다운 → HTML)와 날짜별 대상 → SNAPSHOT.theses / thesisTargets
   data/catalysts.json              # (선택) 캘린더 탭 이벤트(테마 일정·매크로·실적) — skills/catalyst-calendar/SKILL.md 규칙으로 직접 갱신 → SNAPSHOT.catalysts(해외 일정은 한국 시간 kst를 계산해 붙임)
 
 출력:
@@ -44,6 +45,8 @@ BT_STRATEGIES = ROOT / "dashboard" / "bt" / "strategies.js"
 BT_META = ROOT / "docs" / "bt" / "meta.js"
 BT_DEFAULTS = ROOT / "data" / "bt_defaults.json"
 CATALYSTS = ROOT / "data" / "catalysts.json"
+THESES_DIR = ROOT / "data" / "theses"
+THESIS_TARGETS = ROOT / "data" / "thesis_targets.json"
 
 
 def parse_us_kr_mapping(path: Path) -> dict:
@@ -168,6 +171,90 @@ def load_catalysts(path: Path, frames: list, today: str):
     return {"updatedAt": raw.get("updatedAt"), "macroMonths": raw.get("macroMonths", []), "events": events}, warnings
 
 
+def _md_inline(text: str) -> str:
+    """종목 분석 문서용 아주 작은 마크다운 변환: HTML 이스케이프 → **굵게**, [글](주소), `코드`."""
+    import html
+    s = html.escape(text, quote=True)
+    s = re.sub(r"\*\*(.+?)\*\*", r"<b>\1</b>", s)
+    s = re.sub(r"`([^`]+)`", r"<code>\1</code>", s)
+    s = re.sub(r"\[([^\]]+)\]\((https?://[^)\s]+)\)", r'<a href="\2" target="_blank" rel="noopener">\1</a>', s)
+    return s
+
+
+def _table_rows(lines: list) -> list:
+    rows = []
+    for ln in lines:
+        cells = [c.strip() for c in ln.strip().strip("|").split("|")]
+        if all(re.fullmatch(r":?-{2,}:?", c) for c in cells if c):
+            continue  # 구분선
+        rows.append(cells)
+    return rows
+
+
+def _md_block(text: str) -> str:
+    """문단·목록(- )·표(|)만 다룬다. 우리 문서 형식(skills/theme-thesis/SKILL.md) 밖의 문법은 그대로 문단으로 둔다."""
+    out, i, lines = [], 0, [ln for ln in text.strip().splitlines()]
+    while i < len(lines):
+        ln = lines[i].strip()
+        if not ln:
+            i += 1
+            continue
+        if ln.startswith("|"):
+            block = []
+            while i < len(lines) and lines[i].strip().startswith("|"):
+                block.append(lines[i]); i += 1
+            rows = _table_rows(block)
+            head, body = rows[0], rows[1:]
+            out.append('<div class="table-scroll"><table class="ts-t"><thead><tr>' + "".join(f"<th>{_md_inline(c)}</th>" for c in head) +
+                       "</tr></thead><tbody>" + "".join("<tr>" + "".join(f"<td>{_md_inline(c)}</td>" for c in r) + "</tr>" for r in body) + "</tbody></table></div>")
+            continue
+        if ln.startswith("- "):
+            items = []
+            while i < len(lines) and lines[i].strip().startswith("- "):
+                items.append(lines[i].strip()[2:]); i += 1
+            out.append("<ul>" + "".join(f"<li>{_md_inline(x)}</li>" for x in items) + "</ul>")
+            continue
+        out.append(f"<p>{_md_inline(ln)}</p>")
+        i += 1
+    return "".join(out)
+
+
+def load_theses(dir_path: Path) -> dict:
+    """분석 › 종목 분석용: data/theses/<종목>.md 를 머리 정보 + 절(HTML) + 날짜별 기록 행으로 바꾼다."""
+    out = {}
+    if not dir_path.exists():
+        return out
+    for p in sorted(dir_path.glob("*.md")):
+        text = p.read_text(encoding="utf-8")
+        m = re.match(r"---\n(.*?)\n---\n(.*)", text, re.S)
+        if not m:
+            print(f"경고(종목 분석): {p.name} 머리 정보(---)가 없어 건너뜀")
+            continue
+        meta = {}
+        for ln in m.group(1).splitlines():
+            if ":" not in ln:
+                continue
+            k, v = ln.split(":", 1)
+            v = v.split("  #")[0].strip().strip('"')
+            meta[k.strip()] = [x.strip() for x in v.strip("[]").split(",") if x.strip()] if v.startswith("[") else v
+        sections, records = {}, []
+        for part in re.split(r"^## ", m.group(2), flags=re.M)[1:]:
+            title, _, body = part.partition("\n")
+            title = title.strip()
+            if title.startswith("기록"):
+                rows = _table_rows([ln for ln in body.splitlines() if ln.strip().startswith("|")])
+                head = rows[0] if rows else []
+                for r in rows[1:]:
+                    if len(r) == len(head) == 7:
+                        records.append(dict(zip(["date", "theme", "rankInTheme", "change", "material", "impact", "conviction"], r)))
+                sections["기록"] = _md_block(body)
+            else:
+                sections[re.sub(r"\s*\(.*\)$", "", title)] = _md_block(body)
+        name = meta.get("name") or p.stem
+        out[name] = {"meta": meta, "sections": sections, "records": records}
+    return out
+
+
 def main():
     daily_reports = json.loads((ROOT / "data" / "daily_reports.json").read_text(encoding="utf-8"))
     daily_detail = json.loads((ROOT / "data" / "daily_detail_with_reasons.json").read_text(encoding="utf-8"))
@@ -196,6 +283,22 @@ def main():
     catalysts, catalyst_warnings = load_catalysts(CATALYSTS, taxonomy["frames"], datetime.now(ZoneInfo("Asia/Seoul")).strftime("%Y-%m-%d"))
     for w in catalyst_warnings:
         print(f"경고(캘린더): {w}")
+
+    # 분석 › 종목 분석: 문서 + 날짜별 대상(종목명·순위·등장 횟수·그날 등락만 남겨 크기를 줄임)
+    theses = load_theses(THESES_DIR)
+    targets_raw = json.loads(THESIS_TARGETS.read_text(encoding="utf-8")) if THESIS_TARGETS.exists() else {"history": {}}
+    thesis_targets = {
+        "window": targets_raw.get("window"),
+        "tickers": targets_raw.get("tickers", {}),
+        "history": {d: [{"rank": t["rank"], "theme": t["theme"], "n": t["stocksToday"], "tied": t["tiedOut"],
+                         "top": [[r["name"], r["count"], r["todayChange"]] for r in t["top"]]} for t in day["themes"]]
+                    for d, day in targets_raw.get("history", {}).items()},
+    }
+    latest_targets = max(thesis_targets["history"], default=None)
+    if latest_targets:
+        missing_docs = sorted({r[0] for t in thesis_targets["history"][latest_targets] for r in t["top"]} - set(theses))
+        if missing_docs:
+            print(f"경고(종목 분석): {latest_targets} 대상인데 문서가 없는 종목 {missing_docs} — theme-thesis 스킬로 작성 필요")
 
     flows_path = ROOT / "data" / "investor_flows.json"
     investor_flows = json.loads(flows_path.read_text(encoding="utf-8")) if flows_path.exists() else {"order": [], "days": {}}
@@ -228,7 +331,9 @@ def main():
         "    marketHistory: " + json.dumps(market_history, ensure_ascii=False, separators=(",", ":")) + ",\n"
         "    btMeta: " + json.dumps(bt_meta, ensure_ascii=False, separators=(",", ":")) + ",\n"
         "    btDefaults: " + json.dumps(bt_defaults, ensure_ascii=False, separators=(",", ":")) + ",\n"
-        "    catalysts: " + json.dumps(catalysts, ensure_ascii=False, separators=(",", ":")) + "\n"
+        "    catalysts: " + json.dumps(catalysts, ensure_ascii=False, separators=(",", ":")) + ",\n"
+        "    theses: " + json.dumps(theses, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/") + ",\n"
+        "    thesisTargets: " + json.dumps(thesis_targets, ensure_ascii=False, separators=(",", ":")) + "\n"
         "  }"
     )
 
@@ -265,6 +370,7 @@ def main():
     print(f"  거래주체별 순매수 {len(investor_flows['days'])}일치 (최근 {max(investor_flows['days']) if investor_flows['days'] else None})")
     print(f"  분석 탭: 시세 조각 {len(bt_meta['months']) if bt_meta else 0}개월(기준일 {bt_meta['asOf'] if bt_meta else None}, {bt_meta['tickers'] if bt_meta else 0}종목), "
           f"기본값 결과 {len(bt_defaults.get('strategies', {})) if bt_defaults else 0}개 기법")
+    print(f"  종목 분석 문서 {len(theses)}개, 대상 이력 {len(thesis_targets['history'])}일 (최근 {latest_targets})")
     print(f"  캘린더 이벤트 {len(catalysts['events'])}개 (매크로 반영 달 {catalysts['macroMonths']}, 결과 입력 {sum(1 for e in catalysts['events'] if e.get('result') or any(m.get('actual') not in (None, '') for m in e.get('metrics', [])))}개)")
     print(f"  관심종목(해외) 매핑 {len(us_kr['rows'])}행 (기준일 {us_kr['asOf']}), 미국 시세 {len(us_prices['prices'])}종목(최근 {(us_prices['dates'] or [None])[-1]})")
 

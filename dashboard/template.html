@@ -820,6 +820,62 @@
     .cal-dots { display: flex; }
     .cal-day-group { grid-template-columns: 48px minmax(0, 1fr); gap: 8px; }
   }
+
+  /* ---- 분석 하위 탭(백테스트 / 종목 분석) + 종목 분석 화면 (2026-11-24 추가) ---- */
+  .sub-tabs { display: inline-flex; gap: 4px; padding: 3px; background: var(--surface-alt); border-radius: 10px; }
+  .sub-tab { font-family: inherit; font-size: 13px; font-weight: 700; padding: 7px 14px; border: none; border-radius: 8px; background: transparent; color: var(--text-secondary); cursor: pointer; }
+  .sub-tab[aria-selected="true"] { background: var(--surface); color: var(--accent-strong); box-shadow: var(--shadow); }
+  .sub-tab:focus-visible, .ts-stock:focus-visible, .ts-chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .sub-panel { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+  .sub-panel[hidden] { display: none; }
+  .bt-subhead h3, .ts-head h3 { font-size: 15.5px; margin: 0; font-weight: 700; }
+  .ts-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 10px 16px; flex-wrap: wrap; }
+  .ts-head .st-note { margin: 3px 0 0; font-size: 12px; color: var(--text-muted); }
+  .ts-targets { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; align-items: start; }
+  .ts-theme { gap: 8px; }
+  .ts-theme-head { display: flex; align-items: baseline; gap: 6px 8px; flex-wrap: wrap; font-size: 14px; }
+  .ts-theme-head .ts-trk { font-family: "JetBrains Mono", monospace; font-size: 12px; font-weight: 700; color: var(--accent-strong); }
+  .ts-theme-head .ts-sub { font-size: 11.5px; color: var(--text-muted); }
+  .ts-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+  .ts-stock { width: 100%; display: flex; align-items: center; gap: 4px 8px; flex-wrap: wrap; padding: 9px 10px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); color: inherit; font-family: inherit; font-size: 13px; cursor: pointer; text-align: left; }
+  .ts-stock:hover { border-color: var(--text-muted); }
+  .ts-stock.sel { border-color: var(--accent); background: var(--accent-soft); }
+  .ts-rk { font-family: "JetBrains Mono", monospace; font-size: 11.5px; color: var(--text-muted); min-width: 14px; }
+  .ts-nm { font-weight: 700; flex: 1 1 auto; min-width: 0; }
+  .ts-cnt { font-size: 11.5px; color: var(--text-secondary); white-space: nowrap; }
+  .ts-chg { font-family: "JetBrains Mono", monospace; font-size: 12px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .ts-chg.up { color: var(--up); } .ts-chg.down { color: var(--down); }
+  .ts-pill { font-size: 10.5px; font-weight: 700; padding: 2px 7px; border-radius: 999px; white-space: nowrap; background: var(--surface-alt); color: var(--text-secondary); }
+  .ts-pill.conv-hi { background: var(--accent-soft); color: var(--accent-strong); }
+  .ts-pill.conv-lo { background: var(--down-soft); color: var(--down); }
+  .ts-pill.imp-up { background: var(--up-soft); color: var(--up); }
+  .ts-pill.imp-down { background: var(--down-soft); color: var(--down); }
+  .ts-pill.none { border: 1px dashed var(--border); background: transparent; color: var(--text-muted); }
+  .ts-tied { font-size: 11.5px; color: var(--text-muted); margin: 0; }
+  .ts-detail { gap: 16px; padding: 18px 18px 16px; }
+  .ts-d-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px 12px; flex-wrap: wrap; }
+  .ts-d-head h3 { font-size: 19px; margin: 0; font-weight: 800; }
+  .ts-d-head .st-note { margin: 4px 0 0; font-size: 12px; color: var(--text-muted); }
+  .ts-sec h4 { font-size: 12.5px; margin: 0 0 6px; color: var(--text-secondary); font-weight: 700; }
+  .ts-sec p, .ts-sec li { font-size: 13.5px; line-height: 1.7; margin: 0; }
+  .ts-sec ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px; }
+  .ts-sec a { color: var(--accent); }
+  .ts-sec code { font-family: "JetBrains Mono", monospace; font-size: 11.5px; background: var(--surface-alt); padding: 1px 4px; border-radius: 4px; }
+  .ts-thesis { background: var(--accent-soft); border-radius: 10px; padding: 12px 14px; }
+  .ts-thesis p { font-size: 15px; }
+  .ts-two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .ts-src p, .ts-src li { font-size: 12px; color: var(--text-muted); }
+  table.ts-t { border-collapse: collapse; width: 100%; font-size: 12.5px; min-width: 560px; }
+  table.ts-t th { text-align: left; font-size: 11.5px; color: var(--text-muted); font-weight: 600; padding: 6px 8px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  table.ts-t td { padding: 7px 8px; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.55; }
+  .ts-all { gap: 0; }
+  .ts-all summary { cursor: pointer; font-weight: 700; font-size: 13.5px; }
+  .ts-all-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+  .ts-chip { font-family: inherit; font-size: 12.5px; padding: 5px 10px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface); color: var(--text-primary); cursor: pointer; display: inline-flex; gap: 6px; align-items: center; }
+  .ts-chip.sel { border-color: var(--accent); background: var(--accent-soft); }
+  .ts-empty { color: var(--text-muted); font-size: 13px; margin: 0; }
+  @media (max-width: 1100px) { .ts-targets { grid-template-columns: minmax(0, 1fr); } }
+  @media (max-width: 900px) { .ts-two { grid-template-columns: minmax(0, 1fr); } }
 </style>
 
 </head>
@@ -984,7 +1040,30 @@
   <!-- ---- 분석: 매매기법 백테스트 (엔진은 dashboard/bt/engine.js·strategies.js 를 빌드 때 내장, 시세 조각은 실행할 때 bt/*.js 를 받아 옴) ---- -->
   <section class="tab-panel" data-tab-panel="analysis" hidden>
     <div class="section-head">
-      <h2>분석 · 매매기법 백테스트</h2>
+      <h2>분석</h2>
+      <div class="sub-tabs" role="tablist" aria-label="분석 하위 메뉴">
+        <button type="button" class="sub-tab" data-sub="bt" role="tab" aria-selected="true">백테스트</button>
+        <button type="button" class="sub-tab" data-sub="stock" role="tab" aria-selected="false">종목 분석</button>
+      </div>
+    </div>
+
+    <!-- 분석 › 종목 분석 (2026-11-24 추가): data/theses/*.md + data/thesis_targets.json → SNAPSHOT.theses / thesisTargets -->
+    <div class="sub-panel" data-sub-panel="stock" hidden>
+      <div class="ts-head">
+        <div><h3>종목 분석</h3><p class="st-note">그날 큰 틀 1~3위 테마마다, 그 테마 종목 중 최근 25거래일 등장 일수 1~3위 · 종목을 누르면 아래에 분석 문서가 열립니다</p></div>
+        <div class="month-nav" id="tsDateNav"></div>
+      </div>
+      <div class="ts-targets" id="tsTargets"></div>
+      <div class="st-card ts-detail" id="tsDetail"></div>
+      <details class="st-card ts-all">
+        <summary id="tsAllSummary">전체 종목 문서</summary>
+        <div class="ts-all-list" id="tsAllList"></div>
+      </details>
+    </div>
+
+    <div class="sub-panel" data-sub-panel="bt">
+    <div class="section-head bt-subhead">
+      <h3>매매기법 백테스트</h3>
       <span class="note" id="btMetaNote"></span>
     </div>
     <div class="placeholder-note bt-notice" id="btNotice" hidden></div>
@@ -1018,6 +1097,7 @@
           <div class="table-scroll" id="btCompare"></div>
         </div>
       </div>
+    </div>
     </div>
   </section>
 
@@ -2920,7 +3000,10 @@
   function btPut(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } }
   function btOwn(o, k) { return Object.prototype.hasOwnProperty.call(o, k); }
   function btExtras() { return { theme: Object.keys(FRAME_DETAIL).length ? FRAME_DETAIL : null }; }
-  function btVisible() { var p = document.querySelector('.tab-panel[data-tab-panel="analysis"]'); return !!p && !p.hidden; }
+  function btVisible() {
+    var p = document.querySelector('.tab-panel[data-tab-panel="analysis"]'), s = document.querySelector('[data-sub-panel="bt"]');
+    return !!p && !p.hidden && !!s && !s.hidden;
+  }
   function btNarrow() { return !!(window.matchMedia && window.matchMedia('(max-width: 900px)').matches); }
   // 화면이 먼저 한 번 그려지도록 양보(숨은 탭에서는 requestAnimationFrame이 멈추므로 시간 제한을 같이 둔다)
   function btYield() {
@@ -4210,6 +4293,147 @@
   }
 
   // =========================================================
+  // 분석 › 하위 탭(백테스트 / 종목 분석) — 2026-11-24 추가. 마지막 선택은 localStorage themeRadar.analysisSub
+  // =========================================================
+  function setAnalysisSub(key) {
+    document.querySelectorAll('.sub-tab[data-sub]').forEach(function (b) { b.setAttribute('aria-selected', String(b.dataset.sub === key)); });
+    document.querySelectorAll('[data-sub-panel]').forEach(function (p) { p.hidden = p.dataset.subPanel !== key; });
+    try { localStorage.setItem('themeRadar.analysisSub', key); } catch (e) {}
+    // 숨겨져 있던 백테스트 차트는 폭이 0이라 보일 때 다시 그린다
+    if (key === 'bt' && btVisible()) { try { btDrawEquity(); btDrawOverlay(); } catch (e) {} }
+  }
+  function initAnalysisSubs() {
+    var saved = null;
+    try { saved = localStorage.getItem('themeRadar.analysisSub'); } catch (e) {}
+    document.querySelectorAll('.sub-tab[data-sub]').forEach(function (b) {
+      b.addEventListener('click', function () { setAnalysisSub(b.dataset.sub); });
+    });
+    setAnalysisSub(saved === 'stock' ? 'stock' : 'bt');
+  }
+
+  // ---- 종목 분석: SNAPSHOT.thesisTargets.history[날짜] = [{rank, theme, n, tied, top:[[종목, 25일 등장, 그날 등락]]}]
+  //      SNAPSHOT.theses[종목] = {meta, sections:{핵심 논리, 근거, …: HTML}, records:[{date, impact, conviction, …}]}
+  //      문서 HTML은 build_dashboard.py가 우리 마크다운을 이스케이프한 뒤 만든 것이다.
+  var TS = { date: null, name: null };
+  var TS_CONV = { '높음': 'hi', '보통': 'mid', '낮음': 'lo' };
+  function tsHistory() { return ((SNAPSHOT.thesisTargets || {}).history) || {}; }
+  function tsDates() { return Object.keys(tsHistory()).sort(); }
+  function tsDoc(n) { return (SNAPSHOT.theses || {})[n] || null; }
+  function tsRecord(doc, date) { return doc ? (doc.records || []).filter(function (r) { return r.date === date; })[0] || null : null; }
+  function tsImpCls(t) { return !t ? '' : t.indexOf('강화') === 0 ? 'imp-up' : t.indexOf('약화') === 0 ? 'imp-down' : ''; }
+  function tsConvPill(doc, prefix) {
+    var c = doc && doc.meta && doc.meta.conviction;
+    return c ? '<span class="ts-pill conv-' + (TS_CONV[c] || 'mid') + '">' + (prefix || '') + esc(c) + '</span>' : '';
+  }
+  function tsChg(v) {
+    var n = Number(v);
+    return '<span class="ts-chg ' + (n > 0 ? 'up' : n < 0 ? 'down' : '') + '">' + (n > 0 ? '+' : '') + n.toFixed(2) + '%</span>';
+  }
+  function tsDayLabel(d) { return d.slice(5).replace('-', '/') + ' (' + CAL_WD[calWeekday(d)] + ')'; }
+  function tsRenderNav(dates) {
+    var i = dates.indexOf(TS.date);
+    document.getElementById('tsDateNav').innerHTML =
+      '<button type="button" class="month-arrow" data-dir="-1"' + (i <= 0 ? ' disabled' : '') + ' aria-label="이전 거래일">‹</button>' +
+      '<select class="month-select" id="tsDateSelect" aria-label="날짜 선택">' +
+      dates.slice().reverse().map(function (d) { return '<option value="' + d + '"' + (d === TS.date ? ' selected' : '') + '>' + d.slice(0, 4) + '/' + tsDayLabel(d) + '</option>'; }).join('') +
+      '</select>' +
+      '<button type="button" class="month-arrow" data-dir="1"' + (i >= dates.length - 1 ? ' disabled' : '') + ' aria-label="다음 거래일">›</button>';
+  }
+  function tsRenderTargets() {
+    var themes = tsHistory()[TS.date] || [];
+    document.getElementById('tsTargets').innerHTML = themes.length ? themes.map(function (t) {
+      return '<div class="st-card ts-theme"><div class="ts-theme-head"><span class="ts-trk">테마 ' + t.rank + '위</span><b>' + esc(t.theme) + '</b><span class="ts-sub">그날 ' + t.n + '종목</span></div>' +
+        '<ol class="ts-list">' + t.top.map(function (r, i) {
+          var doc = tsDoc(r[0]), rec = tsRecord(doc, TS.date), sel = TS.name === r[0];
+          return '<li><button type="button" class="ts-stock' + (sel ? ' sel' : '') + '" data-name="' + esc(r[0]) + '" aria-pressed="' + sel + '">' +
+            '<span class="ts-rk">' + (i + 1) + '</span><span class="ts-nm">' + esc(r[0]) + '</span>' +
+            '<span class="ts-cnt">25일 ' + r[1] + '회</span>' + tsChg(r[2]) +
+            (doc ? tsConvPill(doc, '확신 ') : '<span class="ts-pill none">문서 없음</span>') +
+            (rec && rec.impact ? '<span class="ts-pill ' + tsImpCls(rec.impact) + '">' + esc(rec.impact) + '</span>' : '') +
+            '</button></li>';
+        }).join('') + '</ol>' +
+        (t.tied && t.tied.length ? '<p class="ts-tied">3위와 등장 일수가 같지만 거래대금 기준으로 밀림: ' + t.tied.map(esc).join(', ') + '</p>' : '') +
+        '</div>';
+    }).join('') : '<p class="ts-empty">이 날짜에는 대상 종목이 없습니다.</p>';
+  }
+  function tsRenderDetail() {
+    var el = document.getElementById('tsDetail'), doc = tsDoc(TS.name);
+    if (!TS.name) { el.innerHTML = '<p class="ts-empty">위에서 종목을 고르면 분석 문서가 여기에 열립니다.</p>'; return; }
+    if (!doc) {
+      el.innerHTML = '<p class="ts-empty">' + esc(TS.name) + '의 분석 문서가 아직 없습니다. 이 종목이 그날 대상이 된 일일 스크리닝 때 theme-thesis 스킬로 작성됩니다.</p>';
+      return;
+    }
+    var m = doc.meta || {}, s = doc.sections || {};
+    function sec(title, cls) { return s[title] ? '<div class="ts-sec ' + (cls || '') + '"><h4>' + esc(title) + '</h4>' + s[title] + '</div>' : ''; }
+    el.innerHTML = '<div class="ts-d-head"><div><h3>' + esc(m.name || TS.name) + '</h3>' +
+      '<p class="st-note">' + [m.ticker, m.market].filter(Boolean).map(esc).join(' · ') +
+      ' · 추적 시작 ' + esc(m.trackingSince || '-') + ' · 최근 대상 ' + esc(m.lastTargeted || '-') + ' · 갱신 ' + esc(m.updated || '-') + '</p></div>' +
+      tsConvPill(doc, '확신도 ') + '</div>' +
+      ((m.frames || []).length ? '<div class="cal-stocks">' + m.frames.map(function (f) { return '<span>' + esc(f) + '</span>'; }).join('') + '</div>' : '') +
+      sec('핵심 논리', 'ts-thesis') + sec('근거') +
+      '<div class="ts-two">' + sec('이 논리가 틀렸다고 볼 신호') + sec('위험 요인') + '</div>' +
+      sec('관련 일정') + sec('기록') + sec('출처', 'ts-src');
+  }
+  function tsRenderAll() {
+    var names = Object.keys(SNAPSHOT.theses || {}).sort(function (a, b) {
+      var A = tsDoc(a).meta.lastTargeted || '', B = tsDoc(b).meta.lastTargeted || '';
+      return A === B ? (a < b ? -1 : 1) : (A < B ? 1 : -1);
+    });
+    document.getElementById('tsAllSummary').textContent = '전체 종목 문서 ' + names.length + '개 (최근 대상일 순)';
+    document.getElementById('tsAllList').innerHTML = names.map(function (n) {
+      return '<button type="button" class="ts-chip' + (TS.name === n ? ' sel' : '') + '" data-name="' + esc(n) + '">' + esc(n) + tsConvPill(tsDoc(n)) + '</button>';
+    }).join('');
+  }
+  function tsRender() {
+    var dates = tsDates();
+    if (!dates.length) {
+      document.getElementById('tsTargets').innerHTML = '<p class="ts-empty">아직 종목 분석 대상이 없습니다. 일일 스크리닝 때 python scripts/thesis_targets.py 로 만들어집니다.</p>';
+      document.getElementById('tsDetail').hidden = true;
+      return;
+    }
+    if (dates.indexOf(TS.date) === -1) TS.date = dates[dates.length - 1];
+    tsRenderNav(dates);
+    tsRenderTargets();
+    tsRenderDetail();
+    tsRenderAll();
+  }
+  function tsSelect(name, scroll) {
+    TS.name = name;
+    tsRenderTargets(); tsRenderDetail(); tsRenderAll();
+    var el = document.getElementById('tsDetail');
+    if (scroll && el.getBoundingClientRect().top > window.innerHeight * 0.6) el.scrollIntoView({ block: 'start', behavior: 'smooth' });
+  }
+  function tsFirstOf(date) { var t = (tsHistory()[date] || [])[0]; return t && t.top[0] ? t.top[0][0] : null; }
+  function initStockAnalysis() {
+    var dates = tsDates();
+    TS.date = dates[dates.length - 1] || null;
+    TS.name = TS.date ? tsFirstOf(TS.date) : null;
+    document.getElementById('tsDateNav').addEventListener('click', function (e) {
+      var b = e.target.closest('.month-arrow');
+      if (!b || b.disabled) return;
+      var ds = tsDates(), i = ds.indexOf(TS.date) + parseInt(b.dataset.dir, 10);
+      if (i < 0 || i >= ds.length) return;
+      TS.date = ds[i]; TS.name = tsFirstOf(TS.date); tsRender();
+      var again = document.querySelector('#tsDateNav .month-arrow[data-dir="' + b.dataset.dir + '"]');
+      if (again && !again.disabled) again.focus();
+    });
+    document.getElementById('tsDateNav').addEventListener('change', function (e) {
+      if (e.target.id !== 'tsDateSelect') return;
+      TS.date = e.target.value; TS.name = tsFirstOf(TS.date); tsRender();
+      document.getElementById('tsDateSelect').focus();
+    });
+    document.getElementById('tsTargets').addEventListener('click', function (e) {
+      var b = e.target.closest('.ts-stock');
+      if (b) tsSelect(b.dataset.name, true);
+    });
+    document.getElementById('tsAllList').addEventListener('click', function (e) {
+      var b = e.target.closest('.ts-chip');
+      if (b) tsSelect(b.dataset.name, true);
+    });
+    tsRender();
+  }
+
+  // =========================================================
   // 초기 렌더
   // =========================================================
   function render(data) {
@@ -4227,6 +4451,8 @@
     try { initAnalysis(); } catch (e) { if (window.console) console.error('분석 탭 초기화 실패', e); }
     try { initCalc(); } catch (e) { if (window.console) console.error('시세 계산기 초기화 실패', e); }
     try { initCalendar(); } catch (e) { if (window.console) console.error('캘린더 초기화 실패', e); }
+    try { initStockAnalysis(); } catch (e) { if (window.console) console.error('종목 분석 초기화 실패', e); }
+    try { initAnalysisSubs(); } catch (e) { if (window.console) console.error('분석 하위 탭 초기화 실패', e); }
   }
 
   render(SNAPSHOT);

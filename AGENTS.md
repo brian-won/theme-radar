@@ -17,7 +17,7 @@
 ## 3. Commands
 ```bash
 python scripts/market_screen.py [YYYYMMDD]   # 시황+종목 스크리닝 원본 JSON 출력 (테마/재료는 후속 LLM 단계에서 채움)
-python scripts/thesis_targets.py [YYYY-MM-DD]   # 투자 논리 점검 대상(그날 큰 틀 1~3위 테마별, 25거래일 등장 일수 1~3위, 최대 9종목) → data/thesis_targets.json (**일일 스크리닝 때 매번 실행**, daily_detail 기록 뒤, --backfill로 전체 이력)
+python scripts/thesis_targets.py [YYYY-MM-DD]   # 종목 분석 대상(그날 큰 틀 1~3위 테마별, 25거래일 등장 일수 1~3위, 최대 9종목) → data/thesis_targets.json (**일일 스크리닝 때 매번 실행**, daily_detail 기록 뒤, --backfill로 전체 이력)
 python scripts/fetch_recent_prices.py --today   # 그날 큰 틀 1~4위 그룹의 그날 종목만 5일 시세를 recent_prices.json에 합침(**일일 스크리닝 때 매번 실행**, 빌드 전, 약 30초, 2026-11-23 사용자 지시)
 python scripts/fetch_recent_prices.py        # 관심종목 탭 전 종목 최근 5거래일 시세(KIS KRX+NXT 통합)·코스피/코스닥 구분 → data/recent_prices.json (**사용자가 요청할 때만 실행**, 2026-11-13 사용자 지시, 약 5분)
 python scripts/fetch_us_prices.py            # 관심종목(해외) 탭용 미국 종목 최근 5거래일 시세(KIS 해외주식) → data/us_recent_prices.json (빌드 전 실행, 약 2분)
@@ -52,7 +52,7 @@ skills/                    # 재사용 가능한 작업 절차 (SKILL.md 표준)
   ├── daily-market-report/   # 일일 시황 스크리닝→Notion 기록→대시보드 갱신 전체 절차 (상승 이유 출처·인포스탁 소급 검증·추정 종목 규칙 포함 — 스크리닝 전 반드시 읽을 것. 상승 이유는 2026-11-24부터 시황 문구 없이 재료만 2~3문장 한 문단)
   ├── us-kr-sector-mapping/  # 미국 섹터 종목 ↔ 한국 연관 종목 매핑 조회·수정 → 대시보드 관심종목(해외) 탭 반영
   ├── catalyst-calendar/     # 캘린더 탭(data/catalysts.json): 1~3위 테마 일정·지난 이벤트 결과값(매일), 다음 달 매크로 일정(매달 말)
-  └── theme-thesis/          # 주도주 투자 논리 점검(매일): 그날 1~3위 테마별 25거래일 등장 1~3위(최대 9종목) → data/theses/<종목>.md
+  └── theme-thesis/          # 종목 분석(매일): 그날 1~3위 테마별 25거래일 등장 1~3위(최대 9종목) → data/theses/<종목>.md
 ```
 
 ## 6. 에이전트 오답 노트 (실제로 발생한 실수만 기록)

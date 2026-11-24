@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-투자 논리 점검(thesis) 대상 종목을 뽑는다 — 2026-11-24 사용자 지시(같은 날 기준 변경 반영).
+종목 분석(thesis) 대상 종목을 뽑는다 — 2026-11-24 사용자 지시(같은 날 기준 변경 반영).
 
 규칙:
   - 대상 테마: 그날의 큰 틀 1~3위(대시보드 buildFrameDetail()과 같은 방식: 작은 틀 → theme_taxonomy.json 큰 틀,
@@ -15,7 +15,7 @@
   python scripts/thesis_targets.py --backfill   # 25거래일이 쌓인 날부터 모든 날짜를 다시 계산(이력 채우기)
 
 출력: data/thesis_targets.json  {"window": 25, "tickers": {...}, "history": {날짜: {"from","to","themes":[...]}}}
-      화면에는 테마별 대상 종목, 전일 대비 새로 들어온·빠진 종목, 논리 문서(data/theses/<종목>.md)가 없는 종목을 출력한다.
+      화면에는 테마별 대상 종목, 전일 대비 새로 들어온·빠진 종목, 분석 문서(data/theses/<종목>.md)가 없는 종목을 출력한다.
 """
 import argparse
 import json
@@ -117,7 +117,7 @@ def main():
     known = data.get("tickers", {})
     tickers = {**known, **lookup_tickers(names - set(known))}
     out = {
-        "_note": "투자 논리 점검 대상: 그날 큰 틀 1~3위 테마마다, 그날 그 테마 종목 중 최근 25거래일 등장 일수 1~3위(최대 9종목). "
+        "_note": "종목 분석 대상: 그날 큰 틀 1~3위 테마마다, 그날 그 테마 종목 중 최근 25거래일 등장 일수 1~3위(최대 9종목). "
                  "scripts/thesis_targets.py가 생성. 규칙은 skills/theme-thesis/SKILL.md",
         "window": WINDOW,
         "tickers": dict(sorted(tickers.items())),
@@ -140,7 +140,7 @@ def main():
         p = names_of(history[prev])
         print(f"\n전일({prev}) 대비 새로 대상: {sorted(cur - p) or '없음'} / 대상에서 빠짐: {sorted(p - cur) or '없음'}")
     missing = sorted(n for n in cur if not (THESES_DIR / f"{n}.md").exists())
-    print(f"논리 문서 없음(새로 작성 필요): {missing or '없음'}")
+    print(f"분석 문서 없음(새로 작성 필요): {missing or '없음'}")
 
 
 if __name__ == "__main__":
