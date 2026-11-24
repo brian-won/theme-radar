@@ -94,6 +94,36 @@ class KisClient:
             "trading_volume": int(out["acml_vol"]),
         }
 
+    def inquire_daily_ohlcv_integrated(self, ticker: str, start_date: str, end_date: str) -> dict:
+        """KRX+NXT 통합 수정주가 일봉(한 번에 최대 100일, 최근 날짜부터). 날짜(YYYY-MM-DD) → {o, h, l, c, v, val(억원)}.
+        종목 분석 › 기술적 분석(scripts/tech_check.py)용 — 2026-11-24 추가."""
+        data = self._get(
+            "/uapi/domestic-stock/v1/quotations/inquire-daily-itemchartprice", "FHKST03010100",
+            {"FID_COND_MRKT_DIV_CODE": "UN", "FID_INPUT_ISCD": ticker,
+             "FID_INPUT_DATE_1": start_date, "FID_INPUT_DATE_2": end_date,
+             "FID_PERIOD_DIV_CODE": "D", "FID_ORG_ADJ_PRC": "0"},
+            ticker,
+        )
+        out = {}
+        for row in data.get("output2") or []:
+            d = row.get("stck_bsop_date")
+            if not d or not row.get("stck_clpr"):
+                continue
+            out[f"{d[:4]}-{d[4:6]}-{d[6:]}"] = {
+                "o": float(row["stck_oprc"]), "h": float(row["stck_hgpr"]), "l": float(row["stck_lwpr"]),
+                "c": float(row["stck_clpr"]), "v": int(row["acml_vol"]),
+                "val": round(float(row["acml_tr_pbmn"]) / 1e8, 1),
+            }
+        return out
+
+    def inquire_investor_daily(self, ticker: str) -> list:
+        """종목별 투자자 매매동향(최근 약 30거래일, KRX). 원본 행 그대로 돌려준다 — 단위 해석은 호출하는 쪽에서."""
+        data = self._get(
+            "/uapi/domestic-stock/v1/quotations/inquire-investor", "FHKST01010900",
+            {"FID_COND_MRKT_DIV_CODE": "J", "FID_INPUT_ISCD": ticker}, ticker,
+        )
+        return data.get("output") or []
+
     def inquire_daily_prices_integrated(self, ticker: str, start_date: str, end_date: str) -> dict:
         """KRX+NXT 통합 일봉. 날짜(YYYY-MM-DD) → {close, change_rate_pct, trading_value_eok}.
 

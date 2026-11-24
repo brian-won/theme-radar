@@ -19,6 +19,7 @@
   dashboard/bt/engine.js, strategies.js  # 분석 탭 백테스트 엔진 — 파일 내용을 그대로 내장(브라우저 전역 BT)
   docs/bt/meta.js                  # (선택) 분석 탭 시세 조각 목록 — scripts/build_bt_data.py로 생성. 기준일·종목 수·달 목록만 SNAPSHOT.btMeta로 내장
   data/bt_defaults.json            # (선택) 분석 탭 비교표의 기법별 기본값 결과 — node scripts/bt_run.js --defaults 로 생성 → SNAPSHOT.btDefaults
+  data/tech_checks.json            # (선택) 분석 › 종목 분석의 기술적 분석 — scripts/tech_check.py로 생성 → SNAPSHOT.techChecks
   data/theses/*.md, data/thesis_targets.json  # (선택) 분석 › 종목 분석 — theme-thesis 스킬 문서(마크다운 → HTML)와 날짜별 대상 → SNAPSHOT.theses / thesisTargets
   data/catalysts.json              # (선택) 캘린더 탭 이벤트(테마 일정·매크로·실적) — skills/catalyst-calendar/SKILL.md 규칙으로 직접 갱신 → SNAPSHOT.catalysts(해외 일정은 한국 시간 kst를 계산해 붙임)
 
@@ -47,6 +48,7 @@ BT_DEFAULTS = ROOT / "data" / "bt_defaults.json"
 CATALYSTS = ROOT / "data" / "catalysts.json"
 THESES_DIR = ROOT / "data" / "theses"
 THESIS_TARGETS = ROOT / "data" / "thesis_targets.json"
+TECH_CHECKS = ROOT / "data" / "tech_checks.json"
 
 
 def parse_us_kr_mapping(path: Path) -> dict:
@@ -295,6 +297,10 @@ def main():
                     for d, day in targets_raw.get("history", {}).items()},
     }
     latest_targets = max(thesis_targets["history"], default=None)
+    tech_checks = json.loads(TECH_CHECKS.read_text(encoding="utf-8")) if TECH_CHECKS.exists() else {"history": {}, "series": {}}
+    tech_checks.pop("_note", None)
+    if latest_targets and latest_targets not in tech_checks["history"]:
+        print(f"경고(종목 분석): {latest_targets} 기술적 분석이 없습니다 — python scripts/tech_check.py 실행 필요(KIS 키)")
     if latest_targets:
         missing_docs = sorted({r[0] for t in thesis_targets["history"][latest_targets] for r in t["top"]} - set(theses))
         if missing_docs:
@@ -333,7 +339,8 @@ def main():
         "    btDefaults: " + json.dumps(bt_defaults, ensure_ascii=False, separators=(",", ":")) + ",\n"
         "    catalysts: " + json.dumps(catalysts, ensure_ascii=False, separators=(",", ":")) + ",\n"
         "    theses: " + json.dumps(theses, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/") + ",\n"
-        "    thesisTargets: " + json.dumps(thesis_targets, ensure_ascii=False, separators=(",", ":")) + "\n"
+        "    thesisTargets: " + json.dumps(thesis_targets, ensure_ascii=False, separators=(",", ":")) + ",\n"
+        "    techChecks: " + json.dumps(tech_checks, ensure_ascii=False, separators=(",", ":")) + "\n"
         "  }"
     )
 
@@ -370,7 +377,7 @@ def main():
     print(f"  거래주체별 순매수 {len(investor_flows['days'])}일치 (최근 {max(investor_flows['days']) if investor_flows['days'] else None})")
     print(f"  분석 탭: 시세 조각 {len(bt_meta['months']) if bt_meta else 0}개월(기준일 {bt_meta['asOf'] if bt_meta else None}, {bt_meta['tickers'] if bt_meta else 0}종목), "
           f"기본값 결과 {len(bt_defaults.get('strategies', {})) if bt_defaults else 0}개 기법")
-    print(f"  종목 분석 문서 {len(theses)}개, 대상 이력 {len(thesis_targets['history'])}일 (최근 {latest_targets})")
+    print(f"  종목 분석 문서 {len(theses)}개, 대상 이력 {len(thesis_targets['history'])}일 (최근 {latest_targets}), 기술적 분석 {len(tech_checks['history'])}일치")
     print(f"  캘린더 이벤트 {len(catalysts['events'])}개 (매크로 반영 달 {catalysts['macroMonths']}, 결과 입력 {sum(1 for e in catalysts['events'] if e.get('result') or any(m.get('actual') not in (None, '') for m in e.get('metrics', [])))}개)")
     print(f"  관심종목(해외) 매핑 {len(us_kr['rows'])}행 (기준일 {us_kr['asOf']}), 미국 시세 {len(us_prices['prices'])}종목(최근 {(us_prices['dates'] or [None])[-1]})")
 

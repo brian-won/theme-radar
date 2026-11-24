@@ -874,6 +874,22 @@
   .ts-chip { font-family: inherit; font-size: 12.5px; padding: 5px 10px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface); color: var(--text-primary); cursor: pointer; display: inline-flex; gap: 6px; align-items: center; }
   .ts-chip.sel { border-color: var(--accent); background: var(--accent-soft); }
   .ts-empty { color: var(--text-muted); font-size: 13px; margin: 0; }
+  .ts-tech { display: flex; flex-direction: column; gap: 10px; border-top: 1px solid var(--border); padding-top: 14px; }
+  .ts-tech h4 { margin: 0; }
+  .ts-asof { font-weight: 500; color: var(--text-muted); margin-left: 6px; }
+  .ts-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+  .ts-chart { width: 100%; max-width: min(100%, 760px); height: auto; display: block; }
+  .ts-legend { display: flex; flex-wrap: wrap; gap: 12px; font-size: 11.5px; color: var(--text-secondary); }
+  .ts-legend span { display: inline-flex; align-items: center; gap: 5px; }
+  .ts-legend i { width: 14px; height: 2px; display: inline-block; }
+  .ts-legend i.dash { background: repeating-linear-gradient(90deg, var(--text-muted) 0 4px, transparent 4px 7px); }
+  .ts-kv { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; }
+  .ts-kv > div { background: var(--surface-alt); border-radius: 8px; padding: 8px 10px; display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+  .ts-kv .k { font-size: 11px; color: var(--text-muted); }
+  .ts-kv .v { font-size: 13px; font-family: "JetBrains Mono", "Noto Sans KR", monospace; font-variant-numeric: tabular-nums; }
+  .ts-ma { display: flex; flex-direction: column; gap: 2px; font-size: 12px; }
+  .ts-ma b { font-weight: 600; } .ts-ma b.up { color: var(--up); } .ts-ma b.down { color: var(--down); }
+  .ts-tech-note { font-size: 11.5px; color: var(--text-muted); margin: 0; }
   @media (max-width: 1100px) { .ts-targets { grid-template-columns: minmax(0, 1fr); } }
   @media (max-width: 900px) { .ts-two { grid-template-columns: minmax(0, 1fr); } }
 </style>
@@ -4350,11 +4366,86 @@
             '<span class="ts-cnt">25일 ' + r[1] + '회</span>' + tsChg(r[2]) +
             (doc ? tsConvPill(doc, '확신 ') : '<span class="ts-pill none">문서 없음</span>') +
             (rec && rec.impact ? '<span class="ts-pill ' + tsImpCls(rec.impact) + '">' + esc(rec.impact) + '</span>' : '') +
+            (function () { var tc = tsTech(r[0], TS.date); return tc && tc.asof === TS.date ? '<span class="ts-pill ' + (tc.align === '정배열' ? 'imp-up' : tc.align === '역배열' ? 'imp-down' : '') + '">' + esc(tc.align) + '</span>' : ''; })() +
             '</button></li>';
         }).join('') + '</ol>' +
         (t.tied && t.tied.length ? '<p class="ts-tied">3위와 등장 일수가 같지만 거래대금 기준으로 밀림: ' + t.tied.map(esc).join(', ') + '</p>' : '') +
         '</div>';
     }).join('') : '<p class="ts-empty">이 날짜에는 대상 종목이 없습니다.</p>';
+  }
+  // ---- 기술적 분석(2026-11-24): SNAPSHOT.techChecks.history[날짜][종목] — scripts/tech_check.py가 그날 대상만 계산
+  //      series[종목] = 최근 120거래일 종가·20/60/120일선(가장 최근 계산분). 숫자 판단은 모두 스크립트 규칙이고 화면은 보여 주기만 한다.
+  function tsTech(name, date) {
+    var h = ((SNAPSHOT.techChecks || {}).history) || {};
+    if (h[date] && h[date][name]) return h[date][name];
+    var ds = Object.keys(h).filter(function (d) { return d <= date && h[d][name]; }).sort();
+    return ds.length ? h[ds[ds.length - 1]][name] : null;
+  }
+  function tsSigned(n, unit, digits) {
+    if (n === null || n === undefined) return '—';
+    return (n > 0 ? '+' : '') + fmt(n, digits === undefined ? (unit === '%' ? 2 : 0) : digits) + (unit || '');
+  }
+  function tsTagCls(st) { return st === 'good' ? 'imp-up' : st === 'bad' ? 'imp-down' : ''; }
+  function tsChartSvg(name, asof) {
+    var s = ((SNAPSHOT.techChecks || {}).series || {})[name];
+    if (!s || !s.dates || s.dates.length < 2) return '';
+    var end = s.dates.indexOf(asof);
+    if (end === -1) end = asof > s.dates[s.dates.length - 1] ? s.dates.length - 1 : -1;
+    if (end < 1) return '';
+    var lines = [['close', 'var(--text-primary)', ''], ['ma20', 'var(--accent)', ''], ['ma60', 'var(--gold)', ''], ['ma120', 'var(--text-muted)', '4 3']];
+    var lo = Infinity, hi = -Infinity;
+    lines.forEach(function (ln) { for (var i = 0; i <= end; i++) { var v = s[ln[0]][i]; if (v !== null && v !== undefined) { lo = Math.min(lo, v); hi = Math.max(hi, v); } } });
+    if (!(hi > lo)) return '';
+    var W = 640, H = 210, L = 6, R = 70, T = 10, B = 24, n = end + 1;
+    function x(i) { return L + i / (n - 1) * (W - L - R); }
+    function y(v) { return T + (1 - (v - lo) / (hi - lo)) * (H - T - B); }
+    function path(key) {
+      var d = '', pen = false;
+      for (var i = 0; i <= end; i++) {
+        var v = s[key][i];
+        if (v === null || v === undefined) { pen = false; continue; }
+        d += (pen ? 'L' : 'M') + x(i).toFixed(1) + ',' + y(v).toFixed(1); pen = true;
+      }
+      return d;
+    }
+    var grid = [lo, (lo + hi) / 2, hi].map(function (v) {
+      return '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + y(v).toFixed(1) + '" y2="' + y(v).toFixed(1) + '" stroke="var(--border)" stroke-width="1"/>' +
+        '<text x="' + (W - R + 6) + '" y="' + (y(v) + 4).toFixed(1) + '" font-size="11" fill="var(--text-muted)">' + fmt(v) + '</text>';
+    }).join('');
+    var last = s.close[end];
+    var md = function (d) { return parseInt(d.slice(5, 7), 10) + '/' + parseInt(d.slice(8), 10); };
+    return '<svg class="ts-chart" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + esc(name) + ' 최근 ' + n + '거래일 종가와 20·60·120일선">' + grid +
+      lines.map(function (ln) { return '<path d="' + path(ln[0]) + '" fill="none" stroke="' + ln[1] + '" stroke-width="' + (ln[0] === 'close' ? 1.8 : 1.3) + '"' + (ln[2] ? ' stroke-dasharray="' + ln[2] + '"' : '') + '/>'; }).join('') +
+      '<circle cx="' + x(end).toFixed(1) + '" cy="' + y(last).toFixed(1) + '" r="3" fill="var(--text-primary)"/>' +
+      '<text x="' + L + '" y="' + (H - 6) + '" font-size="11" fill="var(--text-muted)">' + md(s.dates[0]) + '</text>' +
+      '<text x="' + (W - R) + '" y="' + (H - 6) + '" font-size="11" fill="var(--text-muted)" text-anchor="end">' + md(s.dates[end]) + '</text></svg>' +
+      '<div class="ts-legend"><span><i style="background:var(--text-primary)"></i>종가</span><span><i style="background:var(--accent)"></i>20일선</span>' +
+      '<span><i style="background:var(--gold)"></i>60일선</span><span><i class="dash"></i>120일선</span></div>';
+  }
+  function tsTechHtml(name, date) {
+    var t = tsTech(name, date);
+    if (!t) return '<div class="ts-sec ts-tech"><h4>기술적 분석</h4><p class="ts-empty">이 종목은 아직 기술적 분석이 없습니다. 종목 분석 대상이 된 날 python scripts/tech_check.py 로 계산됩니다.</p></div>';
+    var ma = t.ma || {}, f = (t.flow || {}).foreign || {}, i = (t.flow || {}).inst || {};
+    function maLine(w) { var m = ma[w]; return m ? '<span>' + w + '일 ' + fmt(m.value) + ' <b class="' + (m.pos === '위' ? 'up' : 'down') + '">' + m.pos + ' ' + tsSigned(m.dev, '%') + '</b></span>' : '<span>' + w + '일 —</span>'; }
+    function flowLine(o) { return tsSigned(o.d1, '') + ' / ' + tsSigned(o.d5, '') + ' / ' + tsSigned(o.d20, '') + '억'; }
+    var tiles = [
+      ['이동평균(값·이격도)', '<div class="ts-ma">' + ['5', '20', '60', '120'].map(maLine).join('') + '</div>'],
+      ['배열', esc(t.align)],
+      ['RSI(14)', t.rsi === null ? '—' : String(t.rsi) + (t.rsi >= 70 ? ' 과열' : t.rsi <= 30 ? ' 침체' : '')],
+      ['MACD 히스토그램', tsSigned(t.macd && t.macd.hist, '', 1) + (t.macd && t.macd.cross ? ' · ' + t.macd.cross : '')],
+      ['볼린저 %B(20, 2σ)', t.bbPctB === null ? '—' : t.bbPctB + '%'],
+      ['거래량', t.volRatio === null ? '—' : '직전 20일 평균의 ' + t.volRatio + '배'],
+      ['52주 고가·저가 대비', tsSigned(t.fromHi52, '%') + ' · ' + tsSigned(t.fromLo52, '%')],
+      ['20일 지지·저항', fmt(t.support20) + ' · ' + fmt(t.resist20) + '원'],
+      ['수익률 5일·20일', tsSigned(t.ret5, '%') + ' · ' + tsSigned(t.ret20, '%')],
+      ['외국인 순매수 1·5·20일', flowLine(f)],
+      ['기관 순매수 1·5·20일', flowLine(i)]
+    ];
+    return '<div class="ts-sec ts-tech"><h4>기술적 분석 <span class="ts-asof">기준 ' + esc(t.asof) + (t.asof !== date ? '(선택한 날 이전 최근 계산분)' : '') + ' · 종가 ' + fmt(t.close) + '원</span></h4>' +
+      '<div class="ts-tags">' + (t.tags || []).map(function (g) { return '<span class="ts-pill ' + tsTagCls(g[1]) + '">' + esc(g[0]) + '</span>'; }).join('') + '</div>' +
+      tsChartSvg(name, t.asof) +
+      '<div class="ts-kv">' + tiles.map(function (k) { return '<div><span class="k">' + k[0] + '</span><span class="v">' + k[1] + '</span></div>'; }).join('') + '</div>' +
+      '<p class="ts-tech-note">KIS KRX+NXT 통합 수정주가 일봉으로 계산했고, 수급은 KRX 정규장 기준입니다. 규칙으로 만든 참고 지표이며 매매 권유가 아닙니다.</p></div>';
   }
   function tsRenderDetail() {
     var el = document.getElementById('tsDetail'), doc = tsDoc(TS.name);
@@ -4370,7 +4461,7 @@
       ' · 추적 시작 ' + esc(m.trackingSince || '-') + ' · 최근 대상 ' + esc(m.lastTargeted || '-') + ' · 갱신 ' + esc(m.updated || '-') + '</p></div>' +
       tsConvPill(doc, '확신도 ') + '</div>' +
       ((m.frames || []).length ? '<div class="cal-stocks">' + m.frames.map(function (f) { return '<span>' + esc(f) + '</span>'; }).join('') + '</div>' : '') +
-      sec('핵심 논리', 'ts-thesis') + sec('근거') +
+      sec('핵심 논리', 'ts-thesis') + sec('근거') + tsTechHtml(TS.name, TS.date) +
       '<div class="ts-two">' + sec('이 논리가 틀렸다고 볼 신호') + sec('위험 요인') + '</div>' +
       sec('관련 일정') + sec('기록') + sec('출처', 'ts-src');
   }

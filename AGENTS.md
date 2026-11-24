@@ -18,6 +18,7 @@
 ```bash
 python scripts/market_screen.py [YYYYMMDD]   # 시황+종목 스크리닝 원본 JSON 출력 (테마/재료는 후속 LLM 단계에서 채움)
 python scripts/thesis_targets.py [YYYY-MM-DD]   # 종목 분석 대상(그날 큰 틀 1~3위 테마별, 25거래일 등장 일수 1~3위, 최대 9종목) → data/thesis_targets.json (**일일 스크리닝 때 매번 실행**, daily_detail 기록 뒤, --backfill로 전체 이력)
+python scripts/tech_check.py [YYYY-MM-DD]       # 종목 분석 대상(최대 9종목)만 기술적 지표 계산(KIS 통합 일봉 약 1년·투자자 수급) → data/tech_checks.json (**일일 스크리닝 때 매번 실행**, thesis_targets.py 뒤, 약 30초)
 python scripts/fetch_recent_prices.py --today   # 그날 큰 틀 1~4위 그룹의 그날 종목만 5일 시세를 recent_prices.json에 합침(**일일 스크리닝 때 매번 실행**, 빌드 전, 약 30초, 2026-11-23 사용자 지시)
 python scripts/fetch_recent_prices.py        # 관심종목 탭 전 종목 최근 5거래일 시세(KIS KRX+NXT 통합)·코스피/코스닥 구분 → data/recent_prices.json (**사용자가 요청할 때만 실행**, 2026-11-13 사용자 지시, 약 5분)
 python scripts/fetch_us_prices.py            # 관심종목(해외) 탭용 미국 종목 최근 5거래일 시세(KIS 해외주식) → data/us_recent_prices.json (빌드 전 실행, 약 2분)

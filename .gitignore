@@ -20,6 +20,7 @@ data/*
 !data/bt_defaults.json
 !data/catalysts.json
 !data/thesis_targets.json
+!data/tech_checks.json
 !data/theses/
 
 # 분석 탭 시세 조각: docs/bt 가 원본(배포용). dashboard/bt 의 조각은 로컬 미리보기용 복사본이라 추적하지 않는다

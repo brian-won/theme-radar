@@ -69,6 +69,7 @@ python scripts/market_screen.py [YYYYMMDD]   # 생략 시 최근 영업일
 ### 3-2. 종목 분석 (2026-11-24 추가, 매 스크리닝)
 `skills/theme-thesis/SKILL.md`를 읽고 따른다. 그날 상세를 `daily_detail_with_reasons.json`에 넣은 **뒤** 진행한다.
 - `python scripts/thesis_targets.py` 실행 → 그날 큰 틀 1~3위 테마마다, 그날 그 테마 종목 중 최근 25거래일 등장 일수 1~3위(최대 9종목)가 나온다.
+- `python scripts/tech_check.py` 실행 → 같은 대상 종목만 기술적 지표(이평선·RSI·MACD·볼린저·거래량·52주 고저·수급)를 계산해 `data/tech_checks.json`에 합친다(KIS 키, 약 30초). 화면의 분석 › 종목 분석에 "기술적 분석"으로 나온다.
 - 문서가 없는 종목은 `data/theses/<종목>.md`를 새로 만든다.
 - 그날 대상 종목은 기록을 한 줄 추가한다.
 - 보고에 "종목 분석: …"을 한 줄로 적는다.
