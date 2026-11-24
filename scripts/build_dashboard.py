@@ -19,6 +19,7 @@
   dashboard/bt/engine.js, strategies.js  # 분석 탭 백테스트 엔진 — 파일 내용을 그대로 내장(브라우저 전역 BT)
   docs/bt/meta.js                  # (선택) 분석 탭 시세 조각 목록 — scripts/build_bt_data.py로 생성. 기준일·종목 수·달 목록만 SNAPSHOT.btMeta로 내장
   data/bt_defaults.json            # (선택) 분석 탭 비교표의 기법별 기본값 결과 — node scripts/bt_run.js --defaults 로 생성 → SNAPSHOT.btDefaults
+  data/catalysts.json              # (선택) 캘린더 탭 이벤트(테마 일정·매크로·실적) — skills/catalyst-calendar/SKILL.md 규칙으로 직접 갱신 → SNAPSHOT.catalysts(해외 일정은 한국 시간 kst를 계산해 붙임)
 
 출력:
   dashboard/index.html  # 완전한 standalone 웹페이지 (데이터 내장, 서버/네트워크 불필요, 로컬 미리보기용)
@@ -42,6 +43,7 @@ BT_ENGINE = ROOT / "dashboard" / "bt" / "engine.js"
 BT_STRATEGIES = ROOT / "dashboard" / "bt" / "strategies.js"
 BT_META = ROOT / "docs" / "bt" / "meta.js"
 BT_DEFAULTS = ROOT / "data" / "bt_defaults.json"
+CATALYSTS = ROOT / "data" / "catalysts.json"
 
 
 def parse_us_kr_mapping(path: Path) -> dict:
@@ -104,6 +106,58 @@ def load_bt_meta(path: Path):
     }
 
 
+CATALYST_TZ = {"ET": "America/New_York", "PT": "America/Los_Angeles", "CT": "America/Chicago", "MT": "America/Denver",
+               "CET": "Europe/Berlin", "JST": "Asia/Tokyo", "KST": "Asia/Seoul", "CST": "Asia/Shanghai"}
+CATALYST_KINDS = {"macro", "earnings", "theme", "market"}
+
+
+def load_catalysts(path: Path, frames: list, today: str):
+    """캘린더 탭용: data/catalysts.json을 읽어 형식을 검사하고, 현지 시각이 있는 해외 일정에 한국 시간(kst)을 붙인다.
+    서머타임은 zoneinfo가 날짜별로 반영한다. 형식이 틀린 이벤트는 경고를 내고 뺀다(빌드는 계속)."""
+    if not path.exists():
+        return {"updatedAt": None, "macroMonths": [], "events": []}, []
+    from datetime import datetime, date
+    from zoneinfo import ZoneInfo
+    raw = json.loads(path.read_text(encoding="utf-8"))
+    seoul = ZoneInfo("Asia/Seoul")
+    events, warnings, seen = [], [], set()
+    for ev in raw.get("events", []):
+        eid = ev.get("id") or "(id 없음)"
+        problems = []
+        if eid in seen:
+            problems.append("id 중복")
+        seen.add(eid)
+        try:
+            d0 = date.fromisoformat(ev.get("date", ""))
+            if ev.get("endDate") and date.fromisoformat(ev["endDate"]) < d0:
+                problems.append("endDate가 date보다 앞섬")
+        except ValueError:
+            problems.append("date/endDate 형식 오류(YYYY-MM-DD)")
+        if ev.get("kind") not in CATALYST_KINDS:
+            problems.append(f"kind는 {sorted(CATALYST_KINDS)} 중 하나")
+        if ev.get("tz") not in CATALYST_TZ:
+            problems.append(f"tz는 {sorted(CATALYST_TZ)} 중 하나")
+        if not ev.get("title"):
+            problems.append("title 없음")
+        if ev.get("time") and not re.fullmatch(r"\d\d:\d\d", ev["time"]):
+            problems.append("time 형식 오류(HH:MM)")
+        if problems:
+            warnings.append(f"{eid}: " + ", ".join(problems) + " — 캘린더에서 뺌")
+            continue
+        out = dict(ev)
+        if ev.get("time") and ev["tz"] != "KST":
+            local = datetime.fromisoformat(f"{ev['date']}T{ev['time']}").replace(tzinfo=ZoneInfo(CATALYST_TZ[ev["tz"]]))
+            out["kst"] = local.astimezone(seoul).strftime("%Y-%m-%d %H:%M")
+        unknown = [f for f in ev.get("frames", []) if f not in frames]
+        if unknown:
+            warnings.append(f"{eid}: theme_taxonomy.json 큰 틀에 없는 이름 {unknown}")
+        if (ev.get("endDate") or ev["date"]) < today and ev.get("metrics") and any(m.get("actual") in (None, "") for m in ev["metrics"]) and not ev.get("result"):
+            warnings.append(f"{eid}: 지난 이벤트인데 결과값이 비어 있음 — 다음 스크리닝 때 채울 것")
+        events.append(out)
+    events.sort(key=lambda e: (e["date"], e.get("kst") or e.get("time") or ""))
+    return {"updatedAt": raw.get("updatedAt"), "macroMonths": raw.get("macroMonths", []), "events": events}, warnings
+
+
 def main():
     daily_reports = json.loads((ROOT / "data" / "daily_reports.json").read_text(encoding="utf-8"))
     daily_detail = json.loads((ROOT / "data" / "daily_detail_with_reasons.json").read_text(encoding="utf-8"))
@@ -126,6 +180,12 @@ def main():
         print(f"경고: data/theme_taxonomy.json에 큰 틀 매핑이 없는 세부 테마 {len(unmapped)}개(그대로 큰 틀로 표시됨): {unmapped}")
 
     us_kr = parse_us_kr_mapping(US_KR_MAPPING)
+
+    from datetime import datetime
+    from zoneinfo import ZoneInfo
+    catalysts, catalyst_warnings = load_catalysts(CATALYSTS, taxonomy["frames"], datetime.now(ZoneInfo("Asia/Seoul")).strftime("%Y-%m-%d"))
+    for w in catalyst_warnings:
+        print(f"경고(캘린더): {w}")
 
     flows_path = ROOT / "data" / "investor_flows.json"
     investor_flows = json.loads(flows_path.read_text(encoding="utf-8")) if flows_path.exists() else {"order": [], "days": {}}
@@ -157,7 +217,8 @@ def main():
         "    investorFlows: " + json.dumps({"order": investor_flows["order"], "days": investor_flows["days"]}, ensure_ascii=False, separators=(",", ":")) + ",\n"
         "    marketHistory: " + json.dumps(market_history, ensure_ascii=False, separators=(",", ":")) + ",\n"
         "    btMeta: " + json.dumps(bt_meta, ensure_ascii=False, separators=(",", ":")) + ",\n"
-        "    btDefaults: " + json.dumps(bt_defaults, ensure_ascii=False, separators=(",", ":")) + "\n"
+        "    btDefaults: " + json.dumps(bt_defaults, ensure_ascii=False, separators=(",", ":")) + ",\n"
+        "    catalysts: " + json.dumps(catalysts, ensure_ascii=False, separators=(",", ":")) + "\n"
         "  }"
     )
 
@@ -194,6 +255,7 @@ def main():
     print(f"  거래주체별 순매수 {len(investor_flows['days'])}일치 (최근 {max(investor_flows['days']) if investor_flows['days'] else None})")
     print(f"  분석 탭: 시세 조각 {len(bt_meta['months']) if bt_meta else 0}개월(기준일 {bt_meta['asOf'] if bt_meta else None}, {bt_meta['tickers'] if bt_meta else 0}종목), "
           f"기본값 결과 {len(bt_defaults.get('strategies', {})) if bt_defaults else 0}개 기법")
+    print(f"  캘린더 이벤트 {len(catalysts['events'])}개 (매크로 반영 달 {catalysts['macroMonths']}, 결과 입력 {sum(1 for e in catalysts['events'] if e.get('result') or any(m.get('actual') not in (None, '') for m in e.get('metrics', [])))}개)")
     print(f"  관심종목(해외) 매핑 {len(us_kr['rows'])}행 (기준일 {us_kr['asOf']}), 미국 시세 {len(us_prices['prices'])}종목(최근 {(us_prices['dates'] or [None])[-1]})")
 
 

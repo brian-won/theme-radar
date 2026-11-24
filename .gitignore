@@ -18,6 +18,7 @@ data/*
 !data/investor_flows.json
 !data/market_history.json
 !data/bt_defaults.json
+!data/catalysts.json
 
 # 분석 탭 시세 조각: docs/bt 가 원본(배포용). dashboard/bt 의 조각은 로컬 미리보기용 복사본이라 추적하지 않는다
 # (dashboard/bt 에서는 엔진 engine.js·strategies.js 만 추적 — 조각까지 넣으면 저장소 용량이 두 배가 됨)
