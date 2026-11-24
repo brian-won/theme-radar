@@ -66,6 +66,13 @@ python scripts/market_screen.py [YYYYMMDD]   # 생략 시 최근 영업일
 - 스크리닝 날짜가 25일 이후이고 다음 달이 `macroMonths`에 없으면 다음 달 매크로 일정을 넣는다.
 - 보고에 "캘린더: 추가 N · 결과 입력 N"을 한 줄로 적는다.
 
+### 3-2. 주도주 투자 논리 점검 (2026-11-24 추가, 매 스크리닝)
+`skills/theme-thesis/SKILL.md`를 읽고 따른다. 그날 상세를 `daily_detail_with_reasons.json`에 넣은 **뒤** 진행한다.
+- `python scripts/thesis_targets.py` 실행 → 그날 큰 틀 1~3위 테마마다, 그날 그 테마 종목 중 최근 25거래일 등장 일수 1~3위(최대 9종목)가 나온다.
+- 문서가 없는 종목은 `data/theses/<종목>.md`를 새로 만든다.
+- 그날 대상 종목은 기록을 한 줄 추가한다.
+- 보고에 "논리 점검: …"을 한 줄로 적는다.
+
 ### 4. "테마 레이더" 대시보드 갱신
 두 가지 버전이 공존한다. 데이터 원본은 동일(`data/daily_reports.json` + `data/daily_detail_with_reasons.json`)하므로, 새 날짜 추가 시 두 버전 다 갱신할 것.
 

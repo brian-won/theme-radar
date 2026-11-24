@@ -17,6 +17,7 @@
 ## 3. Commands
 ```bash
 python scripts/market_screen.py [YYYYMMDD]   # 시황+종목 스크리닝 원본 JSON 출력 (테마/재료는 후속 LLM 단계에서 채움)
+python scripts/thesis_targets.py [YYYY-MM-DD]   # 투자 논리 점검 대상(그날 큰 틀 1~3위 테마별, 25거래일 등장 일수 1~3위, 최대 9종목) → data/thesis_targets.json (**일일 스크리닝 때 매번 실행**, daily_detail 기록 뒤, --backfill로 전체 이력)
 python scripts/fetch_recent_prices.py --today   # 그날 큰 틀 1~4위 그룹의 그날 종목만 5일 시세를 recent_prices.json에 합침(**일일 스크리닝 때 매번 실행**, 빌드 전, 약 30초, 2026-11-23 사용자 지시)
 python scripts/fetch_recent_prices.py        # 관심종목 탭 전 종목 최근 5거래일 시세(KIS KRX+NXT 통합)·코스피/코스닥 구분 → data/recent_prices.json (**사용자가 요청할 때만 실행**, 2026-11-13 사용자 지시, 약 5분)
 python scripts/fetch_us_prices.py            # 관심종목(해외) 탭용 미국 종목 최근 5거래일 시세(KIS 해외주식) → data/us_recent_prices.json (빌드 전 실행, 약 2분)
@@ -50,13 +51,14 @@ skills/                    # 재사용 가능한 작업 절차 (SKILL.md 표준)
   ├── skill-creator/         # 새 스킬 생성/수정 방법
   ├── daily-market-report/   # 일일 시황 스크리닝→Notion 기록→대시보드 갱신 전체 절차 (상승 이유 출처·인포스탁 소급 검증·추정 종목 규칙 포함 — 스크리닝 전 반드시 읽을 것. 상승 이유는 2026-11-24부터 시황 문구 없이 재료만 2~3문장 한 문단)
   ├── us-kr-sector-mapping/  # 미국 섹터 종목 ↔ 한국 연관 종목 매핑 조회·수정 → 대시보드 관심종목(해외) 탭 반영
-  └── catalyst-calendar/     # 캘린더 탭(data/catalysts.json): 1~3위 테마 일정·지난 이벤트 결과값(매일), 다음 달 매크로 일정(매달 말)
+  ├── catalyst-calendar/     # 캘린더 탭(data/catalysts.json): 1~3위 테마 일정·지난 이벤트 결과값(매일), 다음 달 매크로 일정(매달 말)
+  └── theme-thesis/          # 주도주 투자 논리 점검(매일): 그날 1~3위 테마별 25거래일 등장 1~3위(최대 9종목) → data/theses/<종목>.md
 ```
 
 ## 6. 에이전트 오답 노트 (실제로 발생한 실수만 기록)
 - [x] [Error-001] 과거 날짜 리포트를 새로 만들 때, 세션 초반 엑셀 원본으로 벌크 임포트해둔 "테마별 종목 로그" 행을 안 지우고 그 위에 새로 추가해 중복 발생 → 새 날짜 작업 전 항상 해당 날짜 기존 행 존재 여부부터 확인할 것.
 - [x] [Error-002] Notion `query_data_sources`(SQL 쿼리)는 워크스페이스 사용량 한도가 있어 세션 중 막힐 수 있음 → 막히면 `notion-fetch`/`notion-create-pages` 등 비-SQL 도구로 대체하고, 집계는 페이지 본문에서 직접 값을 읽어 계산할 것.
-- [x] [Error-003] 2026-11-09 거래주체 시안 작업 중 최종 보고를 영어로 씀 → 4장 한국어 절대 규칙. 보내기 전에 답변 언어가 한국어인지 확인할 것.
+- [x] [Error-003] 2026-11-09 거래주체 시안 작업 중 최종 보고를 영어로 씀 → 4장 한국어 절대 규칙. 보내기 전에 답변 언어가 한국어인지 확인할 것. (2026-11-24 논리 문서 구성 설명에서 재발 — 긴 설명·선택지 답변도 예외 없음)
 
 ## 7. 자동검증 연동
 - `scripts/verify-task.sh`는 git pre-commit hook과 연동 대상입니다(연동 방법은 스크립트 상단 주석 참고).
