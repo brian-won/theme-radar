@@ -120,6 +120,7 @@ def load_catalysts(path: Path, frames: list, today: str):
     from zoneinfo import ZoneInfo
     raw = json.loads(path.read_text(encoding="utf-8"))
     seoul = ZoneInfo("Asia/Seoul")
+    star_rules = raw.get("starRules", {})  # 사용자가 바꾼 별점: {series: {"stars": 1~3, "setOn": "YYYY-MM-DD"}} — 같은 series의 모든 이벤트에 우선 적용
     events, warnings, seen = [], [], set()
     for ev in raw.get("events", []):
         eid = ev.get("id") or "(id 없음)"
@@ -145,6 +146,12 @@ def load_catalysts(path: Path, frames: list, today: str):
             warnings.append(f"{eid}: " + ", ".join(problems) + " — 캘린더에서 뺌")
             continue
         out = dict(ev)
+        rule = star_rules.get(ev.get("series") or "")
+        if rule and rule.get("stars") in (1, 2, 3):
+            out["stars"], out["starsByUser"] = rule["stars"], True
+        elif ev.get("stars") not in (1, 2, 3):
+            warnings.append(f"{eid}: stars는 1~3 정수여야 함 — 1로 표시")
+            out["stars"] = 1
         if ev.get("time") and ev["tz"] != "KST":
             local = datetime.fromisoformat(f"{ev['date']}T{ev['time']}").replace(tzinfo=ZoneInfo(CATALYST_TZ[ev["tz"]]))
             out["kst"] = local.astimezone(seoul).strftime("%Y-%m-%d %H:%M")
@@ -155,6 +162,9 @@ def load_catalysts(path: Path, frames: list, today: str):
             warnings.append(f"{eid}: 지난 이벤트인데 결과값이 비어 있음 — 다음 스크리닝 때 채울 것")
         events.append(out)
     events.sort(key=lambda e: (e["date"], e.get("kst") or e.get("time") or ""))
+    unused = sorted(set(star_rules) - {e.get("series") for e in events})
+    if unused:
+        warnings.append(f"starRules에 있지만 해당 series 이벤트가 아직 없음(규칙은 유지): {unused}")
     return {"updatedAt": raw.get("updatedAt"), "macroMonths": raw.get("macroMonths", []), "events": events}, warnings
 
 

@@ -739,21 +739,28 @@
     .calc-small { font-size: 10.5px; }
   }
 
-  /* ---- 캘린더 탭 (2026-11-24 추가): 위 달력(월 격자) + 아래 일정 목록. 종류 색 토큰 ---- */
-  :root { --ev-macro: #4F5BD5; --ev-macro-soft: #ECEEFC; --ev-earn: #B4561C; --ev-earn-soft: #FBEEE5; --ev-theme: #0E7C6B; --ev-theme-soft: #E1F2EE; --ev-mkt: #6B7480; --ev-mkt-soft: #EEF0F3; }
-  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --ev-macro: #98A2FF; --ev-macro-soft: #1E2244; --ev-earn: #F0A06A; --ev-earn-soft: #3A2416; --ev-theme: #35D6B8; --ev-theme-soft: #12332E; --ev-mkt: #A3ACB9; --ev-mkt-soft: #1F2733; } }
-  :root[data-theme="dark"] { --ev-macro: #98A2FF; --ev-macro-soft: #1E2244; --ev-earn: #F0A06A; --ev-earn-soft: #3A2416; --ev-theme: #35D6B8; --ev-theme-soft: #12332E; --ev-mkt: #A3ACB9; --ev-mkt-soft: #1F2733; }
+  /* ---- 캘린더 탭 (2026-11-24 추가): 위 달력(월 격자) + 아래 일정 목록.
+     색 = 나라 × 종류(2026-11-24 사용자 요청): 한국 매크로 / 한국 종목 / 미국 매크로 / 미국 종목 / 기타 해외 / 휴장·만기 ---- */
+  :root { --ev-krm: #0E7C6B; --ev-krm-soft: #E1F2EE; --ev-krs: #C2620A; --ev-krs-soft: #FCEEDF; --ev-usm: #4F5BD5; --ev-usm-soft: #ECEEFC; --ev-uss: #A8329A; --ev-uss-soft: #F8E8F6; --ev-intl: #8A6A1F; --ev-intl-soft: #F5EEDC; --ev-mkt: #6B7480; --ev-mkt-soft: #EEF0F3; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --ev-krm: #35D6B8; --ev-krm-soft: #12332E; --ev-krs: #F5A35C; --ev-krs-soft: #3A2716; --ev-usm: #98A2FF; --ev-usm-soft: #1E2244; --ev-uss: #E78BDA; --ev-uss-soft: #3A1A36; --ev-intl: #D9B65C; --ev-intl-soft: #332B17; --ev-mkt: #A3ACB9; --ev-mkt-soft: #1F2733; } }
+  :root[data-theme="dark"] { --ev-krm: #35D6B8; --ev-krm-soft: #12332E; --ev-krs: #F5A35C; --ev-krs-soft: #3A2716; --ev-usm: #98A2FF; --ev-usm-soft: #1E2244; --ev-uss: #E78BDA; --ev-uss-soft: #3A1A36; --ev-intl: #D9B65C; --ev-intl-soft: #332B17; --ev-mkt: #A3ACB9; --ev-mkt-soft: #1F2733; }
   .cal-filters { display: flex; flex-wrap: wrap; gap: 6px; }
   .cal-fbtn { font-family: inherit; font-size: 12.5px; font-weight: 700; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface); color: var(--text-secondary); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
   .cal-fbtn[aria-pressed="true"] { border-color: var(--text-secondary); color: var(--text-primary); background: var(--surface-alt); }
   .cal-fbtn:focus-visible, .cal-cell:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
   .cal-fbtn .n { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--text-muted); }
   .cal-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; display: inline-block; }
-  .k-macro { --k: var(--ev-macro); --k-soft: var(--ev-macro-soft); }
-  .k-earnings { --k: var(--ev-earn); --k-soft: var(--ev-earn-soft); }
-  .k-theme { --k: var(--ev-theme); --k-soft: var(--ev-theme-soft); }
-  .k-market { --k: var(--ev-mkt); --k-soft: var(--ev-mkt-soft); }
-  .cal-dot.k-macro, .cal-dot.k-earnings, .cal-dot.k-theme, .cal-dot.k-market { background: var(--k); }
+  .c-krm { --k: var(--ev-krm); --k-soft: var(--ev-krm-soft); }
+  .c-krs { --k: var(--ev-krs); --k-soft: var(--ev-krs-soft); }
+  .c-usm { --k: var(--ev-usm); --k-soft: var(--ev-usm-soft); }
+  .c-uss { --k: var(--ev-uss); --k-soft: var(--ev-uss-soft); }
+  .c-intl { --k: var(--ev-intl); --k-soft: var(--ev-intl-soft); }
+  .c-mkt { --k: var(--ev-mkt); --k-soft: var(--ev-mkt-soft); }
+  .cal-dot { background: var(--k, var(--text-muted)); }
+  .cal-stars { color: var(--gold); letter-spacing: 1px; font-size: 13px; white-space: nowrap; }
+  .cal-stars .off { color: var(--border); }
+  .cal-stars.user { text-decoration: underline dotted var(--gold); text-underline-offset: 3px; }
+  .cal-pill .st { color: var(--gold); margin-right: 3px; letter-spacing: -1px; }
   .cal-card { padding: 10px; }
   .cal-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
   .cal-wd { font-size: 11.5px; font-weight: 700; color: var(--text-muted); text-align: center; padding: 4px 0; }
@@ -785,7 +792,6 @@
   .cal-ev-title { font-size: 14px; font-weight: 700; }
   .cal-badge { font-size: 10.5px; font-weight: 700; padding: 2px 7px; border-radius: 999px; background: var(--k-soft); color: var(--k); white-space: nowrap; }
   .cal-badge.plain { background: var(--surface-alt); color: var(--text-secondary); }
-  .cal-badge.hi { background: var(--up-soft); color: var(--up); }
   .cal-badge.unconf { background: transparent; color: var(--text-muted); border: 1px dashed var(--border); }
   .cal-badge.st-done { background: var(--accent-soft); color: var(--accent-strong); }
   .cal-badge.st-wait { background: var(--surface-alt); color: var(--gold); }
@@ -1027,7 +1033,7 @@
     </div>
     <div class="st-card">
       <div class="st-card-head">
-        <div><h3 id="calListTitle">이달 일정</h3><p class="st-note">해외 일정은 현지 시각, 괄호 안은 한국 시간 · 결과값은 발표 뒤 일일 스크리닝 때 채움</p></div>
+        <div><h3 id="calListTitle">이달 일정</h3><p class="st-note">해외 일정은 현지 시각, 괄호 안은 한국 시간 · 결과값은 발표 뒤 일일 스크리닝 때 채움 · 중요도 ★★★ 지수 전체 큰 영향, ★★ 업종·지수 영향, ★ 참고 (밑줄 별 = 직접 지정한 등급)</p></div>
         <button type="button" class="period-reset" id="calShowAll" hidden>이달 전체 보기</button>
       </div>
       <div id="calList" class="cal-list"></div>
@@ -3999,10 +4005,26 @@
   // metrics[].actual이 하나라도 있거나 result가 있으면 '발표 완료'. 지난 이벤트인데 비어 있으면 '결과 확인 전'.
   // =========================================================
   var CAL_KIND = { macro: '매크로', earnings: '실적', theme: '테마', market: '휴장·만기' };
-  var CAL_KIND_ORDER = ['macro', 'earnings', 'theme', 'market'];
   var CAL_COUNTRY = { US: '미국', KR: '한국', EU: '유럽', JP: '일본', CN: '중국' };
   var CAL_WD = ['일', '월', '화', '수', '목', '금', '토'];
-  var CAL = { kinds: { macro: true, earnings: true, theme: true, market: true }, date: null };
+  // 색 분류 = 나라 × 종류. 종목 이벤트 = 실적(earnings)·테마(theme), 매크로 = 경제지표·중앙은행(macro), 휴장·만기(market)는 회색
+  var CAL_CAT = { krm: '한국 매크로', krs: '한국 종목', usm: '미국 매크로', uss: '미국 종목', intl: '기타 해외', mkt: '휴장·만기' };
+  var CAL_CAT_ORDER = ['krm', 'krs', 'usm', 'uss', 'intl', 'mkt'];
+  var CAL_STAR_TIP = { 3: '지수 전체를 크게 움직이는 일정', 2: '업종·지수에 눈에 띄는 영향', 1: '참고 일정' };
+  var CAL = { cats: { krm: true, krs: true, usm: true, uss: true, intl: true, mkt: true }, date: null };
+  function calCat(ev) {
+    if (ev.kind === 'market') return 'mkt';
+    var stock = ev.kind === 'earnings' || ev.kind === 'theme';
+    if (ev.country === 'KR') return stock ? 'krs' : 'krm';
+    if (ev.country === 'US') return stock ? 'uss' : 'usm';
+    return 'intl';
+  }
+  function calStars(ev) { var s = +ev.stars; return s >= 1 && s <= 3 ? s : 1; }
+  function calStarsHtml(ev) {
+    var s = calStars(ev), tip = '중요도 ' + s + '/3 · ' + CAL_STAR_TIP[s] + (ev.starsByUser ? ' (직접 지정한 등급)' : '');
+    return '<span class="cal-stars' + (ev.starsByUser ? ' user' : '') + '" title="' + tip + '" aria-label="' + tip + '">' +
+      '★★★'.slice(0, s) + '<span class="off">' + '★★★'.slice(0, 3 - s) + '</span></span>';
+  }
 
   function calToday() {
     try { return new Date().toLocaleDateString('sv-SE', { timeZone: 'Asia/Seoul' }); } catch (e) {
@@ -4016,7 +4038,8 @@
   function calCovers(ev, ds) { return ev.date <= ds && ds <= calEnd(ev); }
   function calHas(v) { return v !== null && v !== undefined && v !== ''; }
   function calDone(ev) { return !!ev.result || (ev.metrics || []).some(function (m) { return calHas(m.actual); }); }
-  function calVisible(ev) { return !!CAL.kinds[ev.kind]; }
+  function calVisible(ev) { return !!CAL.cats[calCat(ev)]; }
+  function calByStars(a, b) { return calStars(b) - calStars(a) || ((a.kst || a.time || '') < (b.kst || b.time || '') ? -1 : 1); }
   function calInMonth(ev, month) { return ev.date.slice(0, 7) <= month && month <= calEnd(ev).slice(0, 7); }
   function calStatus(ev, today) {
     if (calDone(ev)) return { cls: 'st-done', label: '발표 완료' };
@@ -4062,10 +4085,10 @@
   }
   function calEventHtml(ev, today) {
     var st = calStatus(ev, today);
-    var head = '<span class="cal-ev-title">' + esc(ev.title) + '</span>' +
-      '<span class="cal-badge">' + (CAL_KIND[ev.kind] || ev.kind) + '</span>' +
-      (ev.country ? '<span class="cal-badge plain">' + esc(CAL_COUNTRY[ev.country] || ev.country) + '</span>' : '') +
-      (ev.importance === 'high' ? '<span class="cal-badge hi">중요</span>' : '') +
+    var head = calStarsHtml(ev) + '<span class="cal-ev-title">' + esc(ev.title) + '</span>' +
+      '<span class="cal-badge">' + CAL_CAT[calCat(ev)] + '</span>' +
+      (calCat(ev) === 'mkt' ? (ev.country ? '<span class="cal-badge plain">' + esc(CAL_COUNTRY[ev.country] || ev.country) + '</span>' : '') :
+        '<span class="cal-badge plain">' + (CAL_KIND[ev.kind] || ev.kind) + (ev.country && calCat(ev) === 'intl' ? ' · ' + esc(CAL_COUNTRY[ev.country] || ev.country) : '') + '</span>') +
       (ev.confirmed === false ? '<span class="cal-badge unconf" title="공식 출처로 확인하지 못한 날짜">날짜 미확정</span>' : '') +
       (st ? '<span class="cal-badge ' + st.cls + '">' + st.label + '</span>' : '');
     var tags = (ev.frames || []).map(function (f) { return '<span class="fr">' + esc(f) + '</span>'; })
@@ -4081,7 +4104,7 @@
     if (ev.source) src.push('일정 출처 ' + calSrcLink(ev.source));
     if (r && r.source) src.push('결과 출처 ' + calSrcLink(r.source) + (r.checkedOn ? ' (' + esc(r.checkedOn) + ' 확인)' : ''));
     if (ev.addedFrom) src.push('추가: ' + esc(ev.addedFrom));
-    return '<div class="cal-ev k-' + esc(ev.kind) + '">' +
+    return '<div class="cal-ev c-' + calCat(ev) + '">' +
       '<div class="cal-ev-head">' + head + '</div>' +
       calTimeHtml(ev) +
       (tags ? '<div class="cal-stocks">' + tags + '</div>' : '') +
@@ -4092,11 +4115,11 @@
   }
   function calRenderFilters(month) {
     var inMonth = calEvents().filter(function (e) { return calInMonth(e, month); });
-    var all = CAL_KIND_ORDER.every(function (k) { return CAL.kinds[k]; });
+    var all = CAL_CAT_ORDER.every(function (k) { return CAL.cats[k]; });
     var html = '<button type="button" class="cal-fbtn" data-kind="all" aria-pressed="' + all + '">전체 <span class="n">' + inMonth.length + '</span></button>';
-    html += CAL_KIND_ORDER.map(function (k) {
-      var n = inMonth.filter(function (e) { return e.kind === k; }).length;
-      return '<button type="button" class="cal-fbtn" data-kind="' + k + '" aria-pressed="' + (!all && CAL.kinds[k]) + '"><span class="cal-dot k-' + k + '"></span>' + CAL_KIND[k] + ' <span class="n">' + n + '</span></button>';
+    html += CAL_CAT_ORDER.map(function (k) {
+      var n = inMonth.filter(function (e) { return calCat(e) === k; }).length;
+      return '<button type="button" class="cal-fbtn" data-kind="' + k + '" aria-pressed="' + (!all && CAL.cats[k]) + '"><span class="cal-dot c-' + k + '"></span>' + CAL_CAT[k] + ' <span class="n">' + n + '</span></button>';
     }).join('');
     document.getElementById('calFilters').innerHTML = html;
   }
@@ -4109,15 +4132,16 @@
     for (var i = 0; i < wd0; i++) html += '<div class="cal-cell empty" aria-hidden="true"></div>';
     for (var d = 1; d <= nDays; d++) {
       var ds = month + '-' + ('0' + d).slice(-2), wd = (wd0 + d - 1) % 7;
-      var on = evs.filter(function (e) { return calCovers(e, ds); });
+      var on = evs.filter(function (e) { return calCovers(e, ds); }).sort(calByStars); // 칸에는 별이 많은 일정부터 3개
       var cls = 'cal-cell' + (wd === 0 || wd === 6 ? ' wkend' : '') + (ds === today ? ' today' : '') + (ds === CAL.date ? ' sel' : '');
       var pills = on.slice(0, 3).map(function (e) {
-        return '<span class="cal-pill k-' + esc(e.kind) + (calDone(e) ? ' done' : '') + (e.date !== ds ? ' cont' : '') + '" title="' + esc(e.title) + '">' + esc(e.title) + '</span>';
+        return '<span class="cal-pill c-' + calCat(e) + (calDone(e) ? ' done' : '') + (e.date !== ds ? ' cont' : '') + '" title="' + esc(e.title) + ' · 중요도 ' + calStars(e) + '/3">' +
+          '<span class="st">' + '★★★'.slice(0, calStars(e)) + '</span>' + esc(e.title) + '</span>';
       }).join('');
       html += '<button type="button" class="' + cls + '" data-date="' + ds + '" aria-pressed="' + (ds === CAL.date) + '" aria-label="' + mo + '월 ' + d + '일 일정 ' + on.length + '개">' +
         '<span class="cal-day">' + d + (ds === today ? '<span class="today-tag">오늘</span>' : '') + '</span>' + pills +
         (on.length > 3 ? '<span class="cal-more">+' + (on.length - 3) + '개 더</span>' : '') +
-        '<span class="cal-dots">' + on.map(function (e) { return '<span class="cal-dot k-' + esc(e.kind) + '"></span>'; }).join('') + '</span>' +
+        '<span class="cal-dots">' + on.map(function (e) { return '<span class="cal-dot c-' + calCat(e) + '"></span>'; }).join('') + '</span>' +
         '</button>';
     }
     var tail = (wd0 + nDays) % 7 ? 7 - (wd0 + nDays) % 7 : 0;
@@ -4170,12 +4194,12 @@
     document.getElementById('calFilters').addEventListener('click', function (e) {
       var b = e.target.closest('.cal-fbtn');
       if (!b) return;
-      var k = b.dataset.kind, all = CAL_KIND_ORDER.every(function (x) { return CAL.kinds[x]; });
-      if (k === 'all') CAL_KIND_ORDER.forEach(function (x) { CAL.kinds[x] = true; });
-      else if (all) CAL_KIND_ORDER.forEach(function (x) { CAL.kinds[x] = x === k; });
+      var k = b.dataset.kind, all = CAL_CAT_ORDER.every(function (x) { return CAL.cats[x]; });
+      if (k === 'all') CAL_CAT_ORDER.forEach(function (x) { CAL.cats[x] = true; });
+      else if (all) CAL_CAT_ORDER.forEach(function (x) { CAL.cats[x] = x === k; });
       else {
-        CAL.kinds[k] = !CAL.kinds[k];
-        if (!CAL_KIND_ORDER.some(function (x) { return CAL.kinds[x]; })) CAL_KIND_ORDER.forEach(function (x) { CAL.kinds[x] = true; });
+        CAL.cats[k] = !CAL.cats[k];
+        if (!CAL_CAT_ORDER.some(function (x) { return CAL.cats[x]; })) CAL_CAT_ORDER.forEach(function (x) { CAL.cats[x] = true; });
       }
       renderCalendarTab();
       var again = document.querySelector('#calFilters .cal-fbtn[data-kind="' + k + '"]');

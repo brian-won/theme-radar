@@ -1,227 +1,615 @@
 {
-  "_note": "캘린더 탭 이벤트 원본. 형식·갱신 규칙은 skills/catalyst-calendar/SKILL.md. date/time은 현지 날짜·시각(tz: ET=미국 동부, KST, CET, JST, PT). 한국 시간(kst)은 build_dashboard.py가 계산해 넣으므로 여기 적지 않는다. metrics[].actual은 발표 전 null, 발표 후 값을 채운다.",
+  "_note": "캘린더 탭 이벤트 원본. 형식·갱신 규칙은 skills/catalyst-calendar/SKILL.md. date/time은 현지 날짜·시각(tz: ET=미국 동부, KST, CET, JST, PT). 한국 시간(kst)은 build_dashboard.py가 계산해 넣으므로 여기 적지 않는다. metrics[].actual은 발표 전 null, 발표 후 값을 채운다. stars(1~3)는 시장 가격 영향 순 중요도(Claude 1차 판단). 사용자가 바꾼 등급은 starRules[series]에 저장하고 같은 series의 이후 이벤트에도 적용한다.",
   "updatedAt": "2026-11-24",
-  "macroMonths": ["2026-11", "2026-12"],
+  "macroMonths": [
+    "2026-11",
+    "2026-12"
+  ],
+  "starRules": {},
   "events": [
     {
       "id": "2026-11-25-us-gdp-q3-2nd",
-      "date": "2026-11-25", "time": "08:30", "tz": "ET",
-      "kind": "macro", "country": "US", "importance": "mid", "confirmed": false,
+      "date": "2026-11-25",
+      "time": "08:30",
+      "tz": "ET",
+      "kind": "macro",
+      "country": "US",
+      "stars": 1,
+      "series": "us-gdp",
+      "confirmed": false,
       "title": "미국 3분기 GDP 잠정치(2차)",
-      "metrics": [{"label": "GDP 성장률(연율)", "unit": "%", "forecast": null, "previous": null, "actual": null}],
-      "source": {"label": "fedratecalc 11월 경제지표 달력(보조 출처, BEA 미확인)", "url": "https://fedratecalc.com/us-economic-calendar/november-2026/"},
-      "addedOn": "2026-11-24", "addedFrom": "월간 매크로", "result": null
+      "metrics": [
+        {
+          "label": "GDP 성장률(연율)",
+          "unit": "%",
+          "forecast": null,
+          "previous": null,
+          "actual": null
+        }
+      ],
+      "source": {
+        "label": "fedratecalc 11월 경제지표 달력(보조 출처, BEA 미확인)",
+        "url": "https://fedratecalc.com/us-economic-calendar/november-2026/"
+      },
+      "addedOn": "2026-11-24",
+      "addedFrom": "월간 매크로",
+      "result": null
     },
     {
       "id": "2026-11-25-us-pce-oct",
-      "date": "2026-11-25", "time": "08:30", "tz": "ET",
-      "kind": "macro", "country": "US", "importance": "mid", "confirmed": false,
+      "date": "2026-11-25",
+      "time": "08:30",
+      "tz": "ET",
+      "kind": "macro",
+      "country": "US",
+      "stars": 2,
+      "series": "us-pce",
+      "confirmed": false,
       "title": "미국 10월 PCE 물가",
       "metrics": [
-        {"label": "PCE 전년비", "unit": "%", "forecast": null, "previous": null, "actual": null},
-        {"label": "근원 PCE 전년비", "unit": "%", "forecast": null, "previous": null, "actual": null}
+        {
+          "label": "PCE 전년비",
+          "unit": "%",
+          "forecast": null,
+          "previous": null,
+          "actual": null
+        },
+        {
+          "label": "근원 PCE 전년비",
+          "unit": "%",
+          "forecast": null,
+          "previous": null,
+          "actual": null
+        }
       ],
-      "source": {"label": "fedratecalc 11월 경제지표 달력(보조 출처, BEA 미확인)", "url": "https://fedratecalc.com/us-economic-calendar/november-2026/"},
-      "addedOn": "2026-11-24", "addedFrom": "월간 매크로", "result": null
+      "source": {
+        "label": "fedratecalc 11월 경제지표 달력(보조 출처, BEA 미확인)",
+        "url": "https://fedratecalc.com/us-economic-calendar/november-2026/"
+      },
+      "addedOn": "2026-11-24",
+      "addedFrom": "월간 매크로",
+      "result": null
     },
     {
       "id": "2026-11-26-kr-bok",
-      "date": "2026-11-26", "time": null, "tz": "KST",
-      "kind": "macro", "country": "KR", "importance": "high", "confirmed": true,
+      "date": "2026-11-26",
+      "time": null,
+      "tz": "KST",
+      "kind": "macro",
+      "country": "KR",
+      "stars": 2,
+      "series": "kr-bok",
+      "confirmed": true,
       "title": "한국은행 금통위 기준금리 결정(올해 마지막)",
-      "metrics": [{"label": "기준금리", "unit": "%", "forecast": null, "previous": "3.00", "actual": null}],
+      "metrics": [
+        {
+          "label": "기준금리",
+          "unit": "%",
+          "forecast": null,
+          "previous": "3.00",
+          "actual": null
+        }
+      ],
       "note": "10/22 동결(3.00%). 7·8월 연속 인상 뒤 첫 동결이었다.",
-      "source": {"label": "SBS Biz 보도", "url": "https://biz.sbs.co.kr/article/20000343023"},
-      "addedOn": "2026-11-24", "addedFrom": "월간 매크로", "result": null
+      "source": {
+        "label": "SBS Biz 보도",
+        "url": "https://biz.sbs.co.kr/article/20000343023"
+      },
+      "addedOn": "2026-11-24",
+      "addedFrom": "월간 매크로",
+      "result": null
     },
     {
       "id": "2026-11-26-us-thanksgiving",
-      "date": "2026-11-26", "time": null, "tz": "ET",
-      "kind": "market", "country": "US", "importance": "low", "confirmed": true,
+      "date": "2026-11-26",
+      "time": null,
+      "tz": "ET",
+      "kind": "market",
+      "country": "US",
+      "stars": 1,
+      "series": "us-holiday",
+      "confirmed": true,
       "title": "미국 증시 휴장(추수감사절)",
-      "addedOn": "2026-11-24", "addedFrom": "월간 매크로", "result": null
+      "addedOn": "2026-11-24",
+      "addedFrom": "월간 매크로",
+      "result": null
     },
     {
       "id": "2026-11-27-us-early-close",
-      "date": "2026-11-27", "time": "13:00", "tz": "ET",
-      "kind": "market", "country": "US", "importance": "low", "confirmed": true,
+      "date": "2026-11-27",
+      "time": "13:00",
+      "tz": "ET",
+      "kind": "market",
+      "country": "US",
+      "stars": 1,
+      "series": "us-early-close",
+      "confirmed": true,
       "title": "미국 증시 조기 폐장",
-      "addedOn": "2026-11-24", "addedFrom": "월간 매크로", "result": null
+      "addedOn": "2026-11-24",
+      "addedFrom": "월간 매크로",
+      "result": null
     },
     {
       "id": "2026-12-01-kr-export-nov",
-      "date": "2026-12-01", "time": null, "tz": "KST",
-      "kind": "macro", "country": "KR", "importance": "high", "confirmed": false,
+      "date": "2026-12-01",
+      "time": null,
+      "tz": "KST",
+      "kind": "macro",
+      "country": "KR",
+      "stars": 2,
+      "series": "kr-export",
+      "confirmed": false,
       "title": "한국 11월 수출입동향",
       "metrics": [
-        {"label": "수출 증감률(전년비)", "unit": "%", "forecast": null, "previous": null, "actual": null},
-        {"label": "반도체 수출 증감률", "unit": "%", "forecast": null, "previous": null, "actual": null}
+        {
+          "label": "수출 증감률(전년비)",
+          "unit": "%",
+          "forecast": null,
+          "previous": null,
+          "actual": null
+        },
+        {
+          "label": "반도체 수출 증감률",
+          "unit": "%",
+          "forecast": null,
+          "previous": null,
+          "actual": null
+        }
       ],
       "note": "매월 1일 발표하는 관행 기준. 날짜는 산업통상부 보도 일정으로 다시 확인할 것.",
-      "addedOn": "2026-11-24", "addedFrom": "월간 매크로", "result": null
+      "addedOn": "2026-11-24",
+      "addedFrom": "월간 매크로",
+      "result": null
     },
     {
       "id": "2026-12-01-us-jolts-oct",
-      "date": "2026-12-01", "time": "10:00", "tz": "ET",
-      "kind": "macro", "country": "US", "importance": "low", "confirmed": false,
+      "date": "2026-12-01",
+      "time": "10:00",
+      "tz": "ET",
+      "kind": "macro",
+      "country": "US",
+      "stars": 1,
+      "series": "us-jolts",
+      "confirmed": false,
       "title": "미국 10월 구인건수(JOLTS)",
-      "metrics": [{"label": "구인건수", "unit": "만 건", "forecast": null, "previous": null, "actual": null}],
-      "source": {"label": "fedratecalc 12월 경제지표 달력(보조 출처)", "url": "https://fedratecalc.com/us-economic-calendar/december-2026/"},
-      "addedOn": "2026-11-24", "addedFrom": "월간 매크로", "result": null
+      "metrics": [
+        {
+          "label": "구인건수",
+          "unit": "만 건",
+          "forecast": null,
+          "previous": null,
+          "actual": null
+        }
+      ],
+      "source": {
+        "label": "fedratecalc 12월 경제지표 달력(보조 출처)",
+        "url": "https://fedratecalc.com/us-economic-calendar/december-2026/"
+      },
+      "addedOn": "2026-11-24",
+      "addedFrom": "월간 매크로",
+      "result": null
     },
     {
       "id": "2026-12-04-us-jobs-nov",
-      "date": "2026-12-04", "time": "08:30", "tz": "ET",
-      "kind": "macro", "country": "US", "importance": "high", "confirmed": true,
+      "date": "2026-12-04",
+      "time": "08:30",
+      "tz": "ET",
+      "kind": "macro",
+      "country": "US",
+      "stars": 3,
+      "series": "us-jobs",
+      "confirmed": true,
       "title": "미국 11월 고용보고서",
       "metrics": [
-        {"label": "비농업 고용", "unit": "만 명", "forecast": null, "previous": null, "actual": null},
-        {"label": "실업률", "unit": "%", "forecast": null, "previous": null, "actual": null}
+        {
+          "label": "비농업 고용",
+          "unit": "만 명",
+          "forecast": null,
+          "previous": null,
+          "actual": null
+        },
+        {
+          "label": "실업률",
+          "unit": "%",
+          "forecast": null,
+          "previous": null,
+          "actual": null
+        }
       ],
-      "source": {"label": "BLS 고용보고서 일정", "url": "https://www.bls.gov/schedule/news_release/empsit.htm"},
-      "addedOn": "2026-11-24", "addedFrom": "월간 매크로", "result": null
+      "source": {
+        "label": "BLS 고용보고서 일정",
+        "url": "https://www.bls.gov/schedule/news_release/empsit.htm"
+      },
+      "addedOn": "2026-11-24",
+      "addedFrom": "월간 매크로",
+      "result": null
     },
     {
       "id": "2026-12-09-us-fomc",
-      "date": "2026-12-09", "time": "14:00", "tz": "ET",
-      "kind": "macro", "country": "US", "importance": "high", "confirmed": true,
+      "date": "2026-12-09",
+      "time": "14:00",
+      "tz": "ET",
+      "kind": "macro",
+      "country": "US",
+      "stars": 3,
+      "series": "us-fomc",
+      "confirmed": true,
       "title": "FOMC 금리 결정(12/8~9 회의, 점도표 발표)",
-      "metrics": [{"label": "기준금리(상단)", "unit": "%", "forecast": null, "previous": null, "actual": null}],
+      "metrics": [
+        {
+          "label": "기준금리(상단)",
+          "unit": "%",
+          "forecast": null,
+          "previous": null,
+          "actual": null
+        }
+      ],
       "note": "결정 30분 뒤 의장 기자회견. 회의 날짜는 연준 공식 달력, 발표 시각은 보조 출처 기준.",
-      "source": {"label": "연준 FOMC 달력", "url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm"},
-      "addedOn": "2026-11-24", "addedFrom": "월간 매크로", "result": null
+      "source": {
+        "label": "연준 FOMC 달력",
+        "url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm"
+      },
+      "addedOn": "2026-11-24",
+      "addedFrom": "월간 매크로",
+      "result": null
     },
     {
       "id": "2026-12-10-us-cpi-nov",
-      "date": "2026-12-10", "time": "08:30", "tz": "ET",
-      "kind": "macro", "country": "US", "importance": "high", "confirmed": true,
+      "date": "2026-12-10",
+      "time": "08:30",
+      "tz": "ET",
+      "kind": "macro",
+      "country": "US",
+      "stars": 3,
+      "series": "us-cpi",
+      "confirmed": true,
       "title": "미국 11월 소비자물가(CPI)",
       "metrics": [
-        {"label": "CPI 전년비", "unit": "%", "forecast": null, "previous": null, "actual": null},
-        {"label": "근원 CPI 전년비", "unit": "%", "forecast": null, "previous": null, "actual": null}
+        {
+          "label": "CPI 전년비",
+          "unit": "%",
+          "forecast": null,
+          "previous": null,
+          "actual": null
+        },
+        {
+          "label": "근원 CPI 전년비",
+          "unit": "%",
+          "forecast": null,
+          "previous": null,
+          "actual": null
+        }
       ],
-      "source": {"label": "BLS CPI 일정", "url": "https://www.bls.gov/schedule/news_release/cpi.htm"},
-      "addedOn": "2026-11-24", "addedFrom": "월간 매크로", "result": null
+      "source": {
+        "label": "BLS CPI 일정",
+        "url": "https://www.bls.gov/schedule/news_release/cpi.htm"
+      },
+      "addedOn": "2026-11-24",
+      "addedFrom": "월간 매크로",
+      "result": null
     },
     {
       "id": "2026-12-10-kr-expiry",
-      "date": "2026-12-10", "time": null, "tz": "KST",
-      "kind": "market", "country": "KR", "importance": "mid", "confirmed": true,
+      "date": "2026-12-10",
+      "time": null,
+      "tz": "KST",
+      "kind": "market",
+      "country": "KR",
+      "stars": 2,
+      "series": "kr-quarter-expiry",
+      "confirmed": true,
       "title": "코스피200 선물·옵션 동시만기",
       "note": "매 분기 마지막 달 둘째 목요일 규칙으로 계산했다.",
-      "addedOn": "2026-11-24", "addedFrom": "월간 매크로", "result": null
+      "addedOn": "2026-11-24",
+      "addedFrom": "월간 매크로",
+      "result": null
     },
     {
       "id": "2026-12-15-us-ppi-nov",
-      "date": "2026-12-15", "time": "08:30", "tz": "ET",
-      "kind": "macro", "country": "US", "importance": "mid", "confirmed": false,
+      "date": "2026-12-15",
+      "time": "08:30",
+      "tz": "ET",
+      "kind": "macro",
+      "country": "US",
+      "stars": 1,
+      "series": "us-ppi",
+      "confirmed": false,
       "title": "미국 11월 생산자물가(PPI)",
-      "metrics": [{"label": "PPI 전년비", "unit": "%", "forecast": null, "previous": null, "actual": null}],
-      "source": {"label": "fedratecalc PPI 일정(보조 출처)", "url": "https://fedratecalc.com/ppi-release-date/"},
-      "addedOn": "2026-11-24", "addedFrom": "월간 매크로", "result": null
+      "metrics": [
+        {
+          "label": "PPI 전년비",
+          "unit": "%",
+          "forecast": null,
+          "previous": null,
+          "actual": null
+        }
+      ],
+      "source": {
+        "label": "fedratecalc PPI 일정(보조 출처)",
+        "url": "https://fedratecalc.com/ppi-release-date/"
+      },
+      "addedOn": "2026-11-24",
+      "addedFrom": "월간 매크로",
+      "result": null
     },
     {
       "id": "2026-12-16-us-retail-nov",
-      "date": "2026-12-16", "time": "08:30", "tz": "ET",
-      "kind": "macro", "country": "US", "importance": "mid", "confirmed": false,
+      "date": "2026-12-16",
+      "time": "08:30",
+      "tz": "ET",
+      "kind": "macro",
+      "country": "US",
+      "stars": 2,
+      "series": "us-retail",
+      "confirmed": false,
       "title": "미국 11월 소매판매",
-      "metrics": [{"label": "소매판매 전월비", "unit": "%", "forecast": null, "previous": null, "actual": null}],
-      "source": {"label": "fedratecalc 12월 경제지표 달력(보조 출처)", "url": "https://fedratecalc.com/us-economic-calendar/december-2026/"},
-      "addedOn": "2026-11-24", "addedFrom": "월간 매크로", "result": null
+      "metrics": [
+        {
+          "label": "소매판매 전월비",
+          "unit": "%",
+          "forecast": null,
+          "previous": null,
+          "actual": null
+        }
+      ],
+      "source": {
+        "label": "fedratecalc 12월 경제지표 달력(보조 출처)",
+        "url": "https://fedratecalc.com/us-economic-calendar/december-2026/"
+      },
+      "addedOn": "2026-11-24",
+      "addedFrom": "월간 매크로",
+      "result": null
     },
     {
       "id": "2026-12-17-eu-ecb",
-      "date": "2026-12-17", "time": null, "tz": "CET",
-      "kind": "macro", "country": "EU", "importance": "mid", "confirmed": true,
+      "date": "2026-12-17",
+      "time": null,
+      "tz": "CET",
+      "kind": "macro",
+      "country": "EU",
+      "stars": 1,
+      "series": "eu-ecb",
+      "confirmed": true,
       "title": "ECB 통화정책 결정(경제전망 발표)",
-      "metrics": [{"label": "예금금리", "unit": "%", "forecast": null, "previous": null, "actual": null}],
-      "source": {"label": "ECB 회의 일정", "url": "https://www.ecb.europa.eu/press/calendars/mgcgc/html/index.en.html"},
-      "addedOn": "2026-11-24", "addedFrom": "월간 매크로", "result": null
+      "metrics": [
+        {
+          "label": "예금금리",
+          "unit": "%",
+          "forecast": null,
+          "previous": null,
+          "actual": null
+        }
+      ],
+      "source": {
+        "label": "ECB 회의 일정",
+        "url": "https://www.ecb.europa.eu/press/calendars/mgcgc/html/index.en.html"
+      },
+      "addedOn": "2026-11-24",
+      "addedFrom": "월간 매크로",
+      "result": null
     },
     {
       "id": "2026-12-17-us-micron",
-      "date": "2026-12-17", "time": "16:30", "tz": "ET",
-      "kind": "earnings", "country": "US", "importance": "high", "confirmed": true,
+      "date": "2026-12-17",
+      "time": "16:30",
+      "tz": "ET",
+      "kind": "earnings",
+      "country": "US",
+      "stars": 3,
+      "series": "earn-micron",
+      "confirmed": true,
       "title": "마이크론 회계 1분기(FY27) 실적",
-      "frames": ["반도체 관련주", "반도체 장비/재료/부품", "반도체 기판(FC-BGA/PCB/MLB 등)"],
+      "frames": [
+        "반도체 관련주",
+        "반도체 장비/재료/부품",
+        "반도체 기판(FC-BGA/PCB/MLB 등)"
+      ],
       "metrics": [
-        {"label": "매출", "unit": "억 달러", "forecast": null, "previous": null, "actual": null},
-        {"label": "EPS(조정)", "unit": "달러", "forecast": null, "previous": null, "actual": null}
+        {
+          "label": "매출",
+          "unit": "억 달러",
+          "forecast": null,
+          "previous": null,
+          "actual": null
+        },
+        {
+          "label": "EPS(조정)",
+          "unit": "달러",
+          "forecast": null,
+          "previous": null,
+          "actual": null
+        }
       ],
       "note": "실적 콜 시각은 산악시간(MT) 14:30 발표를 동부시간으로 바꾼 값. 반도체 큰 틀(기판·장비)이 최근 1~3위에 자주 들어 함께 넣었다.",
-      "source": {"label": "마이크론 실적 발표일 공지(11/19)", "url": "https://www.quiverquant.com/news/Micron+Technology+Announces+Date+for+Fiscal+First+Quarter+2026+Earnings+Conference+Call"},
-      "addedOn": "2026-11-24", "addedFrom": "월간 매크로", "result": null
+      "source": {
+        "label": "마이크론 실적 발표일 공지(11/19)",
+        "url": "https://www.quiverquant.com/news/Micron+Technology+Announces+Date+for+Fiscal+First+Quarter+2026+Earnings+Conference+Call"
+      },
+      "addedOn": "2026-11-24",
+      "addedFrom": "월간 매크로",
+      "result": null
     },
     {
       "id": "2026-12-18-jp-boj",
-      "date": "2026-12-18", "time": null, "tz": "JST",
-      "kind": "macro", "country": "JP", "importance": "mid", "confirmed": false,
+      "date": "2026-12-18",
+      "time": null,
+      "tz": "JST",
+      "kind": "macro",
+      "country": "JP",
+      "stars": 2,
+      "series": "jp-boj",
+      "confirmed": false,
       "title": "일본은행 금리 결정(12/17~18 회의)",
-      "metrics": [{"label": "정책금리", "unit": "%", "forecast": null, "previous": "1.25", "actual": null}],
+      "metrics": [
+        {
+          "label": "정책금리",
+          "unit": "%",
+          "forecast": null,
+          "previous": "1.25",
+          "actual": null
+        }
+      ],
       "note": "여러 보도가 같은 날짜를 전하지만 일본은행 공식 표는 확인하지 못했다. 12월 인상 전망이 우세하다는 보도가 있다.",
-      "source": {"label": "일본은행 회의 일정", "url": "https://www.boj.or.jp/en/mopo/mpmsche_minu/index.htm"},
-      "addedOn": "2026-11-24", "addedFrom": "월간 매크로", "result": null
+      "source": {
+        "label": "일본은행 회의 일정",
+        "url": "https://www.boj.or.jp/en/mopo/mpmsche_minu/index.htm"
+      },
+      "addedOn": "2026-11-24",
+      "addedFrom": "월간 매크로",
+      "result": null
     },
     {
       "id": "2026-12-18-us-quad-witching",
-      "date": "2026-12-18", "time": null, "tz": "ET",
-      "kind": "market", "country": "US", "importance": "low", "confirmed": true,
+      "date": "2026-12-18",
+      "time": null,
+      "tz": "ET",
+      "kind": "market",
+      "country": "US",
+      "stars": 1,
+      "series": "us-quad-witching",
+      "confirmed": true,
       "title": "미국 쿼드러플 위칭(분기 만기)",
       "note": "분기 마지막 달 셋째 금요일 규칙으로 계산했다.",
-      "addedOn": "2026-11-24", "addedFrom": "월간 매크로", "result": null
+      "addedOn": "2026-11-24",
+      "addedFrom": "월간 매크로",
+      "result": null
     },
     {
       "id": "2026-12-23-us-pce-nov",
-      "date": "2026-12-23", "time": "08:30", "tz": "ET",
-      "kind": "macro", "country": "US", "importance": "mid", "confirmed": false,
+      "date": "2026-12-23",
+      "time": "08:30",
+      "tz": "ET",
+      "kind": "macro",
+      "country": "US",
+      "stars": 2,
+      "series": "us-pce",
+      "confirmed": false,
       "title": "미국 11월 PCE 물가 · 3분기 GDP 확정치",
       "metrics": [
-        {"label": "PCE 전년비", "unit": "%", "forecast": null, "previous": null, "actual": null},
-        {"label": "근원 PCE 전년비", "unit": "%", "forecast": null, "previous": null, "actual": null},
-        {"label": "GDP 확정치(연율)", "unit": "%", "forecast": null, "previous": null, "actual": null}
+        {
+          "label": "PCE 전년비",
+          "unit": "%",
+          "forecast": null,
+          "previous": null,
+          "actual": null
+        },
+        {
+          "label": "근원 PCE 전년비",
+          "unit": "%",
+          "forecast": null,
+          "previous": null,
+          "actual": null
+        },
+        {
+          "label": "GDP 확정치(연율)",
+          "unit": "%",
+          "forecast": null,
+          "previous": null,
+          "actual": null
+        }
       ],
-      "source": {"label": "fedratecalc 12월 경제지표 달력(보조 출처, BEA 미확인)", "url": "https://fedratecalc.com/us-economic-calendar/december-2026/"},
-      "addedOn": "2026-11-24", "addedFrom": "월간 매크로", "result": null
+      "source": {
+        "label": "fedratecalc 12월 경제지표 달력(보조 출처, BEA 미확인)",
+        "url": "https://fedratecalc.com/us-economic-calendar/december-2026/"
+      },
+      "addedOn": "2026-11-24",
+      "addedFrom": "월간 매크로",
+      "result": null
     },
     {
       "id": "2026-12-24-us-early-close",
-      "date": "2026-12-24", "time": "13:00", "tz": "ET",
-      "kind": "market", "country": "US", "importance": "low", "confirmed": false,
+      "date": "2026-12-24",
+      "time": "13:00",
+      "tz": "ET",
+      "kind": "market",
+      "country": "US",
+      "stars": 1,
+      "series": "us-early-close",
+      "confirmed": false,
       "title": "미국 증시 조기 폐장(성탄 전날)",
-      "addedOn": "2026-11-24", "addedFrom": "월간 매크로", "result": null
+      "addedOn": "2026-11-24",
+      "addedFrom": "월간 매크로",
+      "result": null
     },
     {
       "id": "2026-12-25-holiday",
-      "date": "2026-12-25", "time": null, "tz": "KST",
-      "kind": "market", "country": "KR", "importance": "low", "confirmed": true,
+      "date": "2026-12-25",
+      "time": null,
+      "tz": "KST",
+      "kind": "market",
+      "country": "KR",
+      "stars": 1,
+      "series": "holiday-christmas",
+      "confirmed": true,
       "title": "한·미 증시 휴장(성탄절)",
-      "addedOn": "2026-11-24", "addedFrom": "월간 매크로", "result": null
+      "addedOn": "2026-11-24",
+      "addedFrom": "월간 매크로",
+      "result": null
     },
     {
       "id": "2026-12-30-us-fomc-minutes",
-      "date": "2026-12-30", "time": "14:00", "tz": "ET",
-      "kind": "macro", "country": "US", "importance": "low", "confirmed": false,
+      "date": "2026-12-30",
+      "time": "14:00",
+      "tz": "ET",
+      "kind": "macro",
+      "country": "US",
+      "stars": 1,
+      "series": "us-fomc-minutes",
+      "confirmed": false,
       "title": "FOMC 의사록(12월 회의)",
       "note": "의사록은 결정 3주 뒤 공개하는 규칙으로 계산했다.",
-      "addedOn": "2026-11-24", "addedFrom": "월간 매크로", "result": null
+      "addedOn": "2026-11-24",
+      "addedFrom": "월간 매크로",
+      "result": null
     },
     {
       "id": "2026-12-31-kr-year-end",
-      "date": "2026-12-31", "time": null, "tz": "KST",
-      "kind": "market", "country": "KR", "importance": "low", "confirmed": true,
+      "date": "2026-12-31",
+      "time": null,
+      "tz": "KST",
+      "kind": "market",
+      "country": "KR",
+      "stars": 1,
+      "series": "kr-holiday",
+      "confirmed": true,
       "title": "한국 증시 연말 휴장",
-      "addedOn": "2026-11-24", "addedFrom": "월간 매크로", "result": null
+      "addedOn": "2026-11-24",
+      "addedFrom": "월간 매크로",
+      "result": null
     },
     {
       "id": "2027-01-06-ces-2027",
-      "date": "2027-01-06", "endDate": "2027-01-09", "time": null, "tz": "PT",
-      "kind": "theme", "country": "US", "importance": "high", "confirmed": true,
+      "date": "2027-01-06",
+      "endDate": "2027-01-09",
+      "time": null,
+      "tz": "PT",
+      "kind": "theme",
+      "country": "US",
+      "stars": 2,
+      "series": "ces",
+      "confirmed": true,
       "title": "CES 2027(라스베이거스)",
-      "frames": ["로봇"],
-      "stocks": ["로보티즈", "에이엘로봇", "빅웨이브로보틱스", "삼현", "휴림로봇", "디케이티", "코스모로보틱스", "피앤에스로보틱스"],
+      "frames": [
+        "로봇"
+      ],
+      "stocks": [
+        "로보티즈",
+        "에이엘로봇",
+        "빅웨이브로보틱스",
+        "삼현",
+        "휴림로봇",
+        "디케이티",
+        "코스모로보틱스",
+        "피앤에스로보틱스"
+      ],
       "note": "11/23 로봇 1위 재료: 삼성전자가 CES에서 휴머노이드 로봇 사업 청사진을 공개할 수 있다는 기대. 삼성의 2027 발표 행사 일정은 아직 공개되지 않았다.",
-      "source": {"label": "CES 공식 일정", "url": "https://www.ces.tech/"},
-      "addedOn": "2026-11-24", "addedFrom": "2026-11-23 스크리닝 1위 로봇", "result": null
+      "source": {
+        "label": "CES 공식 일정",
+        "url": "https://www.ces.tech/"
+      },
+      "addedOn": "2026-11-24",
+      "addedFrom": "2026-11-23 스크리닝 1위 로봇",
+      "result": null
     }
   ]
 }
