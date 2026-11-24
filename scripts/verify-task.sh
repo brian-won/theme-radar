@@ -49,6 +49,13 @@ if command -v node >/dev/null 2>&1; then
 else
     echo "⚠️  [SKIP] node 가 없어 백테스트 엔진 테스트를 건너뜁니다."
 fi
+# 매일 쓰는 숫자 계산(종목 분석 대상·기술적 분석·캘린더 한국 시간/별점·문서 변환) — 2026-11-24 추가
+PY=$(command -v python || command -v python3 || true)
+if [ -n "$PY" ]; then
+    PYTHONIOENCODING=utf-8 "$PY" -m unittest discover -s tests/py || { echo "❌ [FAIL] 파이썬 테스트가 실패했습니다 (python -m unittest discover -s tests/py)."; exit 1; }
+else
+    echo "⚠️  [SKIP] python 이 없어 파이썬 테스트를 건너뜁니다."
+fi
 
 echo "✅ [DONE] 검증 완료. 테스트(4단계)만 실제로 검사하며, [SKIP] 항목(1~3단계)은 아직 스캐폴드입니다."
 exit 0

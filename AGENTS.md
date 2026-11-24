@@ -28,11 +28,12 @@ python scripts/fetch_bt_raw.py 20231101 YYYYMMDD   # 분석 탭 백테스트 원
 python scripts/build_bt_data.py              # 원본 → 분석 탭 시세 조각 docs/bt/*.js (+ dashboard/bt 로컬 복사본, git 제외)
 node scripts/bt_run.js --defaults            # 20개 기법 기본값 결과 → data/bt_defaults.json (조각을 새로 만든 뒤, 빌드 전에 실행)
 node --test tests/bt                         # 백테스트 엔진 테스트(dashboard/bt/engine.js·strategies.js 를 고치면 반드시 실행)
+python -m unittest discover -s tests/py      # 파이썬 테스트: 종목 분석 대상·기술적 분석·캘린더(한국 시간·별점)·문서 변환(scripts/thesis_targets.py·tech_check.py·build_dashboard.py를 고치면 반드시 실행)
 python scripts/build_dashboard.py            # data/*.json → dashboard/index.html + docs/index.html (GitHub Pages 배포용, 내용 동일. 백테스트 엔진·기본값 결과도 내장)
 git add -A && git commit -m "..." && git push    # docs/index.html 갱신을 실제 배포(https://brian-won.github.io/theme-radar/)에 반영하려면 푸시까지 해야 함
 # 필요 환경변수: KRX_ID, KRX_PW (data.krx.co.kr 회원) / KIS_APP_KEY, KIS_APP_SECRET (KIS 모의투자, 애프터마켓+NXT 통합 보정·관심종목 5일 시세에 사용)
 ```
-테스트는 백테스트 엔진(`node --test tests/bt`)만 있고 `scripts/verify-task.sh` 4단계에 연결됨. lint/typecheck는 아직 미구성 — 구성 시 이 섹션을 갱신할 것.
+테스트는 백테스트 엔진(`node --test tests/bt`)과 파이썬(`python -m unittest discover -s tests/py`) 두 가지이고 둘 다 `scripts/verify-task.sh` 4단계에 연결됨. lint/typecheck는 아직 미구성 — 구성 시 이 섹션을 갱신할 것.
 
 ## 4. 핵심 절대 규칙 (Boundaries & Invariants)
 어떠한 경우에도 무시·우회할 수 없는 규칙입니다.
