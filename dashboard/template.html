@@ -878,7 +878,8 @@
   .ts-tech h4 { margin: 0; }
   .ts-asof { font-weight: 500; color: var(--text-muted); margin-left: 6px; }
   .ts-tags { display: flex; flex-wrap: wrap; gap: 5px; }
-  .ts-chart { width: 100%; max-width: min(100%, 760px); height: auto; display: block; }
+  .ts-chart { width: 100%; max-width: min(100%, 820px); height: auto; display: block; touch-action: pan-y; }
+  .ts-legend i.band { height: 8px; background: color-mix(in srgb, var(--accent) 18%, transparent); border-top: 1px dashed var(--accent); border-bottom: 1px dashed var(--accent); }
   .ts-legend { display: flex; flex-wrap: wrap; gap: 12px; font-size: 11.5px; color: var(--text-secondary); }
   .ts-legend span { display: inline-flex; align-items: center; gap: 5px; }
   .ts-legend i { width: 14px; height: 2px; display: inline-block; }
@@ -4386,41 +4387,129 @@
     return (n > 0 ? '+' : '') + fmt(n, digits === undefined ? (unit === '%' ? 2 : 0) : digits) + (unit || '');
   }
   function tsTagCls(st) { return st === 'good' ? 'imp-up' : st === 'bad' ? 'imp-down' : ''; }
+  // 기술적 분석 차트(2026-11-24 개편): 한 SVG에 4칸을 같은 날짜 축으로 쌓는다
+  //   ① 가격: 볼린저밴드(20, 2σ) 영역 + 종가·20/60/120일선  ② 거래대금 막대(억, 오른 날 빨강·내린 날 파랑)
+  //   ③ RSI(14) + 30·70 기준선  ④ MACD(12,26,9) 선 + 히스토그램 막대
+  //   달이 바뀌는 날에 세로 경계선과 'N월' 표기, 마우스·손가락을 올리면 그날 값을 툴팁으로 보여 준다.
+  var TS_CHART = null;
   function tsChartSvg(name, asof) {
     var s = ((SNAPSHOT.techChecks || {}).series || {})[name];
     if (!s || !s.dates || s.dates.length < 2) return '';
     var end = s.dates.indexOf(asof);
     if (end === -1) end = asof > s.dates[s.dates.length - 1] ? s.dates.length - 1 : -1;
     if (end < 1) return '';
-    var lines = [['close', 'var(--text-primary)', ''], ['ma20', 'var(--accent)', ''], ['ma60', 'var(--gold)', ''], ['ma120', 'var(--text-muted)', '4 3']];
-    var lo = Infinity, hi = -Infinity;
-    lines.forEach(function (ln) { for (var i = 0; i <= end; i++) { var v = s[ln[0]][i]; if (v !== null && v !== undefined) { lo = Math.min(lo, v); hi = Math.max(hi, v); } } });
-    if (!(hi > lo)) return '';
-    var W = 640, H = 210, L = 6, R = 70, T = 10, B = 24, n = end + 1;
-    function x(i) { return L + i / (n - 1) * (W - L - R); }
-    function y(v) { return T + (1 - (v - lo) / (hi - lo)) * (H - T - B); }
-    function path(key) {
-      var d = '', pen = false;
-      for (var i = 0; i <= end; i++) {
-        var v = s[key][i];
-        if (v === null || v === undefined) { pen = false; continue; }
-        d += (pen ? 'L' : 'M') + x(i).toFixed(1) + ',' + y(v).toFixed(1); pen = true;
-      }
-      return d;
+    var n = end + 1, narrow = window.innerWidth < 600;
+    var W = narrow ? 480 : 760, L = 6, R = narrow ? 50 : 62, PW = W - L - R, FS = narrow ? 10 : 11, GAP = 14, TOP = 6, AX = 18;
+    var P = [{ k: 'price', h: narrow ? 170 : 210 }, { k: 'val', h: 56 }, { k: 'rsi', h: 56 }, { k: 'macd', h: 64 }];
+    var yy = TOP;
+    P.forEach(function (p) { p.top = yy; yy += p.h + GAP; });
+    var H = yy - GAP + AX, BOT = H - AX;
+    function A(k) { return (s[k] || []).slice(0, n); }
+    function has(v) { return v !== null && v !== undefined; }
+    function x(i) { return L + i / (n - 1) * PW; }
+    function scale(p, lo, hi) {
+      if (!(hi > lo)) hi = lo + 1;
+      p.lo = lo; p.hi = hi;
+      p.y = function (v) { return p.top + (1 - (v - lo) / (hi - lo)) * p.h; };
     }
-    var grid = [lo, (lo + hi) / 2, hi].map(function (v) {
-      return '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + y(v).toFixed(1) + '" y2="' + y(v).toFixed(1) + '" stroke="var(--border)" stroke-width="1"/>' +
-        '<text x="' + (W - R + 6) + '" y="' + (y(v) + 4).toFixed(1) + '" font-size="11" fill="var(--text-muted)">' + fmt(v) + '</text>';
-    }).join('');
-    var last = s.close[end];
+    function range(keys, withZero) {
+      var lo = withZero ? 0 : Infinity, hi = withZero ? 0 : -Infinity;
+      keys.forEach(function (k) { A(k).forEach(function (v) { if (has(v)) { lo = Math.min(lo, v); hi = Math.max(hi, v); } }); });
+      return [lo, hi];
+    }
+    function line(p, k, color, w, dash) {
+      var d = '', pen = false;
+      A(k).forEach(function (v, i) {
+        if (!has(v)) { pen = false; return; }
+        d += (pen ? 'L' : 'M') + x(i).toFixed(1) + ',' + p.y(v).toFixed(1); pen = true;
+      });
+      return d ? '<path d="' + d + '" fill="none" stroke="' + color + '" stroke-width="' + w + '"' + (dash ? ' stroke-dasharray="' + dash + '"' : '') + '/>' : '';
+    }
+    function hline(p, v, color, dash) {
+      var Y = p.y(v).toFixed(1);
+      return '<line x1="' + L + '" x2="' + (L + PW) + '" y1="' + Y + '" y2="' + Y + '" stroke="' + color + '" stroke-width="1"' + (dash ? ' stroke-dasharray="' + dash + '"' : '') + '/>';
+    }
+    function ylab(p, v, txt) { return '<text x="' + (L + PW + 5) + '" y="' + (p.y(v) + 4).toFixed(1) + '" font-size="' + FS + '" fill="var(--text-muted)">' + txt + '</text>'; }
+    function title(p, txt) { return '<text x="' + (L + 4) + '" y="' + (p.top + FS + 1) + '" font-size="' + FS + '" fill="var(--text-secondary)" font-weight="600">' + txt + '</text>'; }
+    function bar(xc, y1, y2, color, op) {
+      return '<rect x="' + (xc - bw / 2).toFixed(1) + '" y="' + Math.min(y1, y2).toFixed(1) + '" width="' + bw.toFixed(1) + '" height="' + Math.max(0.5, Math.abs(y2 - y1)).toFixed(1) + '" fill="' + color + '" fill-opacity="' + op + '"/>';
+    }
+    var bw = Math.max(1, PW / n * 0.68), close = A('close'), out = [], i;
     var md = function (d) { return parseInt(d.slice(5, 7), 10) + '/' + parseInt(d.slice(8), 10); };
-    return '<svg class="ts-chart" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + esc(name) + ' 최근 ' + n + '거래일 종가와 20·60·120일선">' + grid +
-      lines.map(function (ln) { return '<path d="' + path(ln[0]) + '" fill="none" stroke="' + ln[1] + '" stroke-width="' + (ln[0] === 'close' ? 1.8 : 1.3) + '"' + (ln[2] ? ' stroke-dasharray="' + ln[2] + '"' : '') + '/>'; }).join('') +
-      '<circle cx="' + x(end).toFixed(1) + '" cy="' + y(last).toFixed(1) + '" r="3" fill="var(--text-primary)"/>' +
-      '<text x="' + L + '" y="' + (H - 6) + '" font-size="11" fill="var(--text-muted)">' + md(s.dates[0]) + '</text>' +
-      '<text x="' + (W - R) + '" y="' + (H - 6) + '" font-size="11" fill="var(--text-muted)" text-anchor="end">' + md(s.dates[end]) + '</text></svg>' +
+    // 달 경계선 + 날짜 표기(맨 처음·맨 끝은 월/일)
+    for (i = 1; i < n; i++) {
+      if (s.dates[i].slice(0, 7) !== s.dates[i - 1].slice(0, 7)) {
+        var X = x(i).toFixed(1);
+        out.push('<line x1="' + X + '" x2="' + X + '" y1="' + TOP + '" y2="' + BOT + '" stroke="var(--border)" stroke-width="1" stroke-dasharray="3 3"/>');
+        if (x(i) > L + 30 && x(i) < L + PW - 30) {
+          out.push('<text x="' + X + '" y="' + (H - 4) + '" font-size="' + FS + '" fill="var(--text-muted)" text-anchor="middle">' + parseInt(s.dates[i].slice(5, 7), 10) + '월</text>');
+        }
+      }
+    }
+    out.push('<text x="' + L + '" y="' + (H - 4) + '" font-size="' + FS + '" fill="var(--text-muted)">' + md(s.dates[0]) + '</text>');
+    out.push('<text x="' + (L + PW) + '" y="' + (H - 4) + '" font-size="' + FS + '" fill="var(--text-muted)" text-anchor="end">' + md(s.dates[end]) + '</text>');
+    // ① 가격 + 볼린저밴드
+    var pp = P[0], r = range(['close', 'ma20', 'ma60', 'ma120', 'bbU', 'bbL']), pad = (r[1] - r[0]) * 0.04;
+    scale(pp, r[0] - pad, r[1] + pad);
+    var U = A('bbU'), Lo = A('bbL'), up = '', dn = '';
+    for (i = 0; i < n; i++) {
+      if (has(U[i]) && has(Lo[i])) {
+        up += (up ? 'L' : 'M') + x(i).toFixed(1) + ',' + pp.y(U[i]).toFixed(1);
+        dn = 'L' + x(i).toFixed(1) + ',' + pp.y(Lo[i]).toFixed(1) + dn;
+      }
+    }
+    if (up) out.push('<path d="' + up + dn + 'Z" fill="var(--accent)" fill-opacity="0.08" stroke="none"/>');
+    [r[0], (r[0] + r[1]) / 2, r[1]].forEach(function (v) { out.push(hline(pp, v, 'var(--border)'), ylab(pp, v, fmt(v))); });
+    out.push(line(pp, 'bbU', 'var(--accent)', 1, '2 3'), line(pp, 'bbL', 'var(--accent)', 1, '2 3'));
+    out.push(line(pp, 'ma120', 'var(--text-muted)', 1.2, '5 3'), line(pp, 'ma60', 'var(--gold)', 1.2), line(pp, 'ma20', 'var(--accent)', 1.3), line(pp, 'close', 'var(--text-primary)', 1.8));
+    out.push('<circle cx="' + x(end).toFixed(1) + '" cy="' + pp.y(close[end]).toFixed(1) + '" r="3" fill="var(--text-primary)"/>');
+    // ② 거래대금(억)
+    var pv = P[1], vals = A('val'), vmax = Math.max.apply(null, vals.filter(has).concat([1]));
+    scale(pv, 0, vmax);
+    vals.forEach(function (v, i) {
+      if (!has(v)) return;
+      var prev = i > 0 ? close[i - 1] : s.prevClose, rise = !has(prev) || close[i] >= prev;
+      out.push(bar(x(i), pv.y(0), pv.y(v), rise ? 'var(--up)' : 'var(--down)', 0.55));
+    });
+    out.push(hline(pv, 0, 'var(--border)'), ylab(pv, vmax, fmt(vmax)), title(pv, '거래대금(억)'));
+    // ③ RSI(14)
+    var pr = P[2], rsiNow = A('rsi')[end];
+    scale(pr, 0, 100);
+    out.push('<rect x="' + L + '" y="' + pr.y(70).toFixed(1) + '" width="' + PW + '" height="' + (pr.y(30) - pr.y(70)).toFixed(1) + '" fill="var(--surface-alt)"/>');
+    out.push(hline(pr, 70, 'var(--up)', '3 3'), hline(pr, 30, 'var(--down)', '3 3'), ylab(pr, 70, '70'), ylab(pr, 30, '30'));
+    out.push(line(pr, 'rsi', 'var(--p-for)', 1.5), title(pr, 'RSI(14)' + (has(rsiNow) ? ' ' + rsiNow : '')));
+    // ④ MACD(12,26,9)
+    var pm = P[3], rm = range(['macd', 'signal', 'hist'], true);
+    scale(pm, rm[0], rm[1]);
+    A('hist').forEach(function (v, i) { if (has(v)) out.push(bar(x(i), pm.y(0), pm.y(v), v >= 0 ? 'var(--up)' : 'var(--down)', 0.45)); });
+    out.push(hline(pm, 0, 'var(--border)'), ylab(pm, 0, '0'));
+    out.push(line(pm, 'macd', 'var(--idx-kospi)', 1.4), line(pm, 'signal', 'var(--idx-kosdaq)', 1.2), title(pm, 'MACD(12,26,9)'));
+    // 마우스를 따라가는 세로선(툴팁은 tsBindChart가 붙인다)
+    out.push('<line class="ts-cross" x1="0" x2="0" y1="' + TOP + '" y2="' + BOT + '" stroke="var(--text-secondary)" stroke-width="1" visibility="hidden"/>');
+    out.push('<rect class="ts-hit" x="' + L + '" y="' + TOP + '" width="' + PW + '" height="' + (BOT - TOP) + '" fill="transparent"/>');
+    TS_CHART = { s: s, n: n, L: L, PW: PW, W: W, x: x };
+    return '<svg class="ts-chart" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + esc(name) + ' 최근 ' + n + '거래일 가격·볼린저밴드·거래대금·RSI·MACD 차트">' + out.join('') + '</svg>' +
       '<div class="ts-legend"><span><i style="background:var(--text-primary)"></i>종가</span><span><i style="background:var(--accent)"></i>20일선</span>' +
-      '<span><i style="background:var(--gold)"></i>60일선</span><span><i class="dash"></i>120일선</span></div>';
+      '<span><i style="background:var(--gold)"></i>60일선</span><span><i class="dash"></i>120일선</span><span><i class="band"></i>볼린저밴드(20, 2σ)</span>' +
+      '<span><i style="background:var(--p-for)"></i>RSI</span><span><i style="background:var(--idx-kospi)"></i>MACD</span><span><i style="background:var(--idx-kosdaq)"></i>시그널</span></div>';
+  }
+  function tsBindChart() {
+    var svg = document.querySelector('#tsDetail svg.ts-chart');
+    if (!svg || !TS_CHART) return;
+    var c = TS_CHART, s = c.s, cross = svg.querySelector('.ts-cross');
+    function has(v) { return v !== null && v !== undefined; }
+    function num(v, d) { return has(v) ? fmt(v, d || 0) : '—'; }
+    svg.addEventListener('pointermove', function (ev) {
+      var box = svg.getBoundingClientRect(), vx = (ev.clientX - box.left) * c.W / box.width;
+      var i = Math.round((vx - c.L) / c.PW * (c.n - 1));
+      if (i < 0 || i >= c.n) { cross.setAttribute('visibility', 'hidden'); hideTip(); return; }
+      var X = c.x(i).toFixed(1);
+      cross.setAttribute('x1', X); cross.setAttribute('x2', X); cross.setAttribute('visibility', 'visible');
+      showTip(ev, '<b>' + s.dates[i] + '</b><br>종가 <span class="m">' + num(s.close[i]) + '</span> · 거래대금 <span class="m">' + num(s.val[i]) + '억</span>' +
+        '<br>20일선 <span class="m">' + num(s.ma20[i]) + '</span> · 밴드 <span class="m">' + num(s.bbL[i]) + '~' + num(s.bbU[i]) + '</span>' +
+        '<br>RSI <span class="m">' + num(s.rsi[i], 1) + '</span> · MACD <span class="m">' + num(s.macd[i], 1) + '</span> / 시그널 <span class="m">' + num(s.signal[i], 1) + '</span>');
+    });
+    svg.addEventListener('pointerleave', function () { cross.setAttribute('visibility', 'hidden'); hideTip(); });
   }
   function tsTechHtml(name, date) {
     var t = tsTech(name, date);
@@ -4464,6 +4553,7 @@
       sec('핵심 논리', 'ts-thesis') + sec('근거') + tsTechHtml(TS.name, TS.date) +
       '<div class="ts-two">' + sec('이 논리가 틀렸다고 볼 신호') + sec('위험 요인') + '</div>' +
       sec('관련 일정') + sec('기록') + sec('출처', 'ts-src');
+    tsBindChart();
   }
   function tsRenderAll() {
     var names = Object.keys(SNAPSHOT.theses || {}).sort(function (a, b) {

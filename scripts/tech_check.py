@@ -148,19 +148,59 @@ def tags(r: dict) -> list:
     return out
 
 
+def rsi_series(vals, n=14):
+    """날짜별 RSI(와일더). 마지막 값은 rsi(vals)와 같다."""
+    out = [None] * len(vals)
+    if len(vals) <= n:
+        return out
+    gains = [max(vals[i] - vals[i - 1], 0) for i in range(1, len(vals))]
+    losses = [max(vals[i - 1] - vals[i], 0) for i in range(1, len(vals))]
+    ag, al = sum(gains[:n]) / n, sum(losses[:n]) / n
+
+    def val(ag, al):
+        return 100.0 if al == 0 else round(100 - 100 / (1 + ag / al), 1)
+    out[n] = val(ag, al)
+    for i in range(n, len(gains)):
+        ag, al = (ag * (n - 1) + gains[i]) / n, (al * (n - 1) + losses[i]) / n
+        out[i + 1] = val(ag, al)
+    return out
+
+
 def series(ohlcv: dict, asof: str) -> dict:
+    """화면 차트용 최근 SERIES_DAYS 거래일: 종가·거래대금(억)·이평선·볼린저(20, 2σ)·RSI(14)·MACD(12,26,9).
+    지표는 전체 이력으로 계산한 뒤 잘라서, 차트 왼쪽 끝 값도 정확하다."""
     days = sorted(d for d in ohlcv if d <= asof)
     c = [ohlcv[d]["c"] for d in days]
     keep = days[-SERIES_DAYS:]
     off = len(days) - len(keep)
+    idx = range(off, len(days))
 
     def ma_at(i, w):
         return round(sum(c[i - w + 1:i + 1]) / w, 1) if i + 1 >= w else None
+
+    def bb_at(i, sign):
+        if i + 1 < 20:
+            return None
+        win = c[i - 19:i + 1]
+        m = sum(win) / 20
+        return round(m + sign * 2 * (sum((x - m) ** 2 for x in win) / 20) ** 0.5, 1)
+    e12, e26 = ema_series(c, 12), ema_series(c, 26)
+    macd = [a - b for a, b in zip(e12, e26)]
+    sig = ema_series(macd, 9)
+    rs = rsi_series(c)
     return {
         "dates": keep, "close": c[off:],
-        "ma20": [ma_at(off + j, 20) for j in range(len(keep))],
-        "ma60": [ma_at(off + j, 60) for j in range(len(keep))],
-        "ma120": [ma_at(off + j, 120) for j in range(len(keep))],
+        "prevClose": c[off - 1] if off > 0 else None,
+        "val": [ohlcv[d]["val"] for d in keep],
+        "ma20": [ma_at(i, 20) for i in idx],
+        "ma60": [ma_at(i, 60) for i in idx],
+        "ma120": [ma_at(i, 120) for i in idx],
+        "bbU": [bb_at(i, 1) for i in idx],
+        "bbL": [bb_at(i, -1) for i in idx],
+        "rsi": rs[off:],
+        "macd": [round(macd[i], 2) for i in idx],
+        "signal": [round(sig[i], 2) for i in idx],
+        "hist": [round(macd[i] - sig[i], 2) for i in idx],
     }
 
 

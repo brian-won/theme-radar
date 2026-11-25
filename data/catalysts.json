@@ -1,6 +1,6 @@
 {
   "_note": "캘린더 탭 이벤트 원본. 형식·갱신 규칙은 skills/catalyst-calendar/SKILL.md. date/time은 현지 날짜·시각(tz: ET=미국 동부, KST, CET, JST, PT). 한국 시간(kst)은 build_dashboard.py가 계산해 넣으므로 여기 적지 않는다. metrics[].actual은 발표 전 null, 발표 후 값을 채운다. stars(1~3)는 시장 가격 영향 순 중요도(Claude 1차 판단). 사용자가 바꾼 등급은 starRules[series]에 저장하고 같은 series의 이후 이벤트에도 적용한다.",
-  "updatedAt": "2026-11-24",
+  "updatedAt": "2026-11-25",
   "macroMonths": [
     "2026-11",
     "2026-12"
@@ -16,24 +16,31 @@
       "country": "US",
       "stars": 1,
       "series": "us-gdp",
-      "confirmed": false,
+      "confirmed": true,
       "title": "미국 3분기 GDP 잠정치(2차)",
       "metrics": [
         {
           "label": "GDP 성장률(연율)",
           "unit": "%",
-          "forecast": null,
-          "previous": null,
-          "actual": null
+          "forecast": 3.5,
+          "previous": 3.4,
+          "actual": 4.3
         }
       ],
       "source": {
-        "label": "fedratecalc 11월 경제지표 달력(보조 출처, BEA 미확인)",
-        "url": "https://fedratecalc.com/us-economic-calendar/november-2026/"
+        "label": "BEA 발표 일정",
+        "url": "https://www.bea.gov/news/schedule"
       },
       "addedOn": "2026-11-24",
       "addedFrom": "월간 매크로",
-      "result": null
+      "result": {
+        "summary": "3분기 GDP가 연율 4.3%로 속보치 3.4%에서 크게 상향됐고 예상치(3.5%)를 웃돌았다. 투자와 소비 지출이 함께 상향 조정됐다.",
+        "source": {
+          "label": "Fox Business",
+          "url": "https://www.foxbusiness.com/economy/us-economy-q3-2026-second-estimate"
+        },
+        "checkedOn": "2026-11-25"
+      }
     },
     {
       "id": "2026-11-25-us-pce-oct",
@@ -44,22 +51,22 @@
       "country": "US",
       "stars": 2,
       "series": "us-pce",
-      "confirmed": false,
+      "confirmed": true,
       "title": "미국 10월 PCE 물가",
       "metrics": [
         {
           "label": "PCE 전년비",
           "unit": "%",
-          "forecast": null,
+          "forecast": 3.8,
           "previous": null,
-          "actual": null
+          "actual": 3.8
         },
         {
           "label": "근원 PCE 전년비",
           "unit": "%",
-          "forecast": null,
+          "forecast": 3.2,
           "previous": null,
-          "actual": null
+          "actual": 3.3
         }
       ],
       "source": {
@@ -68,7 +75,14 @@
       },
       "addedOn": "2026-11-24",
       "addedFrom": "월간 매크로",
-      "result": null
+      "result": {
+        "summary": "10월 PCE는 전년비 3.8%로 예상과 같았고, 근원 PCE는 3.3%로 예상(3.2%)을 웃돌며 2023년 11월 이후 가장 높았다. 12월 금리 인상 가능성을 키우는 결과로 받아들여졌다.",
+        "source": {
+          "label": "FXStreet",
+          "url": "https://www.fxstreet.com/news/us-core-pce-inflation-set-to-heat-up-in-october-prompting-federal-reserve-rate-hikes-in-2027-202611250930"
+        },
+        "checkedOn": "2026-11-25"
+      }
     },
     {
       "id": "2026-11-26-kr-bok",

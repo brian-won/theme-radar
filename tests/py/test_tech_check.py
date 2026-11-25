@@ -147,6 +147,27 @@ class TestCompute(unittest.TestCase):
         short = t.series(make_ohlcv(closes[:50]), "2025-02-19")
         self.assertIsNone(short["ma60"][-1])
 
+    def test_series_indicators_match_compute(self):
+        closes = [100 + 10 * ((i * 7) % 13) / 13 + i * 0.3 for i in range(240)]  # 오르내리는 시세
+        o = make_ohlcv(closes, vols=[1000 + (i % 5) * 100 for i in range(240)])
+        asof = max(o)
+        s, r = t.series(o, asof), t.compute(o, [], asof)
+        n = t.SERIES_DAYS
+        for k in ("val", "bbU", "bbL", "rsi", "macd", "signal", "hist"):
+            self.assertEqual(len(s[k]), n, k)
+        self.assertEqual(s["rsi"][-1], r["rsi"])                       # 차트 마지막 RSI = 지표 타일 RSI
+        self.assertAlmostEqual(s["hist"][-1], r["macd"]["hist"], delta=0.06)
+        self.assertLess(s["bbL"][-1], s["ma20"][-1])
+        self.assertGreater(s["bbU"][-1], s["ma20"][-1])
+        self.assertAlmostEqual((s["bbU"][-1] + s["bbL"][-1]) / 2, s["ma20"][-1], delta=0.1)  # 밴드 중심 = 20일선
+        self.assertEqual(s["prevClose"], closes[-n - 1])
+
+    def test_rsi_series_last_equals_rsi(self):
+        c = TestRSI.CLOSES
+        self.assertEqual(t.rsi_series(c)[-1], t.rsi(c))
+        self.assertIsNone(t.rsi_series(c)[13])
+        self.assertIsNotNone(t.rsi_series(c)[14])
+
 
 if __name__ == "__main__":
     unittest.main()

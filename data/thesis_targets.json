@@ -22691,6 +22691,131 @@
      "tiedOut": []
     }
    ]
+  },
+  "2026-11-25": {
+   "from": "2026-10-22",
+   "to": "2026-11-25",
+   "days": 25,
+   "themes": [
+    {
+     "rank": 1,
+     "theme": "보안주(정보)",
+     "stocksToday": 7,
+     "top": [
+      {
+       "rank": 1,
+       "name": "지니언스",
+       "count": 5,
+       "sumValue": 10470,
+       "avgChange": 14.13,
+       "todayChange": 17.94,
+       "todayValue": 3995
+      },
+      {
+       "rank": 2,
+       "name": "안랩",
+       "count": 2,
+       "sumValue": 7321,
+       "avgChange": 23.97,
+       "todayChange": 29.96,
+       "todayValue": 5778
+      },
+      {
+       "rank": 3,
+       "name": "라온시큐어",
+       "count": 2,
+       "sumValue": 2550,
+       "avgChange": 15.35,
+       "todayChange": 13.88,
+       "todayValue": 948
+      }
+     ],
+     "tiedOut": [
+      "파수AI"
+     ]
+    },
+    {
+     "rank": 2,
+     "theme": "제약/바이오",
+     "stocksToday": 10,
+     "top": [
+      {
+       "rank": 1,
+       "name": "루닛",
+       "count": 4,
+       "sumValue": 5475,
+       "avgChange": 10.98,
+       "todayChange": 3.97,
+       "todayValue": 1563
+      },
+      {
+       "rank": 2,
+       "name": "셀트리온",
+       "count": 2,
+       "sumValue": 8771,
+       "avgChange": 5.19,
+       "todayChange": 2.87,
+       "todayValue": 2311
+      },
+      {
+       "rank": 3,
+       "name": "알테오젠",
+       "count": 2,
+       "sumValue": 4750,
+       "avgChange": 3.88,
+       "todayChange": 4.07,
+       "todayValue": 2540
+      }
+     ],
+     "tiedOut": [
+      "삼성바이오로직스",
+      "삼성에피스홀딩스",
+      "프로티나"
+     ]
+    },
+    {
+     "rank": 3,
+     "theme": "화장품",
+     "stocksToday": 9,
+     "top": [
+      {
+       "rank": 1,
+       "name": "에이피알",
+       "count": 1,
+       "sumValue": 3683,
+       "avgChange": 10.63,
+       "todayChange": 10.63,
+       "todayValue": 3683
+      },
+      {
+       "rank": 2,
+       "name": "실리콘투",
+       "count": 1,
+       "sumValue": 1633,
+       "avgChange": 12.02,
+       "todayChange": 12.02,
+       "todayValue": 1633
+      },
+      {
+       "rank": 3,
+       "name": "아모레퍼시픽",
+       "count": 1,
+       "sumValue": 825,
+       "avgChange": 4.94,
+       "todayChange": 4.94,
+       "todayValue": 825
+      }
+     ],
+     "tiedOut": [
+      "코스맥스",
+      "한국화장품",
+      "한국콜마",
+      "한국화장품제조",
+      "달바글로벌",
+      "코스메카코리아"
+     ]
+    }
+   ]
   }
  }
 }
