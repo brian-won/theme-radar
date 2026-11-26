@@ -386,6 +386,10 @@
    "ticker": "006340",
    "market": "KOSPI"
   },
+  "대주전자재료": {
+   "ticker": "078600",
+   "market": "KOSDAQ"
+  },
   "대한광통신": {
    "ticker": "010170",
    "market": "KOSDAQ"
@@ -22736,47 +22740,8 @@
     },
     {
      "rank": 2,
-     "theme": "제약/바이오",
-     "stocksToday": 10,
-     "top": [
-      {
-       "rank": 1,
-       "name": "루닛",
-       "count": 4,
-       "sumValue": 5475,
-       "avgChange": 10.98,
-       "todayChange": 3.97,
-       "todayValue": 1563
-      },
-      {
-       "rank": 2,
-       "name": "셀트리온",
-       "count": 2,
-       "sumValue": 8771,
-       "avgChange": 5.19,
-       "todayChange": 2.87,
-       "todayValue": 2311
-      },
-      {
-       "rank": 3,
-       "name": "알테오젠",
-       "count": 2,
-       "sumValue": 4750,
-       "avgChange": 3.88,
-       "todayChange": 4.07,
-       "todayValue": 2540
-      }
-     ],
-     "tiedOut": [
-      "삼성바이오로직스",
-      "삼성에피스홀딩스",
-      "프로티나"
-     ]
-    },
-    {
-     "rank": 3,
      "theme": "화장품",
-     "stocksToday": 9,
+     "stocksToday": 10,
      "top": [
       {
        "rank": 1,
@@ -22812,7 +22777,135 @@
       "한국콜마",
       "한국화장품제조",
       "달바글로벌",
+      "엘앤씨바이오",
       "코스메카코리아"
+     ]
+    },
+    {
+     "rank": 3,
+     "theme": "제약/바이오",
+     "stocksToday": 9,
+     "top": [
+      {
+       "rank": 1,
+       "name": "루닛",
+       "count": 4,
+       "sumValue": 5475,
+       "avgChange": 10.98,
+       "todayChange": 3.97,
+       "todayValue": 1563
+      },
+      {
+       "rank": 2,
+       "name": "셀트리온",
+       "count": 2,
+       "sumValue": 8771,
+       "avgChange": 5.19,
+       "todayChange": 2.87,
+       "todayValue": 2311
+      },
+      {
+       "rank": 3,
+       "name": "알테오젠",
+       "count": 2,
+       "sumValue": 4750,
+       "avgChange": 3.88,
+       "todayChange": 4.07,
+       "todayValue": 2540
+      }
+     ],
+     "tiedOut": [
+      "삼성바이오로직스",
+      "삼성에피스홀딩스",
+      "프로티나"
+     ]
+    }
+   ]
+  },
+  "2026-11-26": {
+   "from": "2026-10-23",
+   "to": "2026-11-26",
+   "days": 25,
+   "themes": [
+    {
+     "rank": 1,
+     "theme": "MLCC(적층세라믹콘덴서)",
+     "stocksToday": 2,
+     "top": [
+      {
+       "rank": 1,
+       "name": "삼성전기",
+       "count": 2,
+       "sumValue": 28534,
+       "avgChange": 4.69,
+       "todayChange": 3.97,
+       "todayValue": 12185
+      },
+      {
+       "rank": 2,
+       "name": "대주전자재료",
+       "count": 1,
+       "sumValue": 1373,
+       "avgChange": 12.34,
+       "todayChange": 12.34,
+       "todayValue": 1373
+      }
+     ],
+     "tiedOut": []
+    },
+    {
+     "rank": 2,
+     "theme": "보안주(정보)",
+     "stocksToday": 1,
+     "top": [
+      {
+       "rank": 1,
+       "name": "안랩",
+       "count": 3,
+       "sumValue": 14207,
+       "avgChange": 17.12,
+       "todayChange": 3.42,
+       "todayValue": 6886
+      }
+     ],
+     "tiedOut": []
+    },
+    {
+     "rank": 3,
+     "theme": "스페이스X/우주항공산업",
+     "stocksToday": 5,
+     "top": [
+      {
+       "rank": 1,
+       "name": "미래에셋벤처투자",
+       "count": 1,
+       "sumValue": 2110,
+       "avgChange": 25.26,
+       "todayChange": 25.26,
+       "todayValue": 2110
+      },
+      {
+       "rank": 2,
+       "name": "스피어",
+       "count": 1,
+       "sumValue": 1172,
+       "avgChange": 21.54,
+       "todayChange": 21.54,
+       "todayValue": 1172
+      },
+      {
+       "rank": 3,
+       "name": "OCI홀딩스",
+       "count": 1,
+       "sumValue": 947,
+       "avgChange": 6.25,
+       "todayChange": 6.25,
+       "todayValue": 947
+      }
+     ],
+     "tiedOut": [
+      "미래에셋증권",
+      "에이치브이엠"
      ]
     }
    ]
